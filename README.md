@@ -9,3 +9,5 @@ app.get('/', function(req, res){
 });
 
 app.listen(3000);
+----------node js kill command onlinux server--------
+killall node
