@@ -1,0 +1,28 @@
+
+    <% if (data && data.length) {
+        data.forEach(row => { %>
+    <div class="row sideBar-body" style="width: 100% !important;">
+        <div class="col-sm-12 col-xs-12 sideBar-main">
+            <div class="row">
+                <div class="col-sm-12 col-xs-12 sideBar-name" style="margin-top:-8px;" onclick="getChat(<%= row.cust_phone %>)">
+                    <span class="name-meta">
+                        <% if (row.cust_name && row.cust_name.trim() !== '') { %>
+                        <%= row.cust_name %>
+                        <% } %>
+                        <br>
+                                <small>&nbsp;<%= row.cust_phone %></small>
+                    </span>
+                    <span class="msg_global_count">
+                        <% if (msg_count[row.cust_phone]>0) { %>
+                            <span class="msg_count"><%= msg_count[row.cust_phone]; %></span>
+                            <% } %>
+                    </span>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <% }); %>
+    <% } else { %>
+        <div>No data found</div>
+       <% } %>

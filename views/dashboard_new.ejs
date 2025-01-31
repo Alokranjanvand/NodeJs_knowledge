@@ -1,0 +1,3464 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        <title>GalaxyPro Dialer</title>
+        <meta name="description" content="">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+
+        <!-- Progressive Web App (PWA) -->
+        <meta name="HandheldFriendly" content="true">
+        <meta name="format-detection" content="telephone=no"/>
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f6f6">
+        <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#292929">
+            <!-- Favicon icon -->
+    <link rel="icon" href="assets1/images/favicon.ico" type="image/x-icon">
+    <!-- fontawesome icon -->
+    <link rel="stylesheet" href="assets1/fonts/fontawesome/css/fontawesome-all.min.css">
+    <!-- animation css -->
+    <link rel="stylesheet" href="assets1/plugins/animation/css/animate.min.css">
+    <!-- vendor css -->
+    <link rel="stylesheet" href="assets1/css/style.css">
+    <!-- Alertify Css code -->
+    <link rel="stylesheet" href="assets/alertify/alertify.core.css?v=5.17.1" />
+    <link rel="stylesheet" href="assets/alertify/alertify.default.css?v=5.17.1" />
+    <link rel="stylesheet" href="assets/alertify/toastr.css?v=5.17.1" type="text/css" />
+     <!-- vendor css -->
+    <link href="assets1/css/bootstrap-switch-button.css" rel="stylesheet">
+    <script
+        src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js"></script>
+    <link href="assets/sipjs/toastr.css" rel="stylesheet" type="text/css" />
+    <link href="assets/sipjs/crmlog.css" rel="stylesheet" type="text/css" />
+		<!-- Javascript code -->
+    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    <!-- Alertify Javascript code -->
+    <script src="assets/alertify/alertify.min.js?v=5.17.1"></script>
+    <script src="assets/alertify/modernizr.js?v=5.17.1"></script>
+    <script src="assets/alertify/toastr.js?v=5.17.1"></script>
+    <script src="assets/sipjs/all_constant.js?v=5.17.1" type="text/javascript"></script>
+    <script>
+        //console.log = console.warn = console.error = function() {};
+        window.onload = function() {
+    check_browser();
+  };
+  function check_browser() {
+    // Check if the current URL has been visited before
+    if (localStorage.getItem('lastVisitedURL') === window.location.hostname) {
+      alertify.error("You have visited this URL before...!");
+      //window.location.href = "logout";
+      logout('reload');
+    } else {
+      // Update the last visited URL to the current one
+      localStorage.setItem('lastVisitedURL', window.location.hostname);
+      
+    }
+  }
+  </script>
+
+    <!-- Code added by Udit for datetimepicker provided by Rakesh sir on 09 July 2024 -->
+	
+  <!--  <link rel="stylesheet" media="all" type="text/css"
+        href="https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
+	-->
+	<!-- Code added by Udit for datetimepicker rovided by Rakesh sir on 09 July 2024 end-->
+    <script type="text/javascript">
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0);
+
+        window.onunload = function () {
+            check_browser();
+            null
+        };
+		<!-- variable initialized by udit on 3 july 2024 start-->
+		let dateArray = [];
+		var call_dfid;
+		var autodispose;
+		var mandatory;
+		/*-- variable initialized by udit on 3 july 2024 end-*/
+    </script>
+      <style>
+      
+
+	#modalOverlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 99999;
+			height: 100%;
+			width: 100%;
+	}
+.modalPopup {
+			position: absolute;
+			top: 30%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: #fff;
+			width: 50%;
+			padding: 0 0 30px;
+			-webkit-box-shadow: 0 2px 10px 3px rgba(0,0,0,.2);
+			-moz-box-shadow: 0 2px 10px 3px rgba(0,0,0,.2);
+			box-shadow: 0 2px 10px 3px rgba(0,0,0,.2);
+	}
+.modalContent {padding: 30px 30px;}
+.headerBar {
+		width: 100%;
+		background: #000;
+		margin: 0;
+	  text-align: center;
+      color: #fff;
+      padding: 10px;
+	}
+.headerBar h1 {
+        color: #fff;
+        font-size: 20px;
+	}
+      </style>
+      <style>
+        .calendar-container {
+            display: flex;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 1200px;
+            width: 99%;
+        }
+
+        .calendar {
+            flex: 1;
+            padding: 20px;
+            max-width: 285px;
+            font-size: 12px;
+        }
+
+        .header {
+            background-color: #3f4d67;
+            color: white;
+            padding: 5px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            border-radius: 25px;
+        }
+
+        .header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .currentdate {
+            font-size: 25px;
+            color: #fff;
+            margin-bottom: 0px;
+        }
+
+        .days,
+        .months {
+            display: grid;
+            gap: 5px;
+        }
+
+        .days {
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .months {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .day,
+        .month {
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+            position: relative;
+        }
+
+        .day:hover,
+        .month:hover {
+            background-color: #e0e0e0;
+        }
+
+        .day.active,
+        .month.active {
+            background-color: #1dc4e9;
+            color: white;
+            border-radius: 15px;
+        }
+
+        .day.has-events::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background-color: #1dc4e9;
+            border-radius: 50%;
+        }
+
+        .day.active.has-events::after {
+            background-color: white;
+        }
+
+        .event-view {
+            flex: 1;
+            padding: 20px;
+            border-left: 1px solid #e0e0e0;
+            max-width: 100%;
+        }
+
+        .event-form input,
+        .event-form button {
+            /* width: 100%; */
+            padding: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            padding: 6px 10px;
+            border-radius: 3px;
+            border: 1px solid #d6d5d5;
+        }
+
+        .event-form button {
+            background-color: #0D63B0;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 8px 10px;
+        }
+
+        .events {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .event {
+            background-color: #eff4ff;
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .event button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .view-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .view-selector button {
+            background-color: #3f4d67;
+            color: white;
+            border: none;
+            padding: 2px 20px;
+            cursor: pointer;
+            margin: 0 5px;
+            border-radius: 5px;
+        }
+
+        .view-selector button.active {
+            background-color: #3f4d67;
+            border-radius: 5px;
+        }
+        /**new comments***/
+		.bottomsearch{padding: 5px !important;font-size: 12px  !important;}
+		.input_function_imgs span:hover{cursor:pointer;}
+        
+    </style>
+
+        <link rel="apple-touch-icon" type="image/png" href="icons/512.png">
+        <!--<link rel="manifest" type="application/manifest+json" href="Phone/manifest.json">-->
+        <script type="text/javascript">
+            // If you don't want to use a service worker, you can just take this code out.
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register("sw.js").catch(function(error) {
+                    console.error('Service Worker Error', error);
+                });
+            } else {
+                console.warn("Cannot make use of ServiceWorker");
+            }
+        </script>
+
+        <!-- Cache -->
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+        <meta http-equiv="Expires" content="0"/>
+
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+        <!-- Styles -->
+        <link rel="stylesheet" type="text/css" href="assets/webrtc_asset/normalize-v8.0.1.css?v=5.17.1"/>
+        <link rel="stylesheet preload prefetch" type="text/css" as="style" href="assets/webrtc_asset/roboto.css?v=5.17.1"/>
+        <link rel="stylesheet preload prefetch" type="text/css" as="style" href="https://dtd6jl0d42sve.cloudfront.net/lib/fonts/font_awesome/css/font-awesome.min.css?v=5.17.1"/>
+        <link rel="stylesheet" type="text/css" href="assets/webrtc_asset/jquery-ui-1.13.2.min.css?v=5.17.1"/>
+        <link rel="stylesheet" type="text/css" href="assets/webrtc_asset/croppie.css?v=5.17.1"/>
+        <link rel="stylesheet" type="text/css" href="phone.css"/>
+
+        <!-- Provisioning -->
+        
+        <script type="text/javascript">
+        var sip='<%= session.extension_data  %>';
+        if(sip !='')
+        {            
+            var user_id = sip;
+        }else
+        {
+            var user_id = localStorage.getItem('SIP_ID');
+        }
+		console.log(" user_id= "+user_id+" password="+user_id);
+            // Provision runtime options can go here.
+            var phoneOptions = {
+                welcomeScreen:false,
+                loadAlternateLang: true,
+                profileName:user_id,
+                wssServer:astcontrolserver_url,
+                WebSocketPort:astsocketport,
+                ServerPath:"/ws",
+                SipDomain:astcontrolserver_url,
+                SipUsername: user_id,
+                SipPassword:user_id,
+                EnableConference:true,
+                EnableAccountSettings:false,
+                EnableAppearanceSettings:false,
+                EnableNotificationSettings:true,
+                DisableBuddies:true,
+            }
+			console.log("sip register request= "+JSON.stringify(phoneOptions));
+
+            // Occurs After the Language Packs load, at the start of the InitUi() function 
+            var web_hook_on_before_init = function(){
+                // console.warn("web_hook_on_before_init");
+            }
+            // Occurs at the end of the InitUi() function, before the User Agent is created.
+            // In order to follow events after the User Agent is created, use the register
+            // and transport events below. 
+            var web_hook_on_init = function(){
+                // console.warn("web_hook_on_init");
+            }
+
+            // Connection and Calling Events
+            var web_hook_on_transportError = function(t, ua){
+                // console.warn("web_hook_on_transportError",t, ua);
+            }
+            var web_hook_on_register = function(ua){
+                // console.warn("web_hook_on_register", ua);
+            }
+            var web_hook_on_registrationFailed = function(e){
+                // console.warn("web_hook_on_registrationFailed", e);
+            }
+            var web_hook_on_unregistered = function(){
+                // console.warn("web_hook_on_unregistered");
+            }
+            var web_hook_on_invite = function(session){
+                // console.warn("web_hook_on_invite", session);
+            }
+            var web_hook_on_message = function(message){
+                // console.warn("web_hook_on_message", message);
+            }
+            var web_hook_on_modify = function(action, session){
+                // console.warn("web_hook_on_modify", action, session);
+            }
+            var web_hook_on_dtmf = function(item, session){
+                // console.warn("web_hook_on_dtmf", item, session);
+            }
+            var web_hook_on_terminate = function(session){
+                // console.warn("web_hook_on_terminate", session);
+            }
+            var web_hook_on_notify = function(ContentType, buddyObj, notify){
+                // console.warn("web_hook_on_notify", ContentType, buddyObj, notify);
+            }
+            var web_hook_on_self_notify = function(ContentType, notify){
+                // console.warn("web_hook_on_self_notify", ContentType, notify);
+            }
+
+            // UI events
+            var web_hook_dial_out = function(event){
+                //console.warn("web_hook_dial_out", event);
+            }
+            var web_hook_on_add_buddy = function(event){
+                // console.warn("web_hook_on_add_buddy", event);
+            }
+            var web_hook_on_edit_buddy = function(buddyJson){
+                // console.warn("web_hook_on_edit_buddy", buddyJson);
+            }            
+            var web_hook_on_config_menu = function(event){
+                // console.warn("web_hook_on_config_menu", event);
+            }
+            var web_hook_on_messages_waiting = function(newMsg, oldMsg, ugentNew, ugentOld){
+                // console.warn("web_hook_on_messages_waiting", newMsg, oldMsg, ugentNew, ugentOld);
+            }
+            var web_hook_on_missed_notify = function(missed){
+                // console.warn("web_hook_on_missed_notify", missed);
+            }
+            var web_hook_on_expand_video_area = function(lineNum){
+                // console.warn("web_hook_on_expand_video_area", lineNum);
+            }
+            var web_hook_on_restore_video_area = function(lineNum){
+                // console.warn("web_hook_on_restore_video_area", lineNum);
+            }
+            var web_hook_on_message_action = function(buddy, obj){
+                // console.warn("web_hook_on_message_action", buddy, obj);
+            }
+            var web_hook_disable_dnd = function(){
+                // console.warn("web_hook_disable_dnd");
+            }
+            var web_hook_enable_dnd = function(){
+                // console.warn("web_hook_enable_dnd");
+            }
+            var web_hook_on_edit_media = function(lineNum, obj){
+                // console.warn("web_hook_on_edit_media", lineNum, obj);
+            }
+            var web_hook_sort_and_filter = function(event){
+                // console.warn("web_hook_sort_and_filter", event);
+            }
+           
+            
+			
+        </script>
+    </head>
+    <body id='mdiv'>
+        <span class="draggable-button"></span>
+        <!--- Modal-->
+        <div id="modalOverlay">
+            <div class="modalPopup">
+                <div class="headerBar">
+                    <h1>Campaign Mapping</h1>
+                </div>
+                <div class="modalContent">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label>Campaignlist:</label>
+                            <select class="form-control" aria-label="Default select example" id="campaign">
+                                <option value="">Select Campaign</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label>Mode:</label>
+                            <div id="res_user_mode">
+                            <select class="form-control" name="user-mode" id="user-mode">
+                                <option value="">Select UserMode</option>
+                                
+                             </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="main-search">
+                                <div class="input-group mt-4">
+                                    <button type="button" id="set-campaign" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <!---End Modal-->
+    
+        <!-- [ Pre-loader ] start -->
+        <div class="loader-bg">
+            <div class="loader-track">
+                <div class="loader-fill"></div>
+            </div>
+        </div>
+        <!-- [ Pre-loader ] End -->
+        <!-- [ navigation menu ] start -->
+        <%- include('../views/sidebar') %>
+        <!-- [ navigation menu ] end -->
+    
+        <!-- [ Header ] start -->
+        <%- include('../views/header_new') %>
+        <!-- [ Header ] end -->
+    
+        <!-- [ Main Content ] start -->
+        <% 
+        var currentDate = new Date();
+        var year = currentDate.getFullYear();
+        var month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+        var day = currentDate.getDate().toString().padStart(2, '0');
+        var hours = currentDate.getHours().toString().padStart(2, '0');
+        var minutes = currentDate.getMinutes().toString().padStart(2, '0');
+
+        // Format for datetime-local input: YYYY-MM-DDTHH:MM
+        var formattedStartDate = `${year}-${month}-${day} 00:00`;
+        var formattedEndDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+        var sformattedEndDate = `${year}-${month}-${day} 00:00`;
+        var current_date = `${year}-${month}-${day}`;
+        %>
+        
+        <div class="pcoded-main-container"><input type="hidden" id='green_data_id' value="0"/>
+            <div class="pcoded-wrapper">
+                <div class="pcoded-content" style="padding: 0px 30px 30px 30px;">
+                    <div class="pcoded-inner-content">
+                        <div class="main-body">
+                             <!-----Show call log report------>
+                             <div class="page-wrapper" id="review_reports" style="display: none;">
+                                <div class="row mt-12">
+                                    <div class="col-xl-12 col-md-12 m-t-30">
+                                        <div class="card Recent-Users">
+                                            <div class="card-header">
+                                                <h5>Review Mode</h5>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="row mt-12">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Activity 
+                                                                <i class="feather icon-repeat" title="Load Activity" onclick="getTemplates('review')" style="float: right; margin-left: 10px;cursor: pointer; color: red;"></i></button></label>
+                                                            <select class="form-control" id="activity" style="padding: 5px 10px; height: 34px;">
+                                                            <option value="">-SELECT ACTIVITIES-</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group mb-0" style="margin-top:27px;">
+                                                            <button title="Enter Review Mode" type="button" class="save" id="power-on"><i class="fa fa-floppy-o"></i></button>
+                                                            <button title="Exit Review Mode" type="button" class="exit" id="power-off" style="display: none;"><i class="fa fa-power-off"></i></button>
+                                                            <button type="button" class="btn btn-primary" id="Review-data" style="display: none;"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+
+                                            </div>
+
+                                            <div id="dateRange" style="padding: 0px 15px;display: none;">
+                                                <div id="reviewTab">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label>Search 1</label>
+                                                                <select name="rcolumn[]" class="form-control" id="rcolumn" style="padding: 5px 10px; height: 34px;">
+                                            
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label>Operator</label>
+                                                                <select name="rcondition[]" class="form-control" id="rcondition"
+                                                                    style="padding: 5px 10px; height: 34px;">
+                                                                    <option value='0'>Select</option>
+                                                                    <option value="=">=</option>
+                                                                    <option value="<="><=</option>
+                                                                    <option value=">=">>=</option>
+                                                                    <option value="<"><</option>
+                                                                    <option value=">">></option>
+                                                                    <option value="%">%like</option>
+                                                                    <option value="like">%like%</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label>Value1</label>
+                                                                <input type="text" class="form-control" name="rvalue[]" placeholder="Enter Parameter" id="rvalue"
+                                                                    style="padding: 5px 10px;" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label>Search 2</label>
+                                                                <select name="rcolumn[]" class="form-control" id="rcolumn1"
+                                                                    style="padding: 5px 10px; height: 34px;">
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label>Operator</label>
+                                                                <select name="rcondition[]" class="form-control" id="rcondition1"
+                                                                    style="padding: 5px 10px; height: 34px;">
+                                                                    <option value='0'>Select</option>
+                                                                    <option value="="> = </option>
+                                                                    <option value="<="> <= </option>
+                                                                    <option value=">="> >= </option>
+                                                                    <option value="<"> < </option>
+                                                                    <option value=">">></option>
+                                                                    <option value="%"> %like </option>
+                                                                    <option value="like"> %like% </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label>Value2</label>
+                                                                <input type="text" class="form-control" name="rvalue[]" placeholder="Enter Parameter" id="rvalue1"
+                                                                    style="padding: 5px 10px;" />
+                                                            </div>
+                                                        </div>
+                                            
+                                                        <div id="addReviewTab"></div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label>Start Date</label>
+                                                                <input type="date" class="form-control" id="reviewstarttime" style="padding: 5px 20px;" placeholder="Enter From Date" value="<%= current_date %>"  />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label>End Date</label>
+                                                                <input type="date" class="form-control" id="reviewtotime" style="padding: 5px 20px;" placeholder="Enter To Date" value="<%= current_date %>"  />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label>Disposition</label>
+                                                                <select name="review-disposition" class="form-control" id="review-disposition"
+                                                                    placeholder="Disposition" style="padding: 5px 10px; height: 34px;">
+                                                                    <option value="0">Select Disposition</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <!--<label class="col-sm-2 control-label" for="review-subdisposition">Sub Disposition: </label>-->
+                                                        
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label>Sub Disposition</label>
+                                                                <select name="review-subdisposition" class="form-control" id="review-subdisposition"
+                                                                    placeholder="Sub Disposition" style="padding: 5px 10px; height: 34px;">
+                                                                    <option value="0">Sub Disposition</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label>Order By</label>
+                                                                <select name="rorderbyColumn" class="form-control" id="rorderbyColumn" placeholder="Order By"
+                                                                    style="padding: 5px 10px; height: 34px;">
+                                            
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group form-check">
+                                                                <label>Sort By</label><br/>
+                                                                <label for="orderby"><input type="checkbox" name="orderby" id="rorderby" /> Desc</label>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        
+                                                        
+                                                    </div>
+                                            
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                        </div>
+
+                                    </div>
+                                    <div class="col-xl-12 col-md-12 m-t-30">
+                                        <div class="card Recent-Users">
+                                            <div class="card-header">
+                                                <h5>Review Data</h5>
+                                            </div>
+                                            
+                                            <section class="data_tables" id="viewTable" style="display: none;">
+                                                <input type="hidden" id="selectedID" name="selectedID" />
+                                                    <div class="table-responsive">          
+                                                        <table id="reviewdata-view" class="table">
+                                                            
+                                                        </table>
+                                                    </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+
+                            </div><!--Log Report by alok-->
+                             <div class="page-wrapper" id="log_reports" style="display: none;">
+                                <div class="row mt-12">
+                                    <div class="col-xl-4 col-md-4 m-t-30">
+                                        <div class="card Recent-Users">
+                                            <div class="card-header">
+                                                <h5>Disposition Summary</h5>
+                                            </div>
+                                            
+                                            <div class="dis_detailed-crm-log">
+                                                <table class="table table-bordered" id="summary-disposition"  style="font-size:13px;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="20%">No.</th>
+                                                            <th>Disposition</th>
+                                                            <th width="20%">Count</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tfoot></tfoot>
+                                                </table>
+                                                <!-- <iframe width="100%" height="275px" id="iframe"></iframe> -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-8 col-md-8 m-t-30">
+                                        <div class="card Recent-Users">
+                                            <div class="card-header">
+                                                <h5>Detailed Disposition Logs</h5>
+                                            </div>
+                                            <div class="crm">
+                                                <div id="disposition-data" class="detailed-crm-log" style="max-height:400px;">
+                                                    <div class="form-group">
+                                                        <div class="col-md-12 mt-2">
+                                                            <input type="text" placeholder="Filter.." name="search-txt" id="search-txt" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="data"></div>
+                                                </div>
+                                                <div class="detailed-crm-log" style="display:none">
+                                                    <div class="table-heading"><p>Detailed Disposition Logs</p></div>
+                                                    <table class="table table-bordered" id="detailed-disposition" style="font-size:13px;">
+                                                        <thead></thead>
+                                                        <tbody></tbody>
+                                                        <tfoot></tfoot>
+                                                    </table>
+                                                    <!-- <iframe width="100%" height="275px" id="iframe"></iframe> -->
+                                                </div>
+                                                 
+                                                
+                                                <div class="box_with_input" style="max-height:300px;margin-bottom:20px"> 
+                                                    <div class="card-header">
+                                                        <h5>Search Box</h5>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <input type="datetime-local" class="form-control" id="start-date-disposition-search" value="<%= formattedStartDate %>" name="start-date-disposition-search" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <input type="datetime-local" class="form-control" id="end-date-disposition-search" value="<%= formattedEndDate %>" name="end-date-disposition-search" />
+                                                            </div>
+                                                        </div>
+                                                    
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <select class="form-control" id='time_formate' onchange="zonewise_datechange()">
+                                                                        
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <select class="form-control" id="disposition-disposition-search" name="disposition-disposition-search">
+                                                                        
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <select class="form-control" id="sub-disposition-disposition-search" name="sub-disposition-disposition-search">
+                                                                        
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control" id="searchtxt" name="searchtxt" placeholder="Search here.." />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    
+                                                    
+                                                    <div class="">
+                                                        
+                                                        <div class="input_function_imgs">
+                                                            <span title="CRM Search" class="webrtc_calllog-search-icon"><i class="fa fa-phone" aria-hidden="true"></i> Call Log</span>
+                                                            <span title="CRM Search" class="crm-search-icon"><i class="fa fa-search" aria-hidden="true"></i> CRM Search</span>
+                                                            <span title="Disposition Search" class="disposition-search-icon"><i class="fa fa-cubes" aria-hidden="true"></i> Disposition Search</span>
+                                                            <span title="Directory Search" class="directory-search-icon"><i class="fas fa-folder-open" aria-hidden="true"></i> Directory Search</span>
+                                                            <span title="User Session Log" class="save-icon"><i class="fa fa-floppy-o" aria-hidden="true"></i> User Session Log</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        </div>
+
+                                    </div>
+                                    
+                                </div>
+
+
+                            </div><!--Log Report by alok-->
+                            <div class="page-wrapper" id="dashboard_view">
+                                <div class="row mt-3">
+
+                                    <div class="col-xl-3 col-md-3 m-b-30">
+    
+                                        <div class="card Recent-Users">
+                                            <div class="card-header">
+                                                <h5>Customers</h5>
+                                            </div>
+                                            <ul class="nav nav-tabs" id="customer_myTab" role="tablist">
+                                                <li class="nav-item" onclick="get_assiged('0');" id="assignli-tab">
+                                                    <a class="nav-link" id="Assigned-tab" data-toggle="tab" href="#Assigned"
+                                                        role="tab" aria-controls="Assigned"
+                                                        aria-selected="true">Assigned</a>
+                                                </li>
+                                                <li class="nav-item" onclick="get_CallLog('0');">
+                                                    <a class="nav-link active show" id="logs-tab" data-toggle="tab"
+                                                        href="#logs" role="tab" aria-controls="logs"
+                                                        aria-selected="false">Logs</a>
+                                                </li>
+                                                <li class="nav-item" onclick="get_callback('0');">
+                                                    <a class="nav-link" id="Callback-tab" data-toggle="tab" href="#Callback"
+                                                        role="tab" aria-controls="Callback" aria-selected="true">Call
+                                                        Back</a>
+                                                </li>
+    
+                                            </ul>
+                                            <div class="tab-content pt-0" id="myTabContent">
+                                                <div class="tab-pane fade active show" id="logs" role="tabpanel"
+                                                    aria-labelledby="logs-tab">
+                                                    <div class="mb-0">
+                                                        <ul class="nav">
+                                                            <li class="nav-item"  onclick="get_CallLog('0');">
+                                                                <a class="nav-link active" id="today_log"  href="#"
+                                                                    style="padding: 0px 10px 10px 13px; font-size: 12px;">Today</a>
+                                                            </li>
+                                                            <li class="nav-item"  onclick="get_CallLog('7');">
+                                                                <a class="nav-link"  id="week_log" href="#"
+                                                                    style="padding: 0px 10px 10px 13px; font-size: 12px;">Week</a>
+                                                            </li>
+                                                            <li class="nav-item"  onclick="get_CallLog('30');">
+                                                                <a class="nav-link" id="month_log" href="#"
+                                                                    style="padding: 0px 10px 10px 13px; font-size: 12px;">Month</a>
+                                                            </li>
+    
+                                                        </ul>
+                                                    </div>
+                                                     <div class="form-group has-search mt-0" id="div_calllogsearch">
+                                                        <span class="fa fa-search form-control-feedback"></span>
+														<input type="hidden" id="calllogtxt_opt" class="form-control searchbox">
+                                                        <input type="text" id="calllogtxt_search" class="form-control searchbox" placeholder="Search Phone/Lead Name">
+                                                    </div>
+                                                    <div style="height: 70vh; overflow: auto; overflow-x: hidden;" id="tbl_calllog">
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="Assigned" role="tabpanel"
+                                                    aria-labelledby="Assigned-tab">
+    
+                                                  
+    
+                                                    <div class="form-group has-search mt-0" id="div_assignsearch">
+                                                        <span class="fa fa-search form-control-feedback"></span>
+                                                        <input type="text" readonly class="form-control searchbox" id="previewOpenModalBtn" placeholder="Search">
+                                                    </div>
+                                                     <div style="height: 70vh; overflow: auto; overflow-x: hidden;" id="tbl_assigned">
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="Callback" role="tabpanel"
+                                                aria-labelledby="Callback-tab">
+                                                <div class="form-group has-search mt-0" id="div_callbacksearch">
+                                                    <span class="fa fa-search form-control-feedback"></span>
+                                                    <input type="hidden" id="callbacktxt_opt" class="form-control searchbox">
+                                                    <input type="text" id="callbacktxt_search" class="form-control searchbox" placeholder="Search Phone/Lead Name">
+                                                </div>
+                                                 <div style="height: 70vh; overflow: auto; overflow-x: hidden;" id="tbl_callback">
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-xl-9 col-md-9 m-b-30">
+                                        <form id="crm-form" autocomplete="off">
+                                        <div class="card-transparent mb-5">
+    
+                                            <!-- <div class="row" style="border-bottom:1px solid #8b609d30;">
+                                                <div class="col-md-3">
+                                                    <h6 class="mb-0"><b>Interaction ID</b></h6>
+                                                    <p class="mb-3">4823648624</p>
+                                                </div>
+    
+                                                <div class="col-md-3">
+                                                    <h6 class="mb-0"><b>Phone ID</b></h6>
+                                                    <p class="mb-3">AS12323434AWER</p>
+                                                </div>
+    
+                                                <div class="col-md-3">
+                                                    <h6 class="mb-0"><b>Customer ID</b></h6>
+                                                    <p class="mb-3">54636456432AQ</p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <h6 class="mb-0"><b>DID</b></h6>
+                                                    <p class="mb-3">8049292929</p>
+                                                </div>
+                                            </div> -->
+                                                 	<!-- Written code by udit batra for get html view of Top fields.  -->
+                                                     
+                                                    <div class="row" id="top-crm-continer3" style="display: none;">
+                                                        <div class="col-md-8">
+                                                            <h3 class="mb-1"></h3>
+                                                        </div>
+                                                        <div class="col-md-4 pr-4" style="text-align:right;">
+                                                            <a class="label theme-bg2 text-white f-12 edit-button"
+                                                                title="Edit"><i class="feather icon-edit"></i></a>
+        
+                                                            <a href="javascript:void(0);" class="label theme-bg2 text-white f-12"
+                                                                title="Get New Call" onclick="progressive_call_api()"><i class="feather icon-rotate-ccw"></i></a>
+        
+                                                            <a href="javascript:void(0);" class="label theme-bg2 feedbacktransfer text-white f-12"  onclick="Feedbacktransfer()" title="Feedback Transfer"><i
+                                                                    class="feather icon-message-square"></i></a>
+                                                        </div>
+                                        
+                                                    </div>
+                                                    <div class="row" id="top-crm-continer2" style="background-color: #e3b6c91f;">
+
+                                                        <div class="col-md-12">
+                                                            <h3 class="mb-1"> <img src="assets/images/idel.gif" width="100" />
+                                                                <b>You are on idle mode!</b></h3>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" id="top-crm-continer" style="display: none;">
+                                                    <div class="col-md-8">
+                                                        <h3 class="mb-1"></h3>
+                                                    </div>
+    
+    
+                                                    <div class="col-md-4 pr-4" style="text-align:right;">
+                                                        <a class="label theme-bg2 text-white f-12"
+                                                            title="Edit" id="openModalBtn2" ><i class="feather icon-eye"></i></a>
+                                                        <a class="label theme-bg2 text-white f-12 save-button"
+                                                            title="Save"><i class="feather icon-save"></i></a>
+                                                        <!-- <a class="button small radius cancel-button">Cancel</a> -->
+                                                        <a class="label theme-bg2 text-white f-12 edit-button"
+                                                            title="Edit"><i class="feather icon-edit"></i></a>
+    
+                                                        <a  href="javascript:void(0);" class="label theme-bg2 text-white f-12"
+                                                            title="Get New Call" onclick="progressive_call_api()"><i class="feather icon-rotate-ccw"></i></a>
+    
+                                                        <a href="javascript:void(0);" class="label theme-bg2 feedbacktransfer text-white f-12" title="Feedback Transfer" onclick="Feedbacktransfer()"><i
+                                                                class="feather icon-message-square"></i></a>
+                                                    </div>
+    
+                                                    <div class="col-md-4">
+                                                        <p class="m-0"><b>Reg. no :</b> <span class="detail"><input
+                                                                    type="text" value=""
+                                                                    style="width: 75px;" disabled/></span> | Alt.
+                                                            no. : <span class="detail"><input type="text" value=""
+                                                                    style="width: 75px;" disabled /></span>
+                                                        </p>
+                                                        <p class="m-0"><b>Mail:</b><span class="detail"><input type="text"
+                                                                    value=""
+                                                                    style="width: 235px;" disabled /></span> </p>
+    
+                                                    </div>
+    
+                                                    <div class="col-md-6">
+    
+                                                        <p class="m-0"><b>Address:</b><span class="detail"><input
+                                                                    type="text"
+                                                                    value="" disabled /></span>
+                                                        </p>
+    
+                                                        <p class="m-0"><b>City:</b><span class="detail"><input type="text"
+                                                                    value="" disabled/></span>
+                                                            <b>State:</b> <span class="detail"><input type="text"
+                                                                    value="" disabled/></span>
+                                                        </p>
+    
+                                                    </div>
+    
+                                                    <div class="col-md-2">
+    
+                                                        <p class="m-0"> <b>Gender:</b><span class="detail"><input
+                                                                    type="text" value="" style="width: 50px;" disabled/></span>
+                                                        </p>
+                                                        <p class="m-0"><b>Age:</b><span class="detail"><input type="text"
+                                                                    value="" style="width: 50px;" disabled /></span> </p>
+    
+                                                    </div>
+                                        </div>
+                                  
+                                    </div>
+    
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item" onclick="dispose_show();">
+                                            <a class="nav-link active show call_crm_tab" id="home-tab" data-toggle="tab" href="#home"
+                                                role="tab" aria-controls="home" aria-selected="true">CRM</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile"
+                                                role="tab" aria-controls="profile" aria-selected="false">Interactions</a>
+                                        </li>
+    
+                                        <li class="nav-item" onclick="open_decision();" id="decision_auth">
+                                            <a class="nav-link" id="Decision-tab" data-toggle="tab" href="#Decision"
+                                                role="tab" aria-controls="Decision" aria-selected="true">Decision
+                                                tree</a>
+                                        </li>
+                                        <li class="nav-item" onclick="open_tickets();" id="tickets_auth">
+                                            <a class="nav-link" id="tickets-tab" data-toggle="tab" href="#tickets"
+                                                role="tab" aria-controls="tickets" aria-selected="false">Tickets</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="MO-tab" data-toggle="tab" href="#MO_mode"
+                                                role="tab" aria-controls="SMS" aria-selected="false" onclick="showMoPanel();">MO</a>
+                                        </li>
+    
+                                    </ul>
+                                    <div class="tab-content" id="myTabContent"
+                                        style="height: 70vh; overflow: auto; overflow-x: hidden;">
+                                        <div class="tab-pane fade active show" id="home" role="tabpanel"
+                                            aria-labelledby="home-tab">
+                                            <div class="row">
+                                                <div id="webrtc_crm_data" style="padding: 10px;  clear: both;">
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="tab-pane fade" id="profile" role="tabpanel"
+                                            aria-labelledby="profile-tab">
+    
+                                            <ul class="nav nav-tabs-fill" id="interaction_myTab" role="tablist">
+                                                <li class="nav-item" onclick="all_calllog();">
+                                                    <a class="nav-link active show" id="summary-tab" data-toggle="tab"
+                                                        href="#summary" role="summary" aria-controls="all_summary"
+                                                        aria-selected="true">All</a>
+                                                </li>
+                                                <li class="nav-item" onclick="CallLog_show('0');">
+                                                    <a class="nav-link" id="tabphone-tab" data-toggle="tab" href="#tabphone"
+                                                        role="tab" aria-controls="tabphone" aria-selected="false">Call</a>
+                                                </li>
+    
+                                                <li class="nav-item" id="chat_auth">
+                                                    <a class="nav-link" id="Chat-tab" data-toggle="tab" href="#Chat" onclick="showChatwebRtc()"
+                                                        role="tab" aria-controls="Chat" aria-selected="true">Chat </a>
+                                                </li>
+    
+                                                <li class="nav-item whatsapp_auth">
+                                                    <a class="nav-link" id="Whatsap-tab" onclick="showWhatapp()" data-toggle="tab" href="#whatsapp_tab"
+                                                        role="tab" aria-controls="whatsapp_tab" aria-selected="false">Whatsapp</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="whatsapp-navout" onclick="wpload_template()" data-toggle="tab" href="#whatsapp_tab_out"
+                                                        role="tab" aria-controls="whatsapp_tab_out" aria-selected="false">Whatsapp Out</a>
+                                                </li>
+                                                <li class="nav-item" onclick="emailLog('0')">
+                                                    <a class="nav-link" id="Email-tab" data-toggle="tab" href="#Email"
+                                                        role="tab" aria-controls="Email" aria-selected="false">Email</a>
+                                                </li>
+    
+                                                <li class="nav-item" onclick="smsLog('0')">
+                                                    <a class="nav-link" id="SMS-tab" data-toggle="tab" href="#SMS"
+                                                        role="tab" aria-controls="SMS" aria-selected="false">SMS</a>
+                                                </li>
+                                                
+    
+                                            </ul>
+                                            <div class="tab-content" id="myTabContent" style="padding:0px;">
+    
+                                                <div class="tab-pane fade active show" id="summary" role="tabpanel"
+                                                    aria-labelledby="summary-tab">
+                                                    <input type="hidden" id="all_summary_data_id">
+
+                                                    <div id="show_all_summary"></div>      
+                                                </div>
+    
+                                                <div class="tab-pane fade" id="tabphone" role="tabpanel"
+                                                    aria-labelledby="tabphone">
+                                                    <table class="table table-hover">
+                                                        <thead style="background-color: #ffffffbf;">
+                                                            <tr>
+                                                                <th style="border:none;">Interactions</th>
+																 <th style="border:none;">Interactions ID</th>
+																<th style="border:none;">Phone No.</th>
+                                                                <th style="border:none;">Date</th>
+                                                                <th style="border:none;">Time</th>
+                                                                <th style="border:none;">Duration</th>
+                                                                <th style="border:none;">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbl_calllog_show">
+                                                        </tbody>
+                                                    </table>
+    
+                                                </div>
+    
+                                                <div class="tab-pane fade" id="Chat" role="tabpanel" aria-labelledby="Chat">
+                                                    <input type="hidden" id="userName">
+                                                    <input type="hidden" id="user_id">
+                                                    <!-- <input type="hidden" id="whatsp_number"> -->
+                                                     
+                                                    <div id="newchatview"> <iframe id="chatApp" name="chatApp"class="chat-frame" src="" style=" border: none !important; height: 60vh; width: 100%; "></iframe></div>
+    
+                                                </div>
+    
+                                                <div class="tab-pane fade" id="whatsapp_tab" role="tabpanel"
+                                                aria-labelledby="whatsapp_tab">
+                                                <input type="hidden" id="whatsp_number">
+                                                        <div id="show_what_data">
+                                                            <iframe id="dynamicwpiframe" style="height:500px;width:100%; padding:15px; border:none; background-color:white"></iframe>
+                                                        </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="whatsapp_tab_out" role="tabpanel" aria-labelledby="whatsapp_tab_out">
+                                                    <!---------Start chat------------>
+                                                    <div style="background: #efe7dd url(assets/whatsapp/img/bg.jpg) repeat; z-index: 0; position: relative; border: #ccc solid 1px; padding: 15px;">
+                                                        <p class="validateTips">All form fields are required.</p>
+
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <input type="hidden" name="wroute_id" id="wroute_id" />
+                                                                    <input type="hidden" name="wtemplate_id" id="wtemplate_id" />
+                                                                    <input type="hidden" name="w_skill" id="w_skill" />
+                                                                    <input type="hidden" name="wphoneToWithoutMask" id="wphoneToWithoutMask" />
+                                                                    <input type="hidden" name="whatsapp_f" id="whatsapp_f" />
+                                                                    <label for="whatsapp_template">Select Template: </label>
+                                                                    <select id="whatsapp_template" class="form-control" onchange="wptemplate_view()">
+                                                                        <option value="">-SELECT TEMPLATE-</option>
+                                                                    </select>
+                                                                    <span style="color: red;font-size: 10px;" id="err_whatsapp_template"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="wphoneTo">Phone number: </label>
+                                                                    <input type="text" name="wphoneTo" id="wphoneTo" maxlength="10" onkeyup="if(/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" class="form-control" value="XXXXXXXXXXX" readonly="readonly"/>
+                                                                    <span style="color: red;font-size: 10px;" id="err_wphoneTo"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="wLang">Language:</label>
+                                                                    <input type="text" name="wLang" id="wLang" class="form-control" readonly="readonly" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="wHeader"> Header:</label>
+                                                                    <input type="text" name="wHeader" id="wHeader" class="form-control" readonly="readonly"/> 
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="wutype">Upload Type: </label>
+                                                                    <input type="text" name="wutype" id="wutype" class="form-control" readonly="readonly"/> 
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="wBody">Template Variable: </label>
+                                                                    <textarea id="wBody" name="wBody" class="form-control" readonly="readonly"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <div class="form-group">
+                                                                    <label  for="phoneBody"> Upload File: </label>
+                                                                    <div class="col-sm-7" id="wUfile"></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <button type="button" class="btn btn-danger" style="margin-top: 30px;float:right;" onclick="wptemplate_send()">Send</button>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                        
+                                                </div>
+    
+                                                <div class="tab-pane fade" id="Email" role="tabpanel"
+                                                    aria-labelledby="Email">
+                                                    <div id="tbl_emailloginbox" style="background: #fff; padding: 10px;"></div>
+                                                    <div id="tbl_emaillogsent" style="background: #fff; padding: 10px;"></div>
+													 <button type="button" class="btn btn-danger" id="customOpenModalBtn">+
+                                                    Compose
+                                                    mail</button>
+                                                    
+                                                </div>
+    
+                                                <div class="tab-pane fade" id="SMS" role="tabpanel" aria-labelledby="SMS">
+                                                    <table class="table table-hover">
+                                                        <thead style="background-color: #ffffffbf;">
+                                                            <tr>
+                                                                <th style="border:none;">Interactions</th>
+																<th style="border:none;">Interactions ID</th>
+																<th style="border:none;">Mobile No.</th>
+                                                                <th style="border:none;">Date</th>
+                                                                <th style="border:none;">Time</th>
+                                                                <th style="border:none;">SMS Type</th>
+                                                                <th style="border:none;">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbl_smsloginbox">
+                                                            
+                                                        </tbody>
+														 <tbody id="tbl_smslogsent">
+                                                            
+                                                        </tbody>
+                                                    </table>
+													<button type="button" class="btn btn-danger"
+                                                    id="customOpenModalBtnsms">+
+                                                    SMS</button>
+                                                    
+                                                </div>
+                                               
+    
+                                            </div>
+    
+                                        </div>
+    
+    
+                                        <div class="tab-pane fade" id="Decision" role="tabpanel" aria-labelledby="Decision">
+                                            <!-----Desion tree-->
+                                            <input type="hidden" id="decison_tree_parent_id">
+                                            <div id="show_decision_tree" style="width: 100%;"></div>
+                                        </div>
+                                        
+    
+                                        <div class="tab-pane fade" id="tickets" role="tabpanel" aria-labelledby="tickets">
+    
+                                            <div class="row">
+    
+    
+                                                <div class="page">
+                                                    <iframe id="div_tickets" style="height:400px;width:1050px" title="Tickets"></iframe>
+                                                </div>
+    
+    
+    
+    
+                                            </div>
+    
+    
+                                        </div>
+                                        <div class="tab-pane fade" id="MO_mode" role="tabpanel" aria-labelledby="MO_mode">
+                                            <div id="moinfo"></div>
+                                        </div>
+    
+                                    </div>    
+									</form>
+                                </div>
+    
+                                <div class="col-md-12">
+                                    <div class="card-transparent ">
+                                        <div class="card-block">
+    
+                                            <ul class="nav nav-tabs" id="footer_myTab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active show" id="assign-tab" data-toggle="tab"
+                                                        href="#assign" role="tab" aria-controls="assign"
+                                                        aria-selected="true">Assign</a>
+                                                </li>
+    
+    
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="Activity-tab" data-toggle="tab" href="#Activity"
+                                                        role="tab" aria-controls="Activity"
+                                                        aria-selected="true">Activity</a>
+                                                </li>
+                                            </ul>
+    
+                                            <div class="tab-content" id="myTabContent"
+                                                style="max-height: 70vh; overflow: auto; overflow-x: hidden;">
+                                                <div class="tab-pane fade active show" id="assign" role="tabpanel"
+                                                    aria-labelledby="assign-tab">
+    
+                                                    <div class="row">
+    
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <select class="form-control" name="doctor_language" id="doctor_language">
+                                                                    <option>Language</option>
+                                                                    
+                                                                </select>
+                                                            </div>
+                                                        </div>
+    
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <select class="form-control" name="doctor_name" id="doctor_name">
+                                                                    <option>Representative Name </option>
+                                                                   
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <input type="date" class="form-control" placeholder="Date" name="call_date" id="call_date">
+                                                            </div>
+                                                        </div>
+    
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <select class="form-control" name="slot_id" id="slot_id">
+                                                                    <option>Available Slot </option>
+                                                                   
+                                                                </select>
+                                                            </div>
+                                                        </div>
+    
+                                                        <div class="col-md-2">
+                                                            <button type="button"
+                                                                class="btn btn-primary w-100" id="email_sent" >Email</button>
+                                                        </div>
+    
+    
+                                                    </div>
+    
+                                                    <div class="row" id="show_disposition_section" style="border-top: 1px solid #d8def5;
+        padding-top: 18px;">
+    
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <textarea rows="1" cols="2" class="form-control" id="remarks" name="remarks"></textarea>
+                                                                <span id="err_remarks" style="color: red;font-size: 10px;"></span>
+                                                            </div>
+                                                        </div>
+    
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <input type="hidden" name="node_id" id="node_id" value="0"/>
+                                                                <select class="form-control" id="disposition" name="disposition">
+                                                                    <option value="">Select Disposition</option>
+                                                                    
+                                                                </select>
+                                                                <span id="err_disposition" style="color: red;font-size: 10px;"></span>
+                                                            </div>
+                                                        </div>
+    
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                
+                                                                <select class="form-control" id="sub_disposition" name="sub_disposition">
+                                                                    <option value="">Select Sub-disposition</option>
+                                                                    
+                                                                </select>
+                                                                <span id="err_sub_disposition" style="color: red;font-size: 10px;"></span>
+                                                            </div>
+                                                        </div>
+														  <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <input type="hidden" id="temp_disp" value="0"/>
+                                                                <!--<div id='callbackLabel'><label class="control-label" for="callbackdate">Callback</label></div>-->
+                                                                <input type="datetime-local"  class="form-control" name="callbackdate" id="callbackdate" />
+                                                            </div>
+													    </div>
+                                                        <div class="col-md-1">
+                                                            <div class="form-group">
+    
+                                                                <button type="button" class="btn btn-danger w-100" id="dispose_call">Dispose</button>
+                                                            </div>
+                                                        </div>
+                                                      
+    
+                                                        
+    
+    
+                                                    </div>
+    
+    
+                                                </div>
+    
+    
+                                                <div class="tab-pane fade" id="Activity" role="tabpanel"
+                                                    aria-labelledby="Activity">
+    
+                                                    <div class="row">
+                                                        <div class="calendar-container">
+                                                            <div class="calendar">
+                                                                <div class="header">
+                                                                    <button id="prevBtn">&#10094;</button>
+                                                                    <h2 class="currentdate" id="currentDate">Month Year</h2>
+                                                                    <button id="nextBtn">&#10095;</button>
+                                                                </div>
+                                                                <div class="view-selector">
+                                                                    <button id="monthViewBtn" class="active">Month</button>
+                                                                    <button id="yearViewBtn">Year</button>
+                                                                </div>
+                                                                <div id="calendarView"></div>
+                                                            </div>
+                                                            <div class="event-view">
+                                                                <h3>Events for <span id="selectedDate"></span></h3>
+                                                                <div class="event-form">
+                                                                    <input type="text" id="eventTitle"
+                                                                        placeholder="Event Title">
+                                                                    <input type="time" id="eventTime">
+                                                                    <button id="addEvent">Add Event</button>
+                                                                    <button  type="button" onclick="disposition_map_smssend('Answered')">Send SMS</button>
+                                                                </div>
+                                                                <div class="events" id="eventsContainer"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+    
+    
+    
+                                            </div>
+    
+    
+    
+                                        </div>
+                                    </div>
+                                </div>
+    
+    
+                                
+                                <!-- [ Main Content ] end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ Main Content ] end -->
+        
+        <!-- offcanvas panel right -->
+         <!-- Dial Pad panel right -->
+          <!-- Agent script model start here -->
+    <div id="agent_myModal" class="modalscript hidden">
+        <div class="modalscript-header">
+            <h2 class="modalscript-title">Agent Script</h2>
+            <div class="modalscript-controls">
+                <button class="modalscript-btn" id="minimizeBtn" title="Minimize">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 20H4V16H20V20Z" />
+                    </svg>
+                </button>
+                <button class="modalscript-btn" id="maximizeBtn" title="Maximize">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 4H20V20H4V4Z" />
+                    </svg>
+                </button>
+                <button class="modalscript-btn" id="closeBtn" title="Close">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="modalscript-content" id="dialer_script">
+            <iframe id="dynamicIframe" style="height:500px;width:100%; padding:15px; border:none; background-color:white"></iframe>
+        </div>
+    </div>
+    <!-- Agent script model ends here -->
+        <%- include('../views/dialpad2') %>
+
+      
+       
+            <!--End  Dial Pad panel right -->
+    
+        <!-- Js -->
+
+       
+            <!-- Loading Animation -->
+            <div class=loading>
+                <span class="fa fa-circle-o-notch fa-spin"></span>
+            </div>
+    
+            <!-- The Phone -->
+             <!-- start jainul html code-->
+              <!-- Agent script model ends here -->
+
+    <!-- mail model start -->
+    <div class="custom-modal-overlay" id="customModalOverlay">
+        <div class="custom-modal-container">
+            <div class="custom-modal-header">
+                <h2 class="custom-modal-title">Compose mail</h2>
+                <button class="custom-modal-close-btn" id="customCloseModalBtn">&times;</button>
+            </div>
+			<form id="emailForm">
+            <div class="custom-modal-content">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <select id="email_template" class="form-control" style="padding: 5px 10px; height: 34px;" onchange="get_emailbody(this.value)">
+                               <option value="">-SELECT TEMPLATE-</option>
+
+				               </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" name="to" id="to" class="form-control" placeholder="email id" style="padding: 5px 10px;">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="text" name="subject" id="subject" class="form-control" placeholder="Subject" style="padding: 5px 10px;">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <textarea id="txtEditor"></textarea>
+                    </div>
+
+                    <div class="col-md-12 mt-2"> <button type="button" class="btn btn-primary" onclick="send_email();"><i
+                                class="fa fa-paper-plane" aria-hidden="true"></i> Send</button>
+                        <button type="reset" class="btn btn-outline-danger">Cancel</button>
+                    </div>
+                </div>
+            </div>
+			</form>
+        </div>
+    </div>
+    <!-- Mail model end -->
+
+    <!-- SMS model start -->
+    <div class="custom-modal-overlay" id="customModalOverlaysms">
+        <div class="custom-modal-container">
+            <div class="custom-modal-header">
+                <h2 class="custom-modal-title">SMS</h2>
+                <button class="custom-modal-close-btn" id="customCloseModalBtnsms">&times;</button>
+            </div>
+			<form id="smsForm">
+            <div class="custom-modal-content">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <select id="sms_template" class="form-control" style="padding: 5px 10px; height: 34px;" onchange="get_smsbody(this.value)">
+                              <option>-SELECT TEMPLATE-</option>
+								   
+                            </select>
+                        </div>
+                    </div>
+					    <input type="hidden" name="route_id" id="route_id" value="" />
+						<input type="hidden" name="template_id" id="template_id" value="" />
+						<input type="hidden" name="config_id" id="config_id" value="" />
+						<input type="hidden" name="url_to_tiny" id="url_to_tiny" value="" />
+	                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" name="phoneTo" id="phoneTo" class="form-control" placeholder="5757747466" style="padding: 5px 10px;" maxlength="12">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <textarea id="phoneBody" name="phoneBody" rows="1" cols="3" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-12 mt-2"> <button type="button" class="btn btn-primary" onclick="send_sms();" ><i
+                                class="fa fa-paper-plane" aria-hidden="true"></i> Send</button>
+                        <button type="reset" class="btn btn-outline-danger">Cancel</button>
+                    </div>
+                </div>
+            </div>
+			</form>
+        </div>
+    </div>
+
+    <!---------new code jainul for play recording-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 50%;">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Email Content</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+             <div class="col-md-16">
+                   <textarea id="emailcontent"></textarea>
+             </div>
+            </div>
+          </div>
+        </div>
+      </div>
+	  <div class="modal fade" id="smsexampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">SMS Content</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding-left:20px">
+                <tr>
+                  <td valign="top" style="height:150px; width:100%" id="modal-item-id">
+                   </td>
+                 </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="expalyModal" tabindex="-1" aria-labelledby="expalyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="expalyModalLabel">Play Recording</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="pouse_play();">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding-left:20px">
+                <tr>
+                  <td valign="top">
+                     <audio controls controlsList="nodownload" id='myAudio' style="width:100%">
+                      <source type="audio/mpeg">
+                      Your browser does not support the audio element.
+                    </audio>
+                   </td>
+                 </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+	<!-- code by Udit for log search-->
+	 <div class="custom-modal-overlay" id="logModallog">
+        <div class="custom-modal-container" style="max-width:800px">
+            <div class="custom-modal-header">
+                <h2 class="custom-modal-title">Log</h2>
+                <button class="custom-modal-close-btn" id="logCloseModalBtn">&times;</button>
+            </div>
+		    <div class="custom-modal-content">
+				<input type="text" name="phone-number-to-copy" id="phone-number-to-copy" style="height: 0px; width: 0px;display:none;" />
+			</div>
+		</div>
+	</div>
+	<!-- code by Udit end call log--->
+	 <!--START Priview Model By Jainul--->
+	 <div class="custom-modal-overlay" id="previewModalPreview">
+        <div class="custom-modal-container" style="max-width:800px">
+            <div class="custom-modal-header">
+                <h2 class="custom-modal-title">Preview</h2>
+                <button class="custom-modal-close-btn" id="previewCloseModalBtn">&times;</button>
+            </div>
+			<form id="previewForm">
+            <div class="custom-modal-content">
+                <div class="row">
+
+                       							<div>
+													<div id="previewTab">
+													 <div class="row">
+														 <div class="col-md-4">
+                                                                <div class="form-group">
+																	<select name="column[]" class="form-control" id="column" style="padding: 5px 10px; height: 34px;">
+																		
+																	</select>
+															 </div>
+                                                            </div>
+																  <div class="col-md-4">
+                                                                   <div class="form-group">
+																	<select name="condition[]" class="form-control" id="condition" style="padding: 5px 10px; height: 34px;">
+																		<option value='0'>Select</option>
+																		<option value="=">=</option>
+																		<option value="<="><=</option>
+																		<option value=">=">>=</option>
+																		<option value="<"><</option>
+																		<option value=">">></option>
+																		<option value="%">%like</option>
+																		<option value="like">%like%</option>
+																	</select>
+																 </div>
+																</div>
+																<div class="col-md-4">
+                                                                 <div class="form-group">
+																	<input type="text" class="form-control" name="value[]"  placeholder="Enter Parameter" id="value" style="padding: 5px 10px;"/>
+																</div>
+															 </div>
+															 </div>
+															</div>
+															
+										 				  <div id="addPreviewTab"></div>
+														  <div class="row">
+													   <div class="col-md-4">
+                                                        <div class="form-group">
+																<select name="preview-disposition" class="form-control" id="preview-disposition" placeholder="Disposition" style="padding: 5px 10px; height: 34px;">
+																  <option value="0">Select Disposition</option>
+																</select>
+															 </div>
+															</div>
+															<!--<label class="col-sm-2 control-label" for="review-subdisposition">Sub Disposition: </label>-->
+															<div class="col-md-4">
+                                                               <div class="form-group">
+																<select name="preview-subdisposition" class="form-control" id="preview-subdisposition" placeholder="Sub Disposition" style="padding: 5px 10px; height: 34px;">
+																	<option value="0">Sub Disposition</option>
+																</select>
+															 </div>
+															</div>
+															<div class="col-md-4">
+															 <div class="form-group">
+																	<select name="preview-skill" class="form-control" id="preview-skill" placeholder="Order By"  style="padding: 5px 10px; height: 34px;">
+																		<option value="0">Select Skill</option>
+																	</select>
+																 </div>
+																</div>
+															<div class="col-md-4">
+                                                               <div class="form-group">
+																			<select name="preview_file" id="preview_file" class="form-control" placeholder="File" style="padding: 5px 10px; height: 34px;">
+																			     <option value="0">Select File</option>
+																			</select>
+																		</div>
+																	</div>
+															<div class="col-md-4">
+                                                               <div class="form-group">
+																	<select name="orderbyColumn" class="form-control" id="orderbyColumn" placeholder="Order By"  style="padding: 5px 10px; height: 34px;">
+																		 
+																	</select>
+																 </div>
+																</div>
+                                                              <div class="col-md-4">
+                                                                 <div class="form-group form-check">
+																	<label for="orderby"><input type="checkbox" name="orderby" id="orderby" /> Desc</label>
+																</div>
+															</div>
+														<div class="col-md-12 mt-2">
+                                                           <button type="button" class="btn btn-outline-primary" id="btn-preview-add">+ Add Search</button>														
+													    <button type="button" class="btn btn-primary" id="view-data"><i class="fa fa-eye"
+                                                               aria-hidden="true"></i> View</button>
+                                                               <div id="search_assign_new_data"></div>
+                                                        </div>
+														
+													</div>
+
+												</div>
+											</div>
+										</form>
+									</div>
+								 </div>
+								</div>
+    <!-- jainul Priview model end -->
+ <!-- jainul Review model Start -->
+
+					
+                       
+    <!-- jainul Review model end -->
+ <!-- jainul Priview model end -->
+ <!-- jainul Callback model Start -->
+ <div class="custom-modal-overlay" id="callbackschModalSch">
+    <div class="custom-modal-container" style="max-width:800px">
+        <div class="custom-modal-header">
+            <h2 class="custom-modal-title">Callback Reschedule</h2>
+            <button class="custom-modal-close-btn" id="callbackschCloseModalBtn">&times;</button>
+        </div>
+        <form id="callbackForm">
+          <div class="custom-modal-content">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                    <input type="hidden" id="recall_id" />
+                      <input type="datetime-local" class="form-control" id="schedule_calldate"  />
+                      <span id="err_schedule_calldate" style="color: red; font-size: 12px; display: none;"></span>
+                </div>
+                </div>
+                       <div class="col-md-4 mt-2"> <button type="button" class="btn btn-primary" id="Save_callbackschedule"><i class="fa fa-save"
+                                                           aria-hidden="true"></i> Save</button>
+                        </div>
+                   </div>
+                  </div>
+                </form>
+          </div>
+        </div>
+  <div class="custom-modal-overlay" id="callbackdModalD">
+    <div class="custom-modal-container" style="max-width:800px">
+        <div class="custom-modal-header">
+            <h2 class="custom-modal-title">Callback Details</h2>
+            <button class="custom-modal-close-btn" id="callbackdCloseModalBtn">&times;</button>
+        </div>
+        <form id="callbackForm">
+          <input type="hidden" id="callback_recall_id" />
+            <div class="custom-modal-content">
+                <div class="row" id="callback_logid" style="overflow:auto">
+                </div>
+            </div>
+        </form>
+          </div>
+        </div>
+    <div class="custom-modal-overlay" id="callbacksModalS">
+    <div class="custom-modal-container" style="max-width:800px">
+        <div class="custom-modal-header">
+            <h2 class="custom-modal-title">Callback Search</h2>
+            <button class="custom-modal-close-btn" id="callbacksCloseModalBtn">&times;</button>
+        </div>
+        <form id="callbackForm">
+          <div class="custom-modal-content">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                    <input type="hidden" id="search_recall_id" />
+                      <input type="date" class="form-control" id="search_start_date" value="<%= current_date %>" />
+                </div>
+                </div>
+                 <div class="col-md-4">
+                 <div class="form-group">
+                    <input type="date" class="form-control" id="search_end_date" value="<%= current_date %>" />
+                </div>
+                </div>
+                    <div class="col-md-2"> 
+                        <button type="button" class="btn btn-primary" id="Search_callback">
+                        <i class="fa fa-search" aria-hidden="true"></i> 
+                        Search</button>
+                   </div>
+                   <div class="col-md-2"> 
+                    <button type="button" class="btn btn-primary" id="search_history" onclick="show_recall_history()" style="display: none;">
+                    <i class="fa fa-search" aria-hidden="true"></i> 
+                    History</button>
+                   </div>
+                  </div>
+                       <div class="row" id="callback_searchlog" style="overflow:auto; max-height: 350px;">
+                       </div>
+                  </div>
+                </form>
+          </div>
+        </div>
+   <div class="custom-modal-overlay" id="callbackhModalH">
+    <div class="custom-modal-container" style="max-width:800px">
+        <div class="custom-modal-header">
+            <h2 class="custom-modal-title">Callback History</h2>
+            <button class="custom-modal-close-btn" id="callbackhCloseModalBtn">&times;</button>
+        </div>
+        <form id="callbackHistoryForm">
+          <input type="hidden" id="callback_history_id" />
+            <div class="custom-modal-content">
+                <div class="row" id="callback_historylog" style="height:450px;overflow:auto">
+                </div>
+            </div>
+        </form>
+     </div>
+    </div>
+<!-- jainul Review model end -->
+            
+    </body>
+    <script src="assets/sipjs/include.js?v=5.17.1" type="text/javascript"> </script>
+    <!-- Loadable Scripts -->
+    <script type="text/javascript" src="assets/webrtc_asset/js/jquery-3.6.1.min.js"></script>
+    <script type="text/javascript" src="assets/webrtc_asset/js/jquery-ui-1.13.2.min.js"></script>
+    <script type="text/javascript" src="phone_new.js"></script>
+
+    <!-- Deferred Scripts -->
+    <script type="text/javascript" src="assets/webrtc_asset/js/jquery.md5-min.js" defer="true"></script>
+    <script type="text/javascript" src="assets/webrtc_asset/js/Chart.bundle-2.7.2.min.js" defer="true"></script>
+    <script type="text/javascript" src="assets/webrtc_asset/js/sip-0.20.0.min.js" defer="true"></script>
+    <script type="text/javascript" src="assets/webrtc_asset/js/fabric-2.4.6.min.js" defer="true"></script>
+    <script type="text/javascript" src="assets/webrtc_asset/js/moment-with-locales-2.24.0.min.js" defer="true"></script>
+    <script type="text/javascript" src="assets/webrtc_asset/js/croppie.min.js" defer="true"></script>
+    <script type="text/javascript" src="assets/webrtc_asset/js/strophe-1.4.1.umd.min.js" defer="true"></script>
+    <script>
+        function openModal(itemId) {
+			$('#exampleModal').on('show.bs.modal', function (event) {
+			  var modal = $(this);
+			  modal.find('.modal-body .Editor-editor').html(itemId);
+			});
+
+			$('#exampleModal').modal('show');
+		  }
+		  function opensmsModal(itemId) {
+			$('#smsexampleModal').on('show.bs.modal', function (event) {
+			  var modal = $(this);
+			  modal.find('.modal-body #modal-item-id').text(itemId);
+			});
+
+			$('#smsexampleModal').modal('show');
+		  }
+		  function palyModal(itemId,call_date) {
+            listen_permission=getLocalVariable('listen_permission');
+            if(listen_permission==0)
+            {
+                alertify.error("Listening to the recording is forbidden.");
+                return false;
+            }
+		  var client_id=getLocalVariable('ClientID');
+		    var settings = {
+				  "url": audio_call_api+"?ClientID="+client_id+"&rid="+itemId+"&CallDatetime="+call_date,
+				  "method": "POST",
+				  "timeout": 0,
+				};
+
+		       $.ajax(settings).done(function (response) {
+				   function setAudioSource(path) {
+						$('#myAudio').attr('src', path);
+					}
+                    setAudioSource(response);
+				});
+				$('#expalyModal').on('show.bs.modal', function (event) {
+				  var modal = $(this);
+				  modal.find('.modal-body #modal-item-id').text(itemId);
+				});
+           
+			$('#expalyModal').modal('show');
+		  }
+        var count = 0;
+
+        $(".digit").on('click', function () {
+            var num = ($(this).clone().children().remove().end().text());
+            //alert(num);
+            if (count < 11) {
+                $("#output").append('<span>' + num.trim() + '</span>');
+				 
+				 var sd=$("#output").text();  
+					//sd=parseInt(sd);
+					//alert(sd);
+					
+					$("#txtPhoneNumber").val(sd);
+
+                count++
+            }
+        });
+
+        
+		 $('.icon-delete').click(
+        function(){
+            var inputString = $('#txtPhoneNumber').val();
+            var shortenedString = inputString.substr(0,(inputString.length -1));
+            $('#txtPhoneNumber').val(shortenedString);
+			 $('#output span:last-child').remove();
+			 
+            count--;
+        });
+        function getManualCallerID() {
+    if (typeof (getLocalVariable('all_campaign_group')) != "undefined") {
+        var groups = JSON.parse(getLocalVariable('all_campaign_group'));
+        var group = Object.keys(groups);
+        setLocalVariable('ManualCallerID', '');
+        setLocalVariable('Campaign_Group', group[0]);
+        
+        var callerID = groups[group[0]];
+        setLocalVariable('Campaign_map_did', callerID);
+        setLocalVariable('ManualCallerIDList', callerID);
+
+        if (getLocalVariable('manualRouteSelect') == "1") {
+            $('#route-name').html('');
+            var html = "<option value=''></option>";
+            for (var i in group) {
+                html += "<option value='" + group[i] + "'>" + group[i] + "</option>";
+            }
+            $('#route-name').html(html);
+        }
+        $('#route-select-img').attr('title', "Route: " + getLocalVariable('Campaign_Group') + "\nDID: " + getLocalVariable('ManualCallerID'));
+    }
+    }
+    
+    campaign_list();
+    function campaign_list()
+    {
+        var username=localStorage.getItem("USER_ID");
+        var client_id=localStorage.getItem("ClientID");
+        var CampaignName="";
+        $.ajax({
+        url:"/api_calling/campaign_list",
+        method:"POST",
+        data:{username:username,client_id:client_id,CampaignName:CampaignName},
+        dataType:"JSON",
+        success:function(data)
+        {
+            //console.log(JSON.stringify(data));
+            campaign_data=data.campaign;
+            console.log("campaign length= "+data.Queue_Priority.length);
+            if(data.Queue_Priority.length>0)
+            {
+                var serializedData = JSON.stringify(data.Queue_Priority);
+                localStorage.setItem("Queue_Priority", serializedData);
+            }
+            $("#campaign").attr('disabled', false);
+            $("#dialpad_campaign").attr('disabled', false);
+                $.each(campaign_data,function(key, value)
+                {
+                    var selectdate='';
+                    var CampaignName=localStorage.getItem("CampaignName");
+                    if(CampaignName !='' && value.campaign_id==CampaignName)
+                    {
+                        selectdate='selected';
+                        var UserModeIndexLabel=localStorage.getItem("UserModeIndexLabel");
+                        var jsonData=JSON.parse(UserModeIndexLabel);
+                        var select = $('<select class="form-control" name="user-mode" id="user-mode"></select>') 
+                        .attr("name", "user-mode");  
+                        var select2= $('<select class="form-control" style="border-color: #0D63B0; background-color: #fff;" id="dial_mode"></select>') 
+                        .attr("name", "dial_mode");  
+                        var selectsubdata='';
+                        $.each(jsonData, function(subkey, subvalue) 
+                        {
+                            var UserMode=localStorage.getItem("UserMode");
+                            if(UserMode !='' && subvalue==UserMode)
+                            {
+                                select.append($("<option selected></option>").attr("value", subvalue).text(subvalue)); 
+                                select2.append($("<option selected></option>").attr("value", subvalue).text(subvalue)); 
+                            }else
+                            {
+                                select.append($("<option></option>").attr("value", subvalue).text(subvalue)); 
+                                select2.append($("<option></option>").attr("value", subvalue).text(subvalue));   
+                            }
+                           
+                            
+                        });
+                        $("#res_user_mode").html(select);
+                        $("#show_user_mode").html(select2);
+                        
+                    }
+                    //$("#campaign").append('<option value='+value.campaign_id+'~'+value.campaign_type+'>' + value.campaign_id + '</option>');
+                    $("#campaign").append('<option value='+value.campaign_id+'~'+value.campaign_type+' '+selectdate+' >' + value.campaign_id + '</option>');
+                    $("#dialpad_campaign").append('<option value='+value.campaign_id+' '+selectdate+'>' + value.campaign_id + '</option>');
+                    
+                });
+        }
+    })
+    }
+    function logout_agent()
+    {
+
+        alertify.confirm("Are you sure you want to log out?", function (e) 
+        {
+            if (e)
+            {
+                var clientID=getLocalVariable('ClientID');
+                var AS_ID=getLocalVariable('AS_ID');
+                var CampaignName=getLocalVariable('CampaignName');
+                var USER_ID=getLocalVariable('USER_ID');
+                var SIP_ID=getLocalVariable('SIP_ID');
+                var Campaign_Type=getLocalVariable('Campaign_Type');
+                var LoginHourID=getLocalVariable('LoginHourID');
+                var ModeDBId=getLocalVariable('ModeDBId');
+                var MYIP=getLocalVariable('MYIP');
+                var ChatLoginID=getLocalVariable('ChatLoginID');
+                var emailCount=getLocalVariable('emailCount');
+                var smsCount=getLocalVariable('smsCount');
+                var idleDuration=getLocalVariable('idleDuration');
+                var wrapupDuration=getLocalVariable('wrapupDuration');
+                var holdCount=getLocalVariable('holdCount');
+                var holdDuration=getLocalVariable('holdDuration');
+                var recallCount=getLocalVariable('recallCount');
+                var recallDuration=getLocalVariable('recallDuration');
+                var breakDuration=getLocalVariable('breakDuration');
+                var moDuration=getLocalVariable('moDuration');
+                var transferCount=getLocalVariable('transferCount');
+                var userStatusID=getLocalVariable('userStatusID');
+                var SERVER_IP=getLocalVariable('SERVER_IP');
+                var ActivityID=getLocalVariable('ActivityID');
+                var getNotificationInMode=getLocalVariable('getNotificationInMode');
+                var leadAssignTime=getLocalVariable('leadAssignTime');
+                var previousSQL=getLocalVariable('previousSQL');
+                var CS_API_Port=getLocalVariable('CS_API_Port');
+                var Manual_Caller_ID=getLocalVariable('Manual_Caller_ID');
+                var jsonData={clientID:clientID,AS_ID:AS_ID,CampaignName:CampaignName,USER_ID:USER_ID,SIP_ID:SIP_ID,Campaign_Type:Campaign_Type,LoginHourID:LoginHourID,ModeDBId:ModeDBId,MYIP:MYIP,ChatLoginID:ChatLoginID,emailCount:emailCount,smsCount:smsCount,idleDuration:idleDuration,wrapupDuration:wrapupDuration,holdCount:holdCount,holdDuration:holdDuration,recallCount:recallCount,recallDuration:recallDuration,breakDuration:breakDuration,moDuration:moDuration,transferCount:transferCount,userStatusID:userStatusID,SERVER_IP:SERVER_IP,ActivityID:ActivityID,getNotificationInMode:getNotificationInMode,leadAssignTime:leadAssignTime,previousSQL:previousSQL,CS_API_Port:CS_API_Port,Manual_Caller_ID:Manual_Caller_ID
+                };
+                var json_inout = {client_id: clientID,exten: SIP_ID,campaign: CampaignName,agent: USER_ID,SERVER_IP: SERVER_IP,CS_API_Port: CS_API_Port};
+                $.ajax({url:"/remove-agent",method:"POST",data:json_inout,dataType:"JSON",success:function(result){ console.log(result); }});
+                fetch('/agent_logout', {method: 'POST',headers: {'Content-Type': 'application/json'},body: JSON.stringify(jsonData)}).then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+                 })
+            .then(data => {
+            if(data.status==1){
+            endSession('cs_call');
+            localStorage.clear();
+            location.replace("/logout");
+            }
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            });   
+                
+            } else {
+                return false;
+            }
+        });
+           
+    }
+    </script>
+     <!-- code by udit 03 july -->
+	
+     <script>
+  
+	
+        function unserializeTopPHP(data) {
+               var that = this;
+               var utf8Overhead = function (chr) {
+                   var code = chr.charCodeAt(0);
+                   if (code < 0x0080) {
+                       return 0;
+                   }
+                   if (code < 0x0800) {
+                       return 1;
+                   }
+                   return 2;
+               };
+               var error = function (type, msg, filename, line) {
+                   throw new that.window[type](msg, filename, line);
+               };
+               var read_until = function (data, offset, stopchr) {
+                   var i = 2, buf = [], chr = data.slice(offset, offset + 1);
+   
+                   while (chr != stopchr) {
+                       if ((i + offset) > data.length) {
+                           error('Error', 'Invalid');
+                       }
+                       buf.push(chr);
+                       chr = data.slice(offset + (i - 1), offset + i);
+                       i += 1;
+                   }
+                   return [buf.length, buf.join('')];
+               };
+               var read_chrs = function (data, offset, length) {
+                   var i, chr, buf;
+   
+                   buf = [];
+                   for (i = 0; i < length; i++) {
+                       chr = data.slice(offset + (i - 1), offset + i);
+                       buf.push(chr);
+                       length -= utf8Overhead(chr);
+                   }
+                   return [buf.length, buf.join('')];
+               };
+               var _unserialize = function (data, offset) {
+                   var dtype, dataoffset, keyandchrs, keys, contig,
+                       length, array, readdata, readData, ccount,
+                       stringlength, i, key, kprops, kchrs, vprops,
+                       vchrs, value, chrs = 0,
+                       typeconvert = function (x) {
+                           return x;
+                       };
+   
+                   if (!offset) {
+                       offset = 0;
+                   }
+                   dtype = (data.slice(offset, offset + 1)).toLowerCase();
+   
+                   dataoffset = offset + 2;
+   
+                   switch (dtype) {
+                       case 'i':
+                           typeconvert = function (x) {
+                               return parseInt(x, 10);
+                           };
+                           readData = read_until(data, dataoffset, ';');
+                           chrs = readData[0];
+                           readdata = readData[1];
+                           dataoffset += chrs + 1;
+                           break;
+                       case 'b':
+                           typeconvert = function (x) {
+                               return parseInt(x, 10) !== 0;
+                           };
+                           readData = read_until(data, dataoffset, ';');
+                           chrs = readData[0];
+                           readdata = readData[1];
+                           dataoffset += chrs + 1;
+                           break;
+                       case 'd':
+                           typeconvert = function (x) {
+                               return parseFloat(x);
+                           };
+                           readData = read_until(data, dataoffset, ';');
+                           chrs = readData[0];
+                           readdata = readData[1];
+                           dataoffset += chrs + 1;
+                           break;
+                       case 'n':
+                           readdata = null;
+                           break;
+                       case 's':
+                           ccount = read_until(data, dataoffset, ':');
+                           chrs = ccount[0];
+                           stringlength = ccount[1];
+                           dataoffset += chrs + 2;
+   
+                           readData = read_chrs(data, dataoffset + 1, parseInt(stringlength, 10));
+                           chrs = readData[0];
+                           readdata = readData[1];
+                           dataoffset += chrs + 2;
+                           if (chrs != parseInt(stringlength, 10) && chrs != readdata.length) {
+                               error('SyntaxError', 'String length mismatch');
+                           }
+                           break;
+                       case 'a':
+                           readdata = {};
+   
+                           keyandchrs = read_until(data, dataoffset, ':');
+                           chrs = keyandchrs[0];
+                           keys = keyandchrs[1];
+                           dataoffset += chrs + 2;
+   
+                           length = parseInt(keys, 10);
+                           contig = true;
+   
+                           for (i = 0; i < length; i++) {
+                               kprops = _unserialize(data, dataoffset);
+                               kchrs = kprops[1];
+                               key = kprops[2];
+                               dataoffset += kchrs;
+   
+                               vprops = _unserialize(data, dataoffset);
+                               vchrs = vprops[1];
+                               value = vprops[2];
+                               dataoffset += vchrs;
+   
+                               if (key !== i) {
+                                   contig = false;
+                               }
+   
+                               readdata[key] = value;
+                           }
+   
+                           if (contig) {
+                               array = new Array(length);
+                               for (i = 0; i < length; i++) {
+                                   array[i] = readdata[i];
+                               }
+                               readdata = array;
+                           }
+   
+                           dataoffset += 1;
+                           break;
+                       default:
+                           error('SyntaxError', 'Unknown / Unhandled data type(s): ' + dtype);
+                           break;
+                   }
+                   return [dtype, dataoffset - offset, typeconvert(readdata)];
+               };
+   
+               return _unserialize(data, 0)[2];
+   }
+   
+       
+       function generateTopHTML(array, data, agent, code, campaign, NoMask){
+           let i = 1;
+           let html = '';
+           const detail = unserializeTopPHP(array.ftypedesc);
+           const required = array.req == 1 ? "required='required'" : "";
+           const readonly = array.ltype == 1 ? "readonly='readonly'" : "";
+           var parent = array.parentElement;
+           var style_html = 'style="width: 75px;"';
+           if(array.dfid == 4){
+               style_html = 'style="width: 235px;"';
+           }else if(array.dfid == 5){
+               style_html = 'style="width: 360px;"';
+           }else if(array.dfid == 8 || array.dfid == 9){
+               style_html = 'style="width: 50px;"';
+           }
+           if(array.dfid > 9){
+               return html;
+           }
+           if(array.dfid == 1){
+               html +=  '<div class="col-md-8"><h3 class="mb-1"><b><span class="detail"><input crmtype="' + array.fcaption.toLowerCase() + '"  ' + required + ' ' + readonly + ' type="text" maxlength="' + detail.textlength + '" name="f' + array.dfid + '" id="f' + array.dfid + '" value="' + (data['f' + array.dfid] || '') + '" placeholder="Enter your name" class="placeholder_input" disabled/></span></b></h3></div>';
+               
+               html += '<div class="col-md-4 pr-4" style="text-align:right;">' +
+                       '<a class="label theme-bg2 text-white f-12" title="Script" id="openModalBtn2">' +
+                           '<i class="feather icon-eye"></i>' +
+                       '</a>' +
+                       '<a style="display:none;" id="updateBtn" class="label theme-bg2 text-white f-12 save-button" title="Save">' +
+                           '<i class="feather icon-save"></i>' +
+                       '</a>' +
+                       '<!-- <a class="button small radius cancel-button">Cancel</a> -->' +
+                       '<a class="label theme-bg2 text-white f-12 edit-button" title="Edit">' +
+                           '<i class="feather icon-edit"></i>' +
+                       '</a>' +
+                       '<a href="#!" class="label theme-bg2 text-white f-12" title="Get New Call">' +
+                           '<i class="feather icon-rotate-ccw"></i>' +
+                       '</a>' +
+                       '<a href="javascript:void(0)"  onclick="Feedbacktransfer()" class="feedbacktransfer label theme-bg2 text-white f-12" title="Feedback Transfer">' +
+                           '<i class="feather icon-message-square"></i>' +
+                       '</a>' +
+                   '</div>';
+                           
+               return html;				
+           }
+           
+           if(array.dfid ==2){
+               html += '<div class="col-md-4">';
+           }else if(array.dfid ==5){
+               html += '<div class="col-md-6">';
+           }else if(array.dfid ==8){
+               html += '<div class="col-md-2">';
+           }
+           if(array.dfid ==3){
+               html += "| <b>"+ array.fcaption +  "</b>:<span class='detail'>" + (required ? "<span style='color:red'>*</span>" : "");
+           }else if(array.dfid ==7){
+               html += "<b>"+array.fcaption +  "</b>:<span class='detail'>" + (required ? "<span style='color:red'>*</span>" : "");
+           }else{
+           html += "<p class='m-0'><b>"+ array.fcaption +  "</b>:<span class='detail'>" + (required ? "<span style='color:red'>*</span>" : "") ;
+           }
+       
+               switch (array.ftype) {
+                   case "text":
+                       if (!Array.isArray(detail.textlength)) {
+                       if (array.is_masked == 1 || (array.dial == 1 && NoMask === "false")) {
+                           html += '<input crmtype="' + array.fcaption.toLowerCase() + '"  ' + required + ' ' + readonly + ' type="password" maxlength="' + detail.textlength + '" name="f' + array.dfid + '" id="f' + array.dfid + '" ' + style_html + ' value="' + (data['f' + array.dfid] || '') + '" disabled/>';
+                       } else {
+                           html += '<input  ' + required + ' ' + readonly + ' type="text" maxlength="' + detail.textlength + '" name="f' + array.dfid + '" id="f' + array.dfid + '" ' + style_html + ' value="' + (data['f' + array.dfid] || '') + '" disabled/>';
+                       }
+               }
+   
+               if (array.dial == 1) {
+                   html += '<img src="assets/images/call.svg" width="15" height="15" onclick=\'DialByLine("audio","",document.getElementById("f' + array.dfid + '").value,"","","RD","")\' ondblclick=\'DialByLine("audio","",document.getElementById("f' + array.dfid + '").value,"","","RD","")\' />';
+               }
+                       break;
+                   // Add more cases for different field types as needed
+                   
+                   case 'number':
+                       if (!Array.isArray(detail.textlength)) {
+                           if (array.is_masked == 1 || (array.dial == 1 && NoMask == "false")) {
+                               html += '<input crmtype="' + array.fcaption.toLowerCase() + '"  ' + required + ' ' + readonly + ' type="password" maxlength="' + detail.textlength + '" name="f' + array.dfid + '" '+ style_html +' id="f' + array.dfid + '"  value="' + (data['f' + array.dfid] || '') + '" disabled/>';
+                           } else {
+                               html += '<input  ' + required + ' ' + readonly + ' type="text" maxlength="' + detail.textlength + '" name="f' + array.dfid + '" id="f' + array.dfid + '" value="' + (data['f' + array.dfid] || '') + '" '+ style_html +' disabled/>';
+                           }
+   
+                               
+                       }
+   
+                   if (array.dial == 1) {
+                   html += '<img src="assets/images/call.svg" width="15" height="15" onclick=\'DialByLine("audio","",document.getElementById("f' + array.dfid + '").value,"","","RD","")\' ondblclick=\'DialByLine("audio","",document.getElementById("f' + array.dfid + '").value,"","","RD","")\' />';
+                   }
+                   
+                   break;
+                   
+                   case 'alphanumeric':
+                      html += "<input crmtype='" + array.fcaption.toLowerCase() + "' class='form-control' " + required + " " + readonly +
+                          " type='text' name='f" + array.dfid + "' id='f" + array.dfid + 
+                          "' maxlength='" + detail.alphanumeric_option.length + "' title='VALID FORMAT: " + detail.alphanumeric_option +
+                          "' value='" + (data["f" + array.dfid] !== undefined ? data["f" + array.dfid] : '') + "' />";
+               
+                   break;
+                   
+                   
+                   case "date":
+                       const dateValue = new Date(data['f' + array.dfid]);
+                       const formattedDate = isNaN(dateValue.getTime()) || dateValue.toISOString().substring(0, 10) === "1970-01-01" ? "" : dateValue.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+                       html += '<input class="form-control" ' + required + ' ' + readonly + ' type="text" name="f' + array.dfid + '" value="' + formattedDate + '" id="f' + array.dfid + '" />';
+                       dateArray.push(array.dfid);
+                   
+                   break;
+                   
+                   case "radio" :
+                      if (!Array.isArray(detail.radio_option)) {
+                           const values = detail.radio_option.split(",");
+   
+                           values.forEach(value => {
+                               html += '<label><input style="height:auto !important; float: left;" type="radio" ' + required + ' ' + readonly + ' name="f' + array.dfid + '" id="f' + array.dfid + '" value="' + value.trim() + '" ' + ((value.trim() === data['f' + array.dfid]) ? "checked='checked'" : "") + ' />' + value.trim().charAt(0).toUpperCase() + value.trim().slice(1) + "</label>";
+                           });
+                       }
+                   break;	
+                   
+                 case "checkbox" :
+                      
+                        if (!Array.isArray(detail.checkbox_option)) {
+                           const values = detail.checkbox_option.split(",");
+                           const dbValues = (data['f' + array.dfid] || '').split(",");
+   
+                           values.forEach(value => {
+                               html += '<label><input style="height:auto !important; float: left;" type="checkbox" ' + required + ' ' + readonly + ' name="f' + array.dfid + '[]" id="f' + array.dfid + '" value="' + value.trim() + '" ' + (dbValues.includes(value.trim()) ? "checked='checked'" : "") + ' />' + value.trim().charAt(0).toUpperCase() + value.trim().slice(1) + "</label>";
+                           });
+                       }
+                   break;
+                   
+                   
+                   case "combo":
+                       html += '<select class="form-control" ' + required + ' ' + readonly + ' name="f' + array.dfid + '" id="f' + array.dfid + '"><option value="">Select</option>';
+   
+                       if (!Array.isArray(detail.combo_option)) {
+                           const values = detail.combo_option.split(",");
+                           const dbValues = (data['f' + array.dfid] || '').split(",");
+   
+                           values.forEach(value => {
+                               html += '<option value="' + value.trim() + '" ' + (dbValues.includes(value.trim()) ? "selected='selected'" : "") + '>' + value.trim().charAt(0).toUpperCase() + value.trim().slice(1) + '</option>';
+                           });
+                       }
+   
+                       html += "</select>";
+   
+                   
+                   break;
+                   
+                   case "list":
+                        html += '<select class="form-control" ' + required + ' ' + readonly + ' multiple="multiple" style="height: auto !important;" name="f' + array.dfid + '[]" id="f' + array.dfid + '">';
+   
+                       if (!Array.isArray(detail.list_option)) {
+                           const values = detail.list_option.split(",");
+                           const dbValues = (data['f' + array.dfid] || '').split(",");
+   
+                           values.forEach(value => {
+                               html += '<option value="' + value.trim() + '" ' + (dbValues.includes(value.trim()) ? "selected='selected'" : "") + '>' + value.trim().charAt(0).toUpperCase() + value.trim().slice(1) + '</option>';
+                           });
+                       }
+   
+                       html += "</select>";
+   
+                   
+                   break;
+               }
+           if(array.dfid ==2 || array.dfid ==6){
+               html += '</span>';
+           }else{
+               html += '</span></p>';
+           }
+           
+           if(array.dfid ==4){
+               html += '</div>';
+           }else if(array.dfid ==7){
+               html += '</div>';
+           }else if(array.dfid ==9){
+               html += '</div>';
+           }
+           i++;
+           //alert(html);
+           //console.log("header html= "+html);
+           return html;
+       }
+   
+       
+       
+       $('body').on('click','.call_crm_tab',function(e){
+			e.preventDefault(); // Prevent default anchor behavior
+			var tabId = $(this).attr('href'); // Get the href attribute value
+			$(tabId).tab('show'); 
+            var campaign=localStorage.getItem("CampaignName");
+            var code=localStorage.getItem("ClientID");
+            var CLIENT_ID=localStorage.getItem("ClientID");
+            var agent=localStorage.getItem("USER_ID");
+            var Campaign_Type=localStorage.getItem("Campaign_Type");
+            var sip_id=localStorage.getItem("SIP_ID");
+            var phone=localStorage.getItem("NumberToDial");
+            var SKILL=localStorage.getItem("crm_skill");
+            var did=localStorage.getItem("ManualCallerIDList");
+            var rid=localStorage.getItem("RecordID");
+            var priview_id=0;
+            var auto_att=0;
+            var dararecord={campaign:campaign,code:code,agent:agent,rid:rid,agent:agent,processType:'1',code:code,redial:'0',calltype:'MC',phone:phone,SIP_ID:sip_id,CAMPAIGN_TYPE:Campaign_Type,did:did,SKILL:SKILL,CLIENT_ID:CLIENT_ID};
+			console.log("crmsend_custom= "+JSON.stringify(dararecord));
+            $.ajax({
+			url:"/crm",
+			method:"GET",
+			data:dararecord,
+			//data:{phone:'9999999988',campaign:campaign,rid:'fef',CLIENT_ID:code,code:code,agent:agent,},
+			success:function(res)
+				{
+					//alert(res);
+					$(tabId).html(res); 
+					
+					
+								var tableBody = document.getElementById('top-crm-continer');
+								tableBody.innerHTML = '';
+								var result = JSON.parse(localStorage.getItem('crm-data'));
+								var data = JSON.parse(localStorage.getItem('crm-data-value'));
+								var NoMask = JSON.parse(localStorage.getItem('crm-nomask'));
+								var full_html = ''; 
+								if (result && Array.isArray(result)) {
+									result.forEach(element => {
+									var rhtml = generateTopHTML(element,data, agent,  code, campaign ,NoMask);
+									full_html += rhtml;
+									if (element.ftype === "number") {  
+							  
+									call_dfid = element.dfid ;
+								try {
+										var inputField = document.getElementById('f' + call_dfid);
+										tableBody.addEventListener('keydown', function(event) {
+										if (event.target.matches('input[type="text"][id="f' + call_dfid + '"]')) {
+											var inputField = event.target;
+											if ([46, 8, 9, 27, 13, 110].includes(event.keyCode) ||
+												(event.keyCode === 65 && (event.ctrlKey === true || event.metaKey === true)) ||
+												(event.keyCode >= 35 && event.keyCode <= 40)) {
+												return;
+											}
+											if ((event.shiftKey || (event.keyCode < 48 || event.keyCode > 57)) &&
+												(event.keyCode < 96 || event.keyCode > 105)) {
+												event.preventDefault();
+											}
+										}
+									});
+									
+								} catch (error) {
+									console.error("Error parsing JSON:", error);
+								}
+							 } 
+							
+							 if (element.ftype === "alphanumeric") {  
+							  
+								call_dfid = element.dfid;
+								var ser_detail = element.ftypedesc;
+								var detail = unserializeTopPHP(ser_detail);
+								try {
+										$("#f" + call_dfid).keypress(function(e) {
+												if(e.shiftKey || e.ctrlKey || e.altKey){
+													e.preventDefault();
+												}
+												var code = e.keyCode || e.which;
+												var definedPattern = detail.alphanumeric_option;
+												var value = $(this).val();
+												if(code == 13 || code == 8 || code == 46 || (code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122)){ 
+													if(definedPattern.charAt(value.length) == "X" && !(/[a-z]/i).test(String.fromCharCode(code))) {
+														$("#f" + element.dfid).css({"border": "1px #F00 solid !important"});
+														return false;
+													}
+													if(definedPattern.charAt(value.length) == "N" && !(/[0-9]/).test(String.fromCharCode(code))) {
+														$("#f" + element.dfid).css({"border": "1px #F00 solid !important"});
+														return false;
+													}
+												} else
+													return false;
+										});
+									
+								} catch (error) {
+									console.error("Error parsing JSON:", error);
+								}
+								} 
+								
+							 }); 
+						 }
+							tableBody.innerHTML = full_html;
+															 
+				
+				}
+			});
+
+		
+		});	
+           </script>
+	<!-- code by udit 03 july for crm data top & bottom view end-->
+    <script src="assets1/js/rightpanel.js"></script>
+    <script src="assets1/js/vendor-all.min.js"></script>
+    <script src="assets1/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets1/js/pcoded.min.js"></script>
+
+    <script src="assets/sipjs/toastr.js"></script> 
+   
+    <script src="assets/sipjs/include.js?v=5.17.1" type="text/javascript"> </script>
+    <script type="text/javascript" src="assets/sipjs/webSocket.js?v=5.17.1"></script>
+    <script type="text/javascript" src="assets/sipjs/custom.js?v=5.17.1"></script>
+    <script type="text/javascript" src="assets/sipjs/custom_new.js?v=5.17.1"></script>
+    <script type="text/javascript" src="assets/sipjs/custom_ajax.js?v=5.17.1"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+   
+	<link href="assets/css/editor.css" type="text/css" rel="stylesheet" />
+	<script src="assets/js/editor.js"></script>	
+    <script src="assets/js/main.js"></script>
+    <!-- Added for datetimepicker by Udit on 09 july 2024 start-->
+	
+	 <!---  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js"></script>
+  
+    <script type="text/javascript" src="assets/js/jquery-ui-timepicker-addon.js"></script>-->
+	<!--- <link rel="stylesheet"
+    href=
+"https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
+
+
+<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
+</script> 
+Added for datetimepicker by Udit on 09 july 2024 end-->
+<script>
+  $(document).ready(function(){
+   $('#calllogtxt_search').keypress(function (event) {
+			  var keycode = (event.keyCode ? event.keyCode : event.which);
+              //alert(keycode);
+			  if (keycode <= '13') {
+			       var d=$('#calllogtxt_opt').val();
+				   get_CallLog(d);
+				 }
+			  });
+			  $('#callbacktxt_search').keypress(function (event) {
+			  var keycode = (event.keyCode ? event.keyCode : event.which);
+			  if (keycode <= '13') {
+			       var d=$('#callbacktxt_opt').val();
+				   get_callback(d);
+				 }
+			  });
+    /****---  Added for datetimepicker by Udit on 09 july 2024 end--- ****/
+    function initializeDateTimePicker() {
+          $('body .hasDatepicker').datetimepicker({
+              formatDate:'Y-m-d h:mm a',
+          })
+      }
+      $('body').on('click','.hasDatepicker', function(){
+        initializeDateTimePicker();
+      
+      });
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('call_date').setAttribute('min', today);
+      // Initial datetimepicker setup for existing elements
+    /** Added for datetimepicker by Udit on 09 july 2024 end--*/
+                
+            
+            if(getLocalVariable('CampaignName') !='')
+            {
+                $("#modalOverlay").css("display", "none");
+            }
+			/*--- comment by udit start---*/
+			/*
+            $('#updateBtn').click(function () {
+
+                alert("Hello disposition");
+			if((getLocalVariable('reviewMode') == '0' || getLocalVariable('reviewMode') == '') && (getLocalVariable('UserDisableDisposition') == '1' || getLocalVariable('CampaignDisableDisposition') == '1')) {
+				if(getLocalVariable('UserDisableDisposition') == '1')
+					alertify.error("Disposition disabled for you");
+				else 
+					alertify.error("Disposition disabled");
+				return false;
+			}
+            if ((getLocalVariable('reviewMode') == '0' || getLocalVariable('reviewMode') == '') && !(getLocalVariable('isLineBusy').toUpperCase() == "HANGUP" || getLocalVariable('isLineBusy').toUpperCase() == "READY") && getLocalVariable('isLineBusy') != '') {
+                alertify.error("Hang Up the call first.");
+                return false;
+            }
+            $('#updateBtn').attr("disabled", "disabled");
+            var data = $('form').serialize();
+            mandatory='';
+            if (mandatory.length > 0) {
+                for (x in mandatory) {
+                    if (mandatory[x] != '') {
+                        if ($('#f' + mandatory[x]).val().length == 0) {
+                            alertify.error("Star(*) fields are mandatory");
+                            $('#updateBtn').removeAttr("disabled");
+                            return false;
+                        }
+                    }
+                }
+            }
+            if ($('#disposition').val() == '0') {
+                alertify.error("Please select disposition");
+                $('#updateBtn').removeAttr("disabled");
+                return false;
+            }
+            if ($('#sub_disposition').children('option').length > 1 && $('#sub_disposition').val() == '0') {
+                alertify.error("Please select sub-disposition");
+                $('#updateBtn').removeAttr("disabled");
+                return false;
+            }
+            var is_callback = 0;
+            if (callback.hasOwnProperty($('#disposition').val().toLowerCase().replace(" ", "_"))) {
+                is_callback = parseInt(callback[$('#disposition').val().toLowerCase().replace(" ", "_")]);
+                if (isNaN(is_callback)) {
+                    is_callback = 0;
+                }
+            }
+            if (is_callback == 1 && $('#callbackdate').val().length == 0) {
+                alertify.error("Please select the date for recalling");
+                $('#updateBtn').removeAttr("disabled");
+                return false;
+            }
+            var numbertodial = '';
+            var data = '';
+            checkNumberInLead($('#crm_phone_number').val(), $('#disposition').val(), data, 0, 1, numbertodial);
+            return false;
+        });
+		*/
+		/*comment by udit end*/
+        /*- For update crm data code Added by udit start---*/
+		
+		
+		
+		
+		
+		
+		
+		$('body').on('click','#updateBtn',function () {
+				let attempt = 1;
+               updateCRMWithValidations(attempt);
+		});
+		
+		
+	/*code by udit on 17 july start for update cm with valiations----*/
+	
+	function updateCRMWithValidations(attempt){
+        $('#crm-form :input:disabled').each(function() {
+			$(this).data('disabled', true); // Store the disabled state
+			$(this).prop('disabled', false);
+		});
+
+	// Serialize the form
+	let data = $('#crm-form').serialize();
+			$('#crm-form :input').each(function() {
+				if ($(this).data('disabled')) {
+					$(this).prop('disabled', true);
+					$(this).removeData('disabled'); // Clean up the data attribute
+				}
+			});
+
+// Convert the serialized string into an object
+let dataObj = {};
+data.split('&').forEach(pair => {
+    let [key, value] = pair.split('=');
+    key = decodeURIComponent(key.replace(/\+/g, ' '));
+    value = decodeURIComponent(value.replace(/\+/g, ' '));
+    
+    if (key.endsWith('[]')) {
+        key = key.slice(0, -2);
+        if (!dataObj[key]) {
+            dataObj[key] = [];
+        }
+        dataObj[key].push(value);
+    } else {
+        dataObj[key] = value;
+    }
+});
+
+// Function to format date-time without "T"
+function formatDateTime(dateTime) {
+    return dateTime.replace('T', ' ');
+}
+
+// Modify date-time fields if necessary and convert arrays to comma-separated strings
+for (let key in dataObj) {
+    if (typeof dataObj[key] === 'string' && dataObj[key].includes('T')) {
+        dataObj[key] = formatDateTime(dataObj[key]);
+    }
+    
+    if (Array.isArray(dataObj[key])) {
+        dataObj[key] = dataObj[key].join(',');
+    }
+    if (dataObj[key] === undefined) {
+        dataObj[key] = '';
+    }
+}
+
+// Add additional data if needed
+if (attempt) {
+    dataObj.attempt = '0';
+}
+
+// Log the data object to identify fields
+console.log('dataObj:', dataObj);
+
+// Reserialize the modified data object to a URL-encoded string
+let serializedData = $.param(dataObj);
+console.log('after op:', serializedData);
+
+data = serializedData;
+				
+				
+                //alert("data serilize= "+JSON.stringify(data));
+//                console.log(mandatory);
+            if (mandatory.length > 0) {
+                                    
+                                    for (x in mandatory) {
+                                        if (mandatory[x] != '') {
+                                            if (typeof ($('#f' + mandatory[x]).val()) != "undefined" && $('#f' + mandatory[x]).attr('type') == "text" && $('#f' + mandatory[x]).val().length == 0) {
+                                                alertify.error("Star(*) fields are mandatory");
+                                                return false;
+                                            }else if (typeof ($('#f' + mandatory[x]).val()) != "undefined" && $('#f' + mandatory[x]).attr('type') == "radio" && $('#f' + mandatory[x]).is(":checked") == false) {
+                                            alertify.error("Star(*) fields are mandatory");
+                                                return false;
+                                            }else{
+                                                if ($('#f' + mandatory[x]).val() == "") {
+                                                    alertify.error("Star(*) fields are mandatory");
+                                                    return false;
+                                                }
+                                            }
+                                        }
+                                    }
+                }
+                var phoneno = /^\(?([0-9]{z3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+                 
+                if ($('#disposition').val() === '0') {
+					alertify.error("Please select disposition");
+                    return false;
+                }
+                if ($('#sub_disposition').children('option').length > 1 && $('#sub_disposition').val() === '0') {
+                      alertify.error("Please select sub-disposition");
+					
+                    return false;
+                }
+                var disposition = $('#disposition').val();
+                var tempdisp=$('#temp_disp').val();
+						if (tempdisp == 1) {
+							if ($('#callbackdate').val().length === 0) {
+                              alertify.error("Please select the date for recalling");
+								return false;
+							}
+						  }
+
+				
+                if (autodispose > 0) {
+                    updateCrm(data);
+                } else {
+				updateCrm(data);
+                  /*  $.post('/crm', {
+                        tag: 'check-callback',
+                        USER_ID: $('#agent').val(),
+                        CampaignName: $('#campaign').val(),
+                        CALL_TYPE: $('#calltype').val(),
+                        ClientID: $('#code').val(),
+                        phone: $("#phoneNumber").val()
+                    }, function (result) {
+                        if (result.ok == true) {
+                            if ($('#disposition').val().toUpperCase() == 'CALLBACK') {
+                                var ev = confirm("Callback for phone is already there. Want to update it?");
+                                if (ev) {
+                                    deleteCallback($("#phoneNumber").val(), 1);
+                                    updateCrm(data);
+                                } else {
+                                    updateCrm(data);
+                                }
+                            } else {
+                                var ev = confirm("Callback is there for phone. Want to delete it?");
+                                if (ev) {
+                                    deleteCallback($("#phoneNumber").val());
+                                    updateCrm(data);
+                                } else {
+                                    updateCrm(data);
+                                }
+                            }
+                        } else {
+                            updateCrm(data);
+                        }
+                    }, 'json'); */
+                }
+                return false;
+		}
+	
+	/*--------end-----*/
+		
+		
+		
+		/* ------ update crm data code by udit end -----*/
+
+			
+        });
+        </script>
+        
+        <!------- Crm new design -->
+     
+    
+        <!------- Crm new design -->
+        <script>
+            $(window).on("load", function () {
+				$('body').on('click','.save-button',function(){
+					save_onclick();
+				});
+				$('body').on('click','.cancel-button',function(){
+					cancel_onclick();
+				});
+				$('body').on('click','.edit-button',function(){
+					edit_onclick();
+				});
+                $('body .save-button').hide();
+				$('body .cancel-button').hide();
+            });
+    
+            function edit_onclick() {
+                setFormMode($(this).closest("form"), 'edit');
+            }
+    
+            function cancel_onclick() {
+                setFormMode($(this).closest("form"), 'view');
+            }
+    
+            function save_onclick() {
+                setFormMode($(this).closest("form"), 'view');
+            }
+    
+    
+            function setFormMode($form, mode) {
+				 switch (mode) {
+                    case 'view':
+                        $('#top-crm-continer').find('.save-button, .cancel-button').hide();
+                        $('#top-crm-continer').find('.edit-button').show();
+                        $('#top-crm-continer').find("input, select").prop("disabled", true);
+                        break;
+                    case 'edit':
+                        $('#top-crm-continer').find('.save-button, .cancel-button').show();
+                        $('#top-crm-continer').find('.edit-button').hide();
+                        $('#top-crm-continer').find("input, select").prop("disabled", false);
+                        break;
+                }
+            }
+        </script>
+    
+    
+        <script>
+            var openBtn2 = document.getElementById('openModalBtn2');
+            var closeBtn = document.getElementById('closeBtn');
+            var minimizeBtn = document.getElementById('minimizeBtn');
+            var maximizeBtn = document.getElementById('maximizeBtn');
+            var modalContent = document.querySelector('.modalscript-content');
+    
+            $('body').on('click','#openModalBtn',function(){
+                modalscript.classList.remove('hidden');
+                modalscript.classList.add('fade-in');
+                setTimeout(() => modalscript.classList.remove('fade-in'), 300);
+            });
+            $('body').on('click','#openModalBtn2',function(){
+                modalscript.classList.remove('hidden');
+                modalscript.classList.add('fade-in');
+                setTimeout(() => modalscript.classList.remove('fade-in'), 300);
+            });
+    
+            closeBtn.onclick = () => {
+                modalscript.style.opacity = '0';
+                setTimeout(() => {
+                    modalscript.classList.add('hidden');
+                    modalscript.style.opacity = '1';
+                    modalscript.classList.remove('minimized', 'maximized');
+                }, 300);
+            }
+    
+            minimizeBtn.onclick = () => {
+                modalscript.classList.add('minimized');
+                modalscript.classList.remove('maximized');
+                updateMaximizeIcon();
+            }
+    
+            maximizeBtn.onclick = () => {
+                if (modalscript.classList.contains('minimized')) {
+                    modalscript.classList.remove('minimized');
+                } else {
+                    modalscript.classList.toggle('maximized');
+                }
+                updateMaximizeIcon();
+            }
+    
+            function updateMaximizeIcon() {
+                const isMaximized = modalscript.classList.contains('maximized');
+                const maximizeIcon = maximizeBtn.querySelector('svg');
+                if (isMaximized) {
+                    maximizeIcon.innerHTML = '<path d="M4 8h8V4H4v4zm2-4h4v2H6V4zm10 0v4h8V4h-8zm2 4h-4V6h4v2zM4 20h8v-4H4v4zm2-4h4v2H6v-2zm10 0v4h8v-4h-8zm2 4h-4v-2h4v2z"/>';
+                    maximizeBtn.title = "Restore";
+                } else {
+                    maximizeIcon.innerHTML = '<path d="M4 4H20V20H4V4Z" />';
+                    maximizeBtn.title = "Maximize";
+                }
+            }
+    
+            /*window.onclick = (event) => {
+                if (event.target === modal) {
+                    closeBtn.onclick();
+                }
+            }*/
+        </script>
+        <script>
+            var calendarView = document.getElementById('calendarView');
+            var currentDateElement = document.getElementById('currentDate');
+            var prevBtn = document.getElementById('prevBtn');
+            var nextBtn = document.getElementById('nextBtn');
+            var monthViewBtn = document.getElementById('monthViewBtn');
+            var yearViewBtn = document.getElementById('yearViewBtn');
+            var selectedDateElement = document.getElementById('selectedDate');
+            var eventTitleInput = document.getElementById('eventTitle');
+            var eventTimeInput = document.getElementById('eventTime');
+            var addEventButton = document.getElementById('addEvent');
+            var eventsContainer = document.getElementById('eventsContainer');
+    
+            var currentDate = new Date();
+            var selectedDate = new Date();
+            var currentView = 'month';
+            var events = {};
+    
+            function renderCalendar() {
+                if (currentView === 'month') {
+                    renderMonthView();
+                } else {
+                    renderYearView();
+                }
+                updateHeader();
+                renderEvents();
+            }
+    
+            function renderMonthView() {
+                calendarView.innerHTML = '';
+                const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    
+                const daysContainer = document.createElement('div');
+                daysContainer.classList.add('days');
+    
+                const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                dayNames.forEach(name => {
+                    const dayNameElement = document.createElement('div');
+                    dayNameElement.textContent = name;
+                    dayNameElement.style.fontWeight = 'bold';
+                    daysContainer.appendChild(dayNameElement);
+                });
+    
+                for (let i = 0; i < firstDay.getDay(); i++) {
+                    daysContainer.appendChild(document.createElement('div'));
+                }
+    
+                for (let i = 1; i <= lastDay.getDate(); i++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.classList.add('day');
+                    dayElement.textContent = i;
+                    const dateString = new Date(currentDate.getFullYear(), currentDate.getMonth(), i).toDateString();
+                    if (events[dateString] && events[dateString].length > 0) {
+                        dayElement.classList.add('has-events');
+                    }
+                    dayElement.addEventListener('click', () => selectDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), i)));
+                    daysContainer.appendChild(dayElement);
+                }
+    
+                calendarView.appendChild(daysContainer);
+                updateSelectedDate();
+            }
+    
+            function renderYearView() {
+                calendarView.innerHTML = '';
+                const monthsContainer = document.createElement('div');
+                monthsContainer.classList.add('months');
+    
+                for (let i = 0; i < 12; i++) {
+                    const monthElement = document.createElement('div');
+                    monthElement.classList.add('month');
+                    monthElement.textContent = new Date(currentDate.getFullYear(), i, 1).toLocaleString('default', { month: 'short' });
+                    monthElement.addEventListener('click', () => {
+                        currentDate = new Date(currentDate.getFullYear(), i, 1);
+                        currentView = 'month';
+                        renderCalendar();
+                    });
+                    monthsContainer.appendChild(monthElement);
+                }
+    
+                calendarView.appendChild(monthsContainer);
+            }
+    
+            function updateHeader() {
+                if (currentView === 'month') {
+                    currentDateElement.textContent = `${currentDate.toLocaleString('default', { month: 'long' })} ${currentDate.getFullYear()}`;
+                } else {
+                    currentDateElement.textContent = currentDate.getFullYear();
+                }
+            }
+    
+            function selectDate(date) {
+                selectedDate = date;
+                updateSelectedDate();
+                renderEvents();
+            }
+    
+            function updateSelectedDate() {
+                selectedDateElement.textContent = selectedDate.toDateString();
+                document.querySelectorAll('.day, .month').forEach(element => {
+                    element.classList.remove('active');
+                    if (currentView === 'month' && parseInt(element.textContent) === selectedDate.getDate() &&
+                        currentDate.getMonth() === selectedDate.getMonth() &&
+                        currentDate.getFullYear() === selectedDate.getFullYear()) {
+                        element.classList.add('active');
+                    } else if (currentView === 'year' && element.textContent === selectedDate.toLocaleString('default', { month: 'short' })) {
+                        element.classList.add('active');
+                    }
+                });
+            }
+    
+            function addEvent() {
+                if (!eventTitleInput.value || !eventTimeInput.value) return;
+    
+                const eventKey = selectedDate.toDateString();
+                if (!events[eventKey]) {
+                    events[eventKey] = [];
+                }
+    
+                events[eventKey].push({
+                    title: eventTitleInput.value,
+                    time: eventTimeInput.value
+                });
+    
+                eventTitleInput.value = '';
+                eventTimeInput.value = '';
+                renderEvents();
+                renderCalendar(); // Re-render to update event indicators
+            }
+    
+            function renderEvents() {
+                eventsContainer.innerHTML = '';
+                const eventKey = selectedDate.toDateString();
+                const dayEvents = events[eventKey] || [];
+    
+                dayEvents.forEach((event, index) => {
+                    const eventElement = document.createElement('div');
+                    eventElement.classList.add('event');
+                    eventElement.innerHTML = `
+                        <span>${event.time} - ${event.title}</span>
+                        <button onclick="removeEvent('${eventKey}', ${index})">&#10006;</button>
+                    `;
+                    eventsContainer.appendChild(eventElement);
+                });
+            }
+    
+            function removeEvent(eventKey, index) {
+                events[eventKey].splice(index, 1);
+                renderEvents();
+                renderCalendar(); // Re-render to update event indicators
+            }
+    
+            prevBtn.addEventListener('click', () => {
+                if (currentView === 'month') {
+                    currentDate.setMonth(currentDate.getMonth() - 1);
+                } else {
+                    currentDate.setFullYear(currentDate.getFullYear() - 1);
+                }
+                renderCalendar();
+            });
+    
+            nextBtn.addEventListener('click', () => {
+                if (currentView === 'month') {
+                    currentDate.setMonth(currentDate.getMonth() + 1);
+                } else {
+                    currentDate.setFullYear(currentDate.getFullYear() + 1);
+                }
+                renderCalendar();
+            });
+    
+            monthViewBtn.addEventListener('click', () => {
+                currentView = 'month';
+                monthViewBtn.classList.add('active');
+                yearViewBtn.classList.remove('active');
+                renderCalendar();
+            });
+    
+            yearViewBtn.addEventListener('click', () => {
+                currentView = 'year';
+                yearViewBtn.classList.add('active');
+                monthViewBtn.classList.remove('active');
+                renderCalendar();
+            });
+    
+            addEventButton.addEventListener('click', addEvent);
+    
+            renderCalendar();
+        </script>
+        <style>
+            /*** developed by Alok*/
+           /** .nav-link.show{color: #00d7a1 !important;}
+            .nav-link.show:after {content: ' \25CF';}***/
+            .logstable tr td{ cursor: pointer;}
+            .nav-link.show{font-weight: bold;}
+        </style>
+        <script>
+            $(document).ready(function () {
+                var today = new Date().toISOString().slice(0, 16);
+                document.getElementsByName("callbackdate")[0].min = today;
+                document.getElementById("schedule_calldate").setAttribute('min', today);
+			   var previewSearchCount = 1;
+                var column = $('select[name*=column]'),
+                condition = $('select[name*=condition]'),
+                value = $('select[name*=value]'),
+                page = $('#page'),
+                sort = $('#sort'),
+                orderby = $('#orderby'),
+                previewFields = $([]).add(column).add(condition).add(value).add(page).add(sort).add(orderby),
+                tips = $(".validateTips");
+                 $('#btn-preview-add').click(function () {
+				     if (previewSearchCount == 3) {
+                            alertify.error("Max Search range has given.");
+                            return;
+                        }
+                        html = $('#previewTab').html();
+                        $('#addPreviewTab').append(html);
+                        previewSearchCount++;
+				 });
+                 $('#previewOpenModalBtn').click(function()
+                {
+                    document.getElementById("previewForm").reset();  // Reset the form
+                    $('#addPreviewTab').html('');
+                    $('#search_assign_new_data').html('');
+                    previewSearchCount = 1;
+                });
+                $('#view-data').click(function () {
+                    var preview_file = $('#preview_file').val();
+					/**
+                    if (preview_file == 0) {
+                        alertify.error("Please Select File!...");
+                        return false;
+                    } **/
+                    var columnVal = '';
+                    var column = document.getElementsByName('column[]');
+                    for (var i = 0; i < column.length; i++) {
+                        if (column[i].value != '0') {
+                            columnVal += column[i].value + ',';
+                        }
+                    }
+                    columnVal = columnVal.replace(/,\s*$/, "");
+                    var conditionVal = '';
+                    var condition = document.getElementsByName('condition[]');
+                    for (var i = 0; i < condition.length; i++) {
+                        if (column[i].value != '0' && condition[i].value != '0') {
+                            conditionVal += condition[i].value + ',';
+                        }
+                    }
+                    conditionVal = conditionVal.replace(/,\s*$/, "");
+                    var valueVal = '';
+                    var value = document.getElementsByName('value[]');
+                    for (var i = 0; i < value.length; i++) {
+                        if (column[i].value != '0' && value[i].value.length != 0) {
+                            valueVal += value[i].value + ',';
+                        }
+                    }
+                    valueVal = valueVal.replace(/,\s*$/, "");
+                   	$.ajax({
+					method: 'POST',
+					url: '/get_assiged_search',
+					data:{  
+							campaign: getLocalVariable('CampaignName'),
+							agent: getLocalVariable('USER_ID'),
+							ClientID: getLocalVariable('ClientID'),
+							changeLead: getLocalVariable('changeLead'),
+							MOPanel: getLocalVariable('MOPanel'),
+							dataset: getLocalVariable('dataset'),
+							column: columnVal,
+							condition: conditionVal,
+							value: valueVal,
+							preview_file:preview_file,
+							disposition: $('#preview-disposition').val(),
+							subdisposition: $('#preview-subdisposition').val(),
+							orderbyCol: $('#orderbyColumn').val(),
+							isDisplayPhone: getLocalVariable('isDisplayPhone'),
+							skill: $('#preview-skill').val(),
+							orderby: $('#orderby').is(":checked") ? 'DESC' : 'ASC'
+							},
+					        success: function(response) {
+                           /* $('input[name="value[]"]').val('');
+                            $('select[name="column[]"]').val('0');
+                            $('select[name="condition[]"]').val('0');
+                            $('select[name="preview-disposition"]').val('');
+                            $('select[name="preview-subdisposition"]').val('');
+                            $('select[name="preview-skill"]').val('0');
+                            $('select[name="preview_file"]').val('0');
+                            $('select[name="orderbyColumn"]').val('0');*/
+						    $("#tbl_assigned").html(response);
+                            if(response.trim()=='No data found')
+                            {
+                                $("#search_assign_new_data").html("<b style='color:red'>"+response+"</b>");
+                            }else
+                            {
+                                $('#search_assign_new_data').html("<b style='color:green'>Data show in assign tab</b>");
+                            }
+					   }
+					});
+				 });
+
+
+                 /**jai code***/
+                
+                
+
+            });
+            $(document).off('click', 'section#viewTable #data-view tbody tr').on('click', 'section#viewTable #data-view tbody tr', function () {
+                $('section#viewTable #data-view tbody tr').removeClass("detailed-review-active");
+                var selectedID = $(this)[0].id;
+                $('#selectedID').val(selectedID);
+                $('#' + selectedID).addClass("detailed-review-active");
+            });
+
+          
+            $(document).off('dblclick', 'section#viewTable #data-view tbody tr').on('dblclick', 'section#viewTable #data-view tbody tr', function () {
+                if (getLocalVariable('WaitingDisposition') == "true") {
+                    blankStatus('Please dispose the last review first.');
+                    return;
+                }
+                $('section#viewTable #data-view tbody tr').removeClass("detailed-review-active");
+                var selectedID = $(this)[0].id;
+                $('#selectedID').val(selectedID);
+                $('#' + selectedID).addClass("detailed-review-active");
+                setLocalVariable('CRMDataID', selectedID);
+                setLocalVariable('DispalyPhoneNumber', $($('#' + selectedID + ' td')[1]).html());
+                let input_array = {USER_ID: getLocalVariable('USER_ID'),CampaignName: getLocalVariable('CampaignName'),LoginHourID: getLocalVariable('LoginHourID'),ModeDBId: getLocalVariable('ModeDBId'),SIP_ID: getLocalVariable('SIP_ID'),ClientID: getLocalVariable('ClientID'),ActivityID: getLocalVariable('ActivityID'),Activity: getLocalVariable('Activity'),LastUsedSkill:getLocalVariable('LastUsedSkill'),UserMode:getLocalVariable('UserMode'),CRMDataID:getLocalVariable('CRMDataID')};
+                $.ajax({url:'/review-crm',type: 'POST',contentType: 'application/json',data: JSON.stringify(input_array),
+                success: function(result) {
+                    if (result.ok == true) {
+                        if (Object.keys(result.data).length > 0) {
+                            updateLocalVariables(result.data);
+                        }
+                        crmPage();
+                        loadCRMContent();
+                        loadCRMContentExtended();
+                        $('#review-leadid').val(getLocalVariable('CRMLeadId'));
+                    }
+                },
+                error: function(error) {
+                    alertify.error("Failed to send log: ",error);
+                }
+                });
+				});
+			  $(document).ready(function(){
+                $('#power-on').click(function () {
+                    if (getLocalVariable('WaitingDisposition') == "true") {
+                        blankStatus("Please dispose the last call first");
+                        return;
+                    }
+                    var activity = $('#activity').val();
+                    var activityName = $("#activity option:selected").text();
+                    if (activity.length == 0) {
+                        alertify.error("Please select the activity.");
+                        return;
+                    }
+                    var allowedMode = ["auto", "manual", "progressive", "preview", "callback"];
+                    if ($.inArray(getLocalVariable('UserMode').toLowerCase(), allowedMode) == -1) {
+                        alertify.error('Review Not allowed in the current mode.');
+                        return;
+                    }
+						$.ajax({
+						method: 'POST',
+						url: '/power-on',
+						data:{      
+						        activity: activity,
+								USER_ID: getLocalVariable('USER_ID'),
+								CampaignName: getLocalVariable('CampaignName'),
+								ClientID: getLocalVariable('ClientID'),
+								LoginHourID: getLocalVariable('LoginHourID'),
+								ModeDBId: getLocalVariable('ModeDBId'),
+								UserMode: getLocalVariable('UserMode'),
+								AS_ID: getLocalVariable('AS_ID'),
+								SIP_ID: getLocalVariable('SIP_ID'),
+								User_Status_ID: getLocalVariable('User_Status_ID')
+								},
+							  success: function(response) {
+							    setLocalVariable('Activity', activity);
+								setLocalVariable('ActivityName', activityName);
+                                setLocalVariable('ActivityID', response.ActivityID);
+                                setLocalVariable('ActivityLoginTime', response.ActivityLoginTime);
+								setLocalVariable('reviewMode', 1);
+								alertify.success('Review ' + (activityName.toUpperCase()) + ' choosen.');
+								$('#activity').attr('disabled', true);
+								$('#power-on').hide();
+								$('#power-off').show();
+                                $('#Review-data').show();
+								$('#dateRange').show();
+								$('#viewTable').show();
+                                if(getLocalVariable('UserMode') == "auto")
+                                {
+                                    queueAdd('queue_active');
+                                }
+                                
+						   }
+						});
+                    return false;
+                });
+
+         
+
+
+                $('#power-off').click(function () {
+                    if (getLocalVariable('WaitingDisposition') == "true") {
+                        blankStatus("Please dispose the last review first");
+                        return;
+                    }
+                    alertify.confirm("Do you want to exit from REVIEW mode?", function (ev) {
+                        if (ev) {
+                            $.ajax({
+						method: 'POST',
+						url: '/power-off',
+						data:{ActivityID: getLocalVariable('ActivityID'),ClientID: getLocalVariable('ClientID')},
+							  success: function(response) {
+							    setLocalVariable('Activity', '');
+                                    setLocalVariable('ActivityID', '');
+                                    setLocalVariable('ActivityName', '');
+                                    setLocalVariable('reviewMode', 0);
+                                    setLocalVariable('isLineBusy', 'READY');
+                                    alertify.success('Review exited.');
+                                    $('#activity').attr('disabled', false);
+                                    $('#power-on').show();
+                                    $('#power-off').hide();
+                                    $('#dateRange').hide();
+                                    $('#viewTable').hide();
+                                    $('#change-leadid-div').hide();
+                                    $('#Review-data').hide();
+                                    if(getLocalVariable('UserMode') == "auto")
+                                    {
+                                        queueAdd('queue_inactive');
+                                    }
+						   }
+						});
+                            
+                        }
+                    });
+                    return false;
+                });
+                $('#Review-data').click(function () {
+                    var start = $('#reviewstarttime').val();
+                    if (start.length == 0) {
+                        alertify.error("Enter Start Date");
+                        return false;
+                    }
+                    var to = $('#reviewtotime').val();
+                    if (to.length == 0) {
+                        alertify.error("Enter End Date");
+                        return false;
+                    }
+                    var columnVal = '';
+                    var column = document.getElementsByName('rcolumn[]');
+                    for (var i = 0; i < column.length; i++) {
+                        if (column[i].value != '0') {
+                            columnVal += column[i].value + ',';
+                        }
+                    }
+                    columnVal = columnVal.replace(/,\s*$/, "");
+                    var conditionVal = '';
+                    var condition = document.getElementsByName('rcondition[]');
+                    for (var i = 0; i < condition.length; i++) {
+                        if (column[i].value != '0' && condition[i].value != '0') {
+                            conditionVal += condition[i].value + ',';
+                        }
+                    }
+                    conditionVal = conditionVal.replace(/,\s*$/, "");
+                    var valueVal = '';
+                    var value = document.getElementsByName('rvalue[]');
+                    for (var i = 0; i < value.length; i++) {
+                        if (column[i].value != '0' && value[i].value.length != 0) {
+                            valueVal += value[i].value + ',';
+                        }
+                    }
+                    valueVal = valueVal.replace(/,\s*$/, "");
+				    var logField = getLocalVariable('Log_Data_Field');
+                   	$.ajax({
+					method: 'POST',
+					url: '/get_review_search',
+					data:{  startdate: start,
+							todate: to,
+							campaign: getLocalVariable('CampaignName'),
+							agent: getLocalVariable('USER_ID'),
+							ClientID: getLocalVariable('ClientID'),
+							changeLead: getLocalVariable('changeLead'),
+							MOPanel: getLocalVariable('MOPanel'),
+							dataset: getLocalVariable('dataset'),
+							column: columnVal,
+							condition: conditionVal,
+							value: valueVal,
+							disposition: $('#review-disposition').val(),
+							subdisposition: $('#review-subdisposition').val(),
+							orderbyCol: $('#rorderbyColumn').val(),
+							isDisplayPhone: getLocalVariable('isDisplayPhone'),
+							reviewstarttime: $('#reviewstarttime').val(),
+							reviewtotime:$('#reviewtotime').val(),
+							isDisplayPhone: getLocalVariable('isDisplayPhone'),
+							orderby: $('#rorderby').is(":checked") ? 'DESC' : 'ASC'
+							},
+					      success: function(response) {
+						   $('#viewTable').show();
+						   $("#reviewdata-view").html(response);
+					   }
+					});
+				 });
+              });
+            
+        </script>
+</html>

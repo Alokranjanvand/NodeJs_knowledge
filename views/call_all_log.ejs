@@ -1,0 +1,191 @@
+
+<table class="table table-hover">
+	<thead style="background-color: #ffffffbf;">
+		<tr>
+			<th style="border:none;">Interactions</th>
+			 <th style="border:none;">Interactions ID</th>
+			<th style="border:none;">Phone/Email</th>
+			<th style="border:none;">Date</th>
+			<th style="border:none;">Time</th>
+			<th style="border:none;">Duration</th>
+			<th style="border:none;">Type</th>
+			<th style="border:none;">Action</th>
+		</tr>
+	</thead>
+	<tbody>
+
+    <% if (rows && rows.length) {
+	rows.forEach(row => { %>
+    <tr>
+	<% if(row.call_type=='Email'){%>
+		<td><img src="assets/images/mail.svg" alt="" /></td>
+	<% } %>
+	<% if(row.call_type=='SMS'){%>
+		<td><img src="assets/images/sms.svg" alt="" /></td>
+	<% } %>
+	<% if(row.call_type=='Call'){%>
+		<td><img src="assets/images/call.svg" alt="" /></td>
+	<% } %>
+     
+       <td><%= row.rid %></td>
+	   <% if(row.call_type=='Email'){%>
+	   <td><%= row.email %></td>
+	   <% } else { %>
+		<td><%= row.mobile_no %></td>
+		<% }  %>
+	   <td><%= row.calldate %></td>
+	   <td><%= row.call_time %></td>
+	   <% 
+	   duration='';
+	   if(row.bill_sec) {
+         var duration = row.bill_sec.split(".");
+		 }
+       %>
+	   <td><%= duration[0]	%></td>
+	   <td><%= row.type	%></td>
+	   <% if(row.call_type=='SMS'){%>
+	   <td><img src="assets/images/view.svg" alt=""  style="cursor:pointer"  onclick="opensmsModal('<%= row.msg %>')"/></td>
+	   <% } %>
+	   <% if(row.call_type=='Email'){%>
+	   <td><img src="assets/images/view.svg" alt=""  style="cursor:pointer"  onclick="openModal('<%= row.msg %>')"/></td>
+	   <% } %>
+	<% if(row.call_type=='Call'){%>
+	   <td><img class="show_recording" src="assets/images/recording.svg" alt="" style="cursor:pointer"  onclick="palyModal('<%= row.rid %>','<%= row.start_time %>')"/></td>
+	   <% } %>
+	</tr>
+	<% }); %>
+    <% } else { %>
+	<tr>
+    <td colspan="2">No data found</td>
+	</tr>
+   <% } %>
+</tbody>
+</table>
+<% 
+second_last = 1;
+page_no = page;
+totalRecords = num_rows;
+page_no = parseInt(page_no, 10); // Convert to integer with radix 10
+
+const limit = 10;
+const total_no_of_pages = Math.ceil(totalRecords / limit); // Round up the total pages
+
+// Ensure page_no is at least 1 and not greater than total_no_of_pages
+if (isNaN(page_no) || page_no < 1) {
+    page_no = 1;
+} else if (page_no > total_no_of_pages) {
+    page_no = total_no_of_pages;
+}
+
+const offset = (page_no - 1) * limit;
+const previous_page = page_no > 1 ? page_no - 1 : 1; // Prevent previous_page from being less than 1
+const next_page = page_no < total_no_of_pages ? page_no + 1 : total_no_of_pages; // Prevent next_page from exceeding total_no_of_pages
+const adjacents = 2; // Number of pages to show adjacent to the current page
+%>
+
+<div class="row">
+	<div class="col-md-4">
+	  <div class="show_page">
+		<span>Showing <%= page_no %> to <%= total_no_of_pages %> of <%= totalRecords %> entries</span>
+	  </div>
+	</div>
+	<div class="col-md-8">
+	  <div class="sec_page">
+		<nav aria-label="Page navigation example">
+		<ul class="pagination delivery_page">
+		  <!-- Previous Button -->
+		  <li class="page-item" title="First Page">
+			<a href="javascript:void(0)" id="1" class="page-link"><<</a>
+		  </li>
+		  <li class="page-item" title="Previous" >
+			<a href="javascript:void(0)" id="<%= page_no > 1 ? previous_page : '' %>" class="page-link"><</a>
+		  </li>
+  
+		  <!-- Pagination Logic -->
+		  <% if (total_no_of_pages <= 10) { %>
+			<% for (let counter = 1; counter <= total_no_of_pages; counter++) { %>
+			  <li class="page-item <% if(counter==page_no) { %>active<% } %>">
+				<a href="javascript:void(0)" id="<%= counter %>" class="page-link"><%= counter %></a>
+			  </li>
+			<% } %>
+		  <% } else { %>
+			<% if (page_no <= 4) { %>
+			  <% for (let counter = 1; counter < 8; counter++) { %>
+				<li class="page-item <% if(counter==page_no) { %>active<% } %>">
+				  <a href="javascript:void(0)" id="<%= counter %>" class="page-link"><%= counter %></a>
+				</li>
+			  <% } %>
+			  <li class="page-item"><a href="javascript:void(0)" class="page-link">...</a></li>
+			  <li class="page-item"><a href="javascript:void(0)" id="<%= second_last %>" class="page-link"><%= second_last %></a></li>
+			  <li class="page-item"><a href="javascript:void(0)" id="<%= total_no_of_pages %>" class="page-link"><%= total_no_of_pages %></a></li>
+			<% } else if (page_no > 4 && page_no < total_no_of_pages - 4) { %>
+			  <li class="page-item"><a href="javascript:void(0)" id="1" class="page-link">1</a></li>
+			  <li class="page-item"><a href="javascript:void(0)" id="2" class="page-link">2</a></li>
+			  <li class="page-item"><a href="javascript:void(0)" class="page-link">...</a></li>
+			  <% for (let counter = page_no - adjacents; counter <= page_no + adjacents; counter++) { %>
+				<li class="<%= counter === page_no ? 'active' : '' %>">
+				  <a href="javascript:void(0)" id="<%= counter %>" class="page-link"><%= counter %></a>
+				</li>
+			  <% } %>
+			  <li class="page-item"><a href="javascript:void(0)" class="page-link">...</a></li>
+			  <li class="page-item"><a href="javascript:void(0)" id="<%= second_last %>" class="page-link"><%= second_last %></a></li>
+			  <li class="page-item"><a href="javascript:void(0)" id="<%= total_no_of_pages %>" class="page-link"><%= total_no_of_pages %></a></li>
+			<% } else { %>
+			  <li class="page-item"><a href="javascript:void(0)" id="1" class="page-link">1</a></li>
+			  <li class="page-item"><a href="javascript:void(0)" id="2" class="page-link">2</a></li>
+			  <li class="page-item"><a href="javascript:void(0)" class="page-link">...</a></li>
+			  <% for (let counter = total_no_of_pages - 6; counter <= total_no_of_pages; counter++) { %>
+				<li class="<%= counter === page_no ? 'active' : '' %>" class="page-link">
+				  <a href="javascript:void(0)" id="<%= counter %>" class="page-link"><%= counter %></a>
+				</li>
+			  <% } %>
+			<% } %>
+		  <% } %>
+  
+		  <!-- Next Button -->
+		  <li class="<%= page_no >= total_no_of_pages ? 'disabled' : '' %> page-item" title="Next">
+			<a href="javascript:void(0)" id="<%= page_no < total_no_of_pages ? next_page : '' %>" class="page-link">></a>
+		  </li>
+  
+		  <!-- Last Button -->
+		  <% if (page_no < total_no_of_pages) { %>
+			<li class="page-item" title="Last Page"><a href="javascript:void(0)" id="<%= total_no_of_pages %>" class="page-link">>></a></li>
+		  <% } %>
+		</ul>
+		
+			
+		</nav>
+	  </div>
+	</div>
+  </div>
+  
+<style>
+.sec_page ul li a{ color:#000}
+.sec_page ul li a.active{ background-color: #337ab7 !important; color:#fff}
+.sec_page{ float:right;}
+.show_page{margin: 20px 0;}
+
+.selectBoxC{
+ color:red;
+}
+
+.selectBoxD{
+ color:green;
+}
+
+.selectBoxP{
+ color:brown;
+}
+
+.delivered{
+  color:green;
+}
+.pending{
+  color:brown;
+}
+.cancelled{
+  color:red;
+}
+
+</style>
+

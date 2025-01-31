@@ -1,0 +1,521 @@
+<aside class="offcanvas offcanvas-right" id="my_offcanvas2">
+    <header class="p-4 bg-light border-bottom">
+    <small id="txtRegStatus">Dial Pad</small><br>
+    <small style="color:green; float:right; margin-right:50px;" id="timer"></small>
+    <small style="color:red; float:right; margin-right:50px;" id="end_timer"></small>
+    <small style="color:#333333; float:right; margin-right:0px;font-size: 17px;  margin-top: 10px; cursor: pointer;"  id="btn_reload" title="Reload Configuration"> <i class="fa fa-cogs"></i></small>
+    <button class="btn-xs btn-outline-danger btn-close "> &times </button>
+    <a href="javascript:void(0)" id="infor_btn" class="badge badge-dark">Info</a>
+    <a href="javascript:void(0)" id="dials_btn" class="badge badge-dark" style="display: none;">DialPad</a>
+    <a href="javascript:void(0)" id="route_btn" class="badge badge-dark">Route</a>
+    <a href="javascript:void(0)" id="skill_btn" class="badge badge-dark">Skill</a>
+    <a href="javascript:void(0)" id="call-fwd" class="badge badge-light" onclick="getCallForward_on('add')"><img src="assets/images/phone-forwarded.svg" height="20">Call forwarding</a>
+    <a href="javascript:void(0)" id="forwarding_off" style="display: none;" class="badge badge-light" onclick="getCallForward_on('remove')"><img src="assets/images/phone-off.svg" height="20">Call forwarding Off</a>
+    <a href="javascript:void(0)" id="forwarding_result" class="badge badge-light"></a>
+        
+    </header>
+    <div id="calling_pad">
+        <div id="Phone" style="width: 100%; height: 500px;">
+            <div id='leftContent'>
+                    <div style="text-align:center; margin-top:15px">
+                        <input id="dialText" class="dialTextInput" oninput="handleDialInput(this, event)" onkeydown="dialOnkeydown(event, this)" style="width:170px; height:32px">
+                        <button id="dialDeleteKey" class="roundButtons" onclick="KeyPress('del')">⌫</button>
+                    </div>
+                    <div style="text-align:right"><button class=roundButtons onclick="ShowContacts()"><i class="fa fa-close"></i></button></div>
+                    <div id="myContacts"></div>
+                    <div id="show_dtmf" style="display: none;">
+                        <table cellspacing="10" cellpadding="0" style="margin-left:auto; margin-right: auto">
+                            <tr>
+                                <td><button class="dialButtons" onclick="sendDTMF('lineNum', '1')"><div>1</div><span>&nbsp;</span></button></td>
+                                <td><button class="dialButtons" onclick="sendDTMF('lineNum', '2')"><div>2</div><span>ABC</span></button></td>
+                                <td><button class="dialButtons" onclick="sendDTMF('lineNum', '3')"><div>3</div><span>DEF</span></button></td>
+                            </tr>
+                            <tr>
+                                <td><button class="dialButtons" onclick="sendDTMF('lineNum', '4')"><div>4</div><span>GHI</span></button></td>
+                                <td><button class="dialButtons" onclick="sendDTMF('lineNum', '5')"><div>5</div><span>JKL</span></button></td>
+                                <td><button class="dialButtons" onclick="sendDTMF('lineNum', '6')"><div>6</div><span>MNO</span></button></td>
+                            </tr>
+                            <tr>
+                                <td><button class="dialButtons" onclick="sendDTMF('lineNum', '7')"><div>7</div><span>PQRS</span></button></td>
+                                <td><button class="dialButtons" onclick="sendDTMF('lineNum', '8')"><div>8</div><span>TUV</span></button></td>
+                                <td><button class="dialButtons" onclick="sendDTMF('lineNum', '9')"><div>9</div><span>WXYZ</span></button></td>
+                            </tr>
+                            <tr>
+                                <td><button class="dialButtons" onclick="sendDTMF('lineNum', '*')">*</button></td>
+                                <td><button class="dialButtons" onclick="sendDTMF('lineNum', '0')">0</button></td>
+                                <td><button class="dialButtons" onclick="sendDTMF('lineNum', '#')">#</button></td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <table cellspacing="10" cellpadding="10" style="margin-left:auto; margin-right: auto">
+                        <tr>
+                            <td><button class="dialButtons" onclick="KeyPress('1')"><div>1</div><span>&nbsp;</span></button></td>
+                            <td><button class="dialButtons" onclick="KeyPress('2')"><div>2</div><span>ABC</span></button></td>
+                            <td><button class="dialButtons" onclick="KeyPress('3')"><div>3</div><span>DEF</span></button></td>
+                        </tr>
+                        <tr>
+                            <td><button class="dialButtons" onclick="KeyPress('4')"><div>4</div><span>GHI</span></button></td>
+                            <td><button class="dialButtons" onclick="KeyPress('5')"><div>5</div><span>JKL</span></button></td>
+                            <td><button class="dialButtons" onclick="KeyPress('6')"><div>6</div><span>MNO</span></button></td>
+                        </tr>
+                        <tr>
+                            <td><button class="dialButtons" onclick="KeyPress('7')"><div>7</div><span>PQRS</span></button></td>
+                            <td><button class="dialButtons" onclick="KeyPress('8')"><div>8</div><span>TUV</span></button></td>
+                            <td><button class="dialButtons" onclick="KeyPress('9')"><div>9</div><span>WXYZ</span></button></td>
+                        </tr>
+                        <tr>
+                            <td><button class="dialButtons" onclick="KeyPress('*')">*</button></td>
+                            <td><button class="dialButtons" onclick="KeyPress('0')">0</button></td>
+                            <td><button class="dialButtons" onclick="KeyPress('#')">#</button></td>
+                        </tr>
+                    </table>
+                    <div style="text-align: center; margin-bottom:15px">
+                        <button class="dialButtons dialButtonsDial" id="dialAudio" title="Audio Call" onclick="DialByLine('audio')">
+                            <i class="fa fa-phone"></i>
+                        </button>
+                    </div>
+                    
+                
+                    <div style="clear: both;"></div>  
+            </div>
+            <div id="rightContent" class="rightContent" style=" height: 100%">
+                <div style="clear: both;"></div>
+            </div>
+            <!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="senddtmf" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Send DTMF</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="sendDTMFshow">
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-----End modals-->
+            <div style="clear: both;"></div>
+            </div>
+       
+        <!----call option-->
+        <div class="col-md-12">
+        <div id='divCallOptions' class='call-options' style='opacity: 0; margin-top: 0px; padding-left:20px; padding-top:10px;display:none;'>
+            <button class="btn btn-primary" style="display:none;" id="btnFullScreen" disabled onclick='toggleFullScreen();'>FullScreen</button>&nbsp;
+            <button class="btn btn-primary" ><i class="feather icon-mic" aria-hidden="true"></i></button>&nbsp;
+            <button class="btn btn-primary" ><i class="feather icon-play" aria-hidden="true" ></i></button>&nbsp;
+            <button class="btn btn-primary"  >Transfer</button> &nbsp;
+            <button class="btn btn-primary" style="display:none;" id="btnKeyPad" onclick='openKeyPad();' >KeyPad</button>
+        </div>
+                    
+        <div id="tdVideo" class='tab-video' style="display:none;">
+            <div id="divVideo" class='div-video'>
+                <div id="divVideoRemote" style='position:relative; border:1px solid #009; height:100%; width:100%; z-index: auto; opacity: 1'>
+                    <video class="video" width="100%" height="100%" id="video_remote" autoplay="autoplay" style="opacity: 0;
+                        background-color: #000000; -webkit-transition-property: opacity; -webkit-transition-duration: 2s;"></video>
+                </div>
+                <div id="divVideoLocalWrapper" style="margin-left: 0px; border:0px solid #009; z-index: 1000">
+                    <iframe class="previewvideo" style="border:0px solid #009; z-index: 1000"> </iframe>
+                    <div id="divVideoLocal" class="previewvideo" style=' border:0px solid #009; z-index: 1000'>
+                        <video class="video" width="100%" height="100%" id="video_local" autoplay="autoplay" muted="true" style="opacity: 0;
+                            background-color: #000000; -webkit-transition-property: opacity;
+                            -webkit-transition-duration: 2s;"></video>
+                    </div>
+                </div>
+                <div id="divScreencastLocalWrapper" style="margin-left: 90px; border:0px solid #009; z-index: 1000">
+                    <iframe class="previewvideo" style="border:0px solid #009; z-index: 1000"> </iframe>
+                    <div id="divScreencastLocal" class="previewvideo" style=' border:0px solid #009; z-index: 1000'>
+                    </div>
+                </div>
+                
+            </div>
+        </div>  
+    </div>
+                <!----call option-->
+                
+                <div class="botrow">
+                    <div class="row">
+    
+                         <!--<div class="col-md-12 mb-3" id="divBtnCallGroup"></div>
+                        <div class="col-md-6 mb-3 line1_callgroup">
+                            <button type="button" class="btn btn-success btn-block" id="btnCall"  onclick="DialByLine('audio')"><i class="feather icon-phone"
+                                    aria-hidden="true" style="margin-right: 0px;"></i></button>    
+                        </div>
+                        <div class="col-md-6 mb-3 line1_callgroup">
+                            <button type="button" id="btnHangUp" onclick="endSession(2)" class="btn btn-danger btn-block"><i class="feather icon-phone-off"
+                                    aria-hidden="true" style="margin-right: 0px;"></i></button>
+                        </div>
+                        <div class="col-md-6 mb-3 line2_callgroup">
+                            <button type="button" class="btn btn-success btn-block" id="btnCall"  onclick="sipCall2('call-audio');"><i class="feather icon-phone"
+                                    aria-hidden="true" style="margin-right: 0px;"></i> 2</button>    
+                        </div>
+                        <div class="col-md-6 mb-3 line2_callgroup">
+                            <button type="button" id="btnHangUp" onclick="sipHangUp2();" class="btn btn-danger btn-block"><i class="feather icon-phone-off"
+                                    aria-hidden="true" style="margin-right: 0px;"></i> 2</button>
+                        </div>
+
+               <div class="col-md-12 mb-2">
+                    
+                    <button type="button" class="btn btn-success" title="Line 1" id="netline1"><img src="assets/images/l1.svg"></button>
+                    <button type="button" class="btn btn-light" title="Line 2" id="netline2"><img src="assets/images/l2.svg"></button>
+                    <button type="button" class="btn btn-light" title="Mute/Unmute" id="btnMute" onclick='sipToggleMute();'><i class="feather icon-mic" aria-hidden="true" style="margin-right: 0px;font-size: 20px;"></i></button>
+                    <button type="button" class="btn btn-light" tile="Hold/resume" id="btnHoldResume" value="Hold" onclick='sipToggleHoldResume();'><img src="assets/images/hold.svg"></button>
+                    <button type="button" class="btn btn-light"><img src="assets/images/hold.svg"></button>
+                    <button type="button" class="btn btn-light" title="Transfer" id="btnTransfer" value="Transfer" onclick='sipTransfer();'><img
+                            src="assets/images/bliend-transfer.svg"></button>
+                    <button type="button" class="btn btn-light" title="Call Transfer"><img src="assets/images/call-transfer.svg"></button>
+                    <button type="button" class="btn btn-light" onclick="mergeCalls()" title="Conference Call"><img src="assets/images/confrence.svg"></button>
+                    <button type="button" class="btn btn-light" title="camp-transfer"><img src="assets/images/camp-transfer.svg"></button>
+                    <button type="button" class="btn btn-light" title="Refresh"><img src="assets/images/refresh.svg"></button>
+
+                </div>--->
+
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label style="float: left;">Select Campaign </label>
+                       
+                         <span
+                        style="float: left; color: red; cursor: pointer; margin-left: 5px;" ondblclick="return false;" onclick="CampaignTransfer();" title="Campaign Transfer"><i class="feather icon-corner-up-right" ></i></span><span
+                            style="float: right; color: red; cursor: pointer;" ondblclick="return false;" onclick="dialpad_setcampaign();"><i class="feather icon-save" ></i></span>
+                        <select class="form-control" style="border-color: #0D63B0; background-color: #fff;" id="dialpad_campaign">
+                            <option value="">Select Campaign</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="float: left;">Dialing Mode </label> <span style="float: right; color: red; cursor: pointer;" ondblclick="return false;" onclick="dialpad_setdialmode();"><i
+                                class="feather icon-save"></i></span>
+                                <div id="show_user_mode">
+                        <select class="form-control" style="border-color: #0D63B0; background-color: #fff;" id="dial_mode">
+                            <option value="">Select Mode</option>
+                        </select>
+                    </div>
+                    </div>
+
+                    
+                        
+                    
+
+                    <div class="form-group">
+                        <div class="customDiv">
+                            <label style="float: left;">Transfer <i class="feather icon-repeat" style="float: right; margin-left: 10px;cursor: pointer; color: red;" title="Load free agents" onclick="load_agent()"></i>
+                            </label><span style=" float: right; color: red;">
+                                <img src="assets/images/Blind-trasfer.svg" style=" float: left; cursor: pointer;" title="Blind Transfer" onclick="agent_blindtransfer()">
+                                <img src="assets/images/Attended_trasfer.svg" style=" float: left; cursor: pointer; margin-left: 20px;" title="Attended Transfer" onclick="agent_attendedtransfer()" id="agent_attendedtransfer">
+                                <img src="assets/images/complete-attended-transfer.svg" style=" float: left; cursor: pointer; margin-left: 20px;display: none;" title="Complete Transfer" id="agent_completeattended_transfer">
+                                </span>
+                            <select id="dialpad_transfer" class="form-control" style="border-color: #0D63B0; background-color: #fff;">
+                                <option>Select </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label style="float: left;">Queue Transfer </label> <span
+                            style="float: right; color: red;" onclick="queue_transfer_call()" title="Queue Transfer Call"><i class="feather icon-corner-up-right"></i></span>
+                        <select class="form-control" style="border-color: #0D63B0; background-color: #fff;" id="queue_trasfer_list">
+                            <option value="">Select Campaign</option>
+                          
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label style="float: left;">Skill Transfer </label> <span
+                            style="float: right; color: red;" onclick="skill_transfer_call()" title="Skill Transfer Call"><i class="feather icon-corner-up-right"></i></span>
+                        <select class="form-control" style="border-color: #0D63B0; background-color: #fff;" id="skil_trasfer_list">
+                            <option value="">Select skill</option>
+                            
+                        </select>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+        
+    </div><!--calling_pad-->
+    <div id="skill_section" style="display: none;">
+        <div class="row" style="padding: 50px;">
+            <div class="col-md-12" >
+                <div style="border: #ccc solid 1px; height:auto; margin-top: 20px;">
+                    <table class="table table-bordered" id="skill_list_details" style="padding: 10px; text-align: center;margin-bottom: 0px !important;">
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div id="route_section" style="display: none;">
+            <div class="row" style="padding: 50px;">
+                <div class="col-md-12">
+                    <button onclick="routelist_data();"> Route List</button>
+                    <select class="form-control" id="route_list" onchange="routelist_details();">
+                    </select>
+                </div>
+                <div class="col-md-12" >
+                    <div style="border: #ccc solid 1px; height: 300px; margin-top: 20px;">
+                        <table class="table table-border" id="route_list_details">
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+    </div>
+    <div id="infor_section" style="display: none;">
+        <table class="table">
+            <thead style="background-color: #000; color: #fff;">
+                <tr>
+                    <th scope="col">Timer</th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Login</th>
+                    <td id="logintimer"></td>
+
+                </tr>
+                <tr>
+                    <th scope="row">Mode</th>
+                    <td id="loginmode"></td>
+
+                </tr>
+                <tr>
+                    <th scope="row">Duration</th>
+                    <td id="login_duration"></td>
+
+                </tr>
+
+            </tbody>
+        </table>
+
+        <table class="table">
+            <thead style="background-color: #000; color: #fff;">
+                <tr>
+                    <th scope="col">User Info</th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <th scope="row" >User</th>
+                    <td id="show_user"></td>
+                </tr>
+                <tr>
+                    <th scope="row" >Exten</th>
+                    <td id="show_extn"></td>
+                </tr>
+                <tr>
+                    <th scope="row" >Camp</th>
+                    <td id="show_camp"></td>
+                </tr>
+                <tr>
+                    <th scope="row" >Mode</th>
+                    <td id="show_mode"></td>
+                </tr>
+                <tr>
+                    <th scope="row">IP</th>
+                    <td id="show_ipaddress">-</td>
+                </tr>
+                <tr>
+                    <th scope="row">Status</th>
+                    <td id="calling_state"></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+        <table class="table">
+            <thead style="background-color: #000; color: #fff;">
+                <tr>
+                    <th scope="col">Call Info</th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <th scope="row">Phone</th>
+                    <td id="show_dial_phone"></td>
+                </tr>
+                <tr>
+                    <th scope="row">DID</th>
+                    <td id="show_did"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Queue</th>
+                    <td id="show_queue"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Call type</th>
+                    <td id="show_call_type"></td>
+                </tr>
+                <tr>
+                    <th scope="row">IVR key</th>
+                    <td>-</td>
+                </tr>
+
+
+            </tbody>
+        </table>
+
+        <table class="table">
+            <thead style="background-color: #000; color: #fff;">
+                <tr>
+                    <th scope="col">Call Count</th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <th scope="row">Manual</th>
+                    <td id="manual_calling">0</td>
+                </tr>
+                <tr>
+                    <th scope="row">Outbound</th>
+                    <td id="outbound_calling">0</td>
+                </tr>
+                <tr>
+                    <th scope="row">Inbound</th>
+                    <td id="inbound_calling">0</td>
+                </tr>
+                <tr>
+                    <th scope="row">Callback</th>
+                    <td id="callback_calling">0</td>
+                </tr>
+                <tr>
+                    <th scope="row">Transfer</th>
+                    <td id="transfer_calling">0</td>
+                </tr>
+                <tr>
+                    <th scope="row">Conference</th>
+                    <td id="conference_calling">0</td>
+                </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table">
+            <thead style="background-color: #000; color: #fff;">
+                <tr>
+                    <th scope="col">Call Back</th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <th scope="row">Count</th>
+                    <td id="callback_count">0</td>
+                </tr>
+                <tr>
+                    <th scope="row">Next Callback</th>
+                    <td id="next_callback">0</td>
+                </tr>
+                <tr>
+                    <th scope="row">Phone</th>
+                    <td id="callback_phone">0</td>
+                </tr>
+
+
+
+            </tbody>
+        </table>
+    </div>
+        
+          
+        </div>
+<!-- Call button options -->
+
+<ul id="ulCallOptions" class="dropdown-menu" style="visibility:hidden">
+    <li><a href="#" onclick='sipCall("call-audio");'>Audio</a></li>
+</ul>
+
+</aside>
+<table style='width:100%; display:none;'>
+    <tr>
+        <td>
+            <label style="height: 100%">
+                Display Name:
+            </label>
+        </td>
+        <td>
+            <input type="hidden" style="width: 100%; height: 100%" id="txtDisplayName" value="<%= session.extension_data  %>" placeholder="e.g. John Doe" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label style="height: 100%">
+                Private Identity<sup>*</sup>:
+            </label>
+        </td>
+        <td>
+            <input type="hidden" style="width: 100%; height: 100%" id="txtPrivateIdentity" value="<%= session.extension_data  %>" placeholder="e.g. +33600000000" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label style="height: 100%">
+                Public Identity<sup>*</sup>:
+            </label>
+        </td>
+        <td>
+            <input type="hidden" style="width: 100%; height: 100%" id="txtPublicIdentity" value="sip:<%= session.extension_data  %>@devsiphanger.parahittech.com" placeholder="e.g. sip:+33600000000@doubango.org" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label style="height: 100%">Password:</label>
+        </td>
+        <td>
+            <input type="hidden" style="width: 100%; height: 100%" id="txtPassword" value="<%= session.extension_data  %>" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label style="height: 100%">Realm<sup>*</sup>:</label>
+        </td>
+        <td>
+            <input type="hidden" style="width: 100%; height: 100%" id="txtRealm" value="<%= session.voice_server  %>" placeholder="e.g. doubango.org" />
+        </td>
+    </tr>
+    
+    <tr>
+        <td colspan="3">
+            <p class="small"><sup>*</sup> <i>Mandatory Field</i></p>
+        </td>
+    </tr>
+    <tr>
+        
+    </tr>
+    
+</table>
+
+<!-- offcanvas panel right .end -->
+
+<div class="arrow-container animated fadeInDown" data-trigger="#my_offcanvas2">
+    <div class="arrow-2">
+        <img src="assets1/images/dial.svg" style="position: absolute;
+top: 17px;
+left: 16px;" />
+    </div>
+    <div class="arrow-1 animated hinge infinite zoomIn"></div>
+</div>

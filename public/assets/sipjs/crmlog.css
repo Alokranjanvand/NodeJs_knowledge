@@ -1,0 +1,1203 @@
+/*
+Theme Name: galaxy agent
+Theme URI: http:///
+Author: Dream-Theme
+Author URI: http://parahittech.com/ 
+*/
+
+
+
+
+.loginn {
+    background: rgba(0, 0, 0, 0) url("../image/login_bg.jpg") repeat scroll 0 0;
+}
+
+.top-header {
+    background: #fff none repeat scroll 0 0;
+    border-bottom: 3px solid #ed202a;
+    border-radius: 0;
+    box-shadow: 0 4px 8px #ccc;
+}
+.top-header .logo {
+    text-align: center;
+}
+.top-header .logo img {
+    max-width: 130px;
+}
+.login-wrapper {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+
+.login-wrapper .login-form {
+    background: rgba(255, 255, 255, 0.3) none repeat scroll 0 0;
+    border-radius: 10px;
+    box-shadow: 0 0 2px #444;
+    display: inline-block;
+    padding: 30px 55px;
+}
+
+.login-container {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    margin-top: 70px;
+}
+
+.login-wrapper .login-form .profile-icon .fa {
+    background: #0d63b0 none repeat scroll 0 0;
+    border-radius: 100%;
+    color: #fff;
+    font-size: 23px;
+    margin-bottom: 30px;
+    padding: 25px;
+}
+
+.login-wrapper .login-form form .form-group {
+    margin: 0px;
+}
+
+.login-wrapper .login-form form input {
+    background: #fff none repeat scroll 0 0;
+    border: medium none;
+    width: 270px;
+}
+
+.user-name input {
+    border-radius: 5px 5px 0 0;
+}
+
+.password-name input {
+    border-radius: 0px 0px 5px 5px;
+}
+/*
+#extension{
+    border-radius:0px;}
+*/
+.submit {
+    background: #0d63b0 none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 400;
+    margin-top: 30px;
+    padding: 10px 0;
+    text-transform: uppercase;
+    width: 150px;
+    overflow:hidden;
+
+}
+
+.submit:focus, .compaign-submit button:focus {
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+
+.compaign-icon .fa:hover{
+    color:#444;}
+
+
+.compaign-icon .fa:focus{
+    color:#444;}
+
+
+
+
+
+
+/******************  login page ends here  *******************/
+
+
+/*****************  menu css ******************/
+
+
+
+
+
+
+.logo2 {
+    color: #6ddb07;
+    float: left;
+    max-width: 190px;
+    padding: 0 20px;
+    width: 15%;
+    z-index: 123;
+}
+
+ul{
+    margin:0px;}
+
+.logo a {
+    color: #6DDB07;
+}
+
+.logo2 img {
+    max-width: 124px;
+    padding-top: 5px;
+}
+
+.hader1 ul li {
+    margin-right: -5px;
+    margin-top: 5px;
+}
+
+.hader1 ul li a{}
+
+#cssmenu,
+#cssmenu ul,
+#cssmenu ul li,
+#cssmenu ul li a,
+#cssmenu #head-mobile {
+    border: 0;
+    list-style: none;
+    line-height: 1;
+    display: block;
+    position: relative;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#cssmenu:after,
+#cssmenu > ul:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0
+}
+
+#cssmenu #head-mobile {
+    display: none
+}
+
+
+
+#cssmenu > ul > li {
+    float: left
+}
+
+#cssmenu > ul > li > a {
+    color: #000;
+    font-size: 13px;
+    font-weight: 100;
+    letter-spacing: 1px;
+    padding: 15px 10px;
+    text-decoration: none;
+}
+
+#cssmenu > ul > li:hover > a,
+#cssmenu ul li.active a {
+    color: #000;
+}
+
+#cssmenu > ul > li:hover, #cssmenu ul li.active:hover, #cssmenu ul li.active, #cssmenu ul li.has-sub.active:hover {
+    background: transparent none repeat scroll 0 0;
+    border-bottom: 2px solid red;
+    transition: background 0.3s ease 0s;
+}
+
+#cssmenu > ul > li.has-sub > a {
+    padding-right: 30px
+}
+
+#cssmenu > ul > li.has-sub > a:after {
+    position: absolute;
+    top: 22px;
+    right: 11px;
+    width: 8px;
+    height: 2px;
+    display: block;
+    background: #ddd;
+    content: ''
+}
+
+#cssmenu > ul > li.has-sub > a:before {
+    position: absolute;
+    top: 19px;
+    right: 14px;
+    display: block;
+    width: 2px;
+    height: 8px;
+    background: #ddd;
+    content: '';
+    -webkit-transition: all .25s ease;
+    -ms-transition: all .25s ease;
+    transition: all .25s ease
+}
+
+#cssmenu > ul > li.has-sub:hover > a:before {
+    top: 23px;
+    height: 0
+}
+
+#cssmenu ul ul {
+    position: absolute;
+    left: -9999px
+}
+
+#cssmenu ul ul li {
+    height: 0;
+    -webkit-transition: all .25s ease;
+    -ms-transition: all .25s ease;
+    background: #333;
+    transition: all .25s ease
+}
+
+#cssmenu ul ul li:hover {}
+
+#cssmenu li:hover > ul {
+    left: auto
+}
+
+#cssmenu li:hover > ul > li {
+    height: 35px
+}
+
+#cssmenu ul ul ul {
+    margin-left: 100%;
+    top: 0
+}
+
+#cssmenu ul ul li a {
+    border-bottom: 1px solid rgba(150, 150, 150, 0.15);
+    padding: 11px 15px;
+    width: 170px;
+    font-size: 12px;
+    text-decoration: none;
+    color: #ddd;
+    font-weight: 400;
+}
+
+#cssmenu ul ul li:last-child > a,
+#cssmenu ul ul li.last-item > a {
+    border-bottom: 0
+}
+
+#cssmenu ul ul li:hover > a,
+#cssmenu ul ul li a:hover {
+    color: #fff
+}
+
+#cssmenu ul ul li.has-sub > a:after {
+    position: absolute;
+    top: 16px;
+    right: 11px;
+    width: 8px;
+    height: 2px;
+    display: block;
+    background: #ddd;
+    content: ''
+}
+
+#cssmenu ul ul li.has-sub > a:before {
+    position: absolute;
+    top: 13px;
+    right: 14px;
+    display: block;
+    width: 2px;
+    height: 8px;
+    background: #ddd;
+    content: '';
+    -webkit-transition: all .25s ease;
+    -ms-transition: all .25s ease;
+    transition: all .25s ease
+}
+
+#cssmenu ul ul > li.has-sub:hover > a:before {
+    top: 17px;
+    height: 0
+}
+
+#cssmenu ul ul li.has-sub:hover,
+#cssmenu ul li.has-sub ul li.has-sub ul li:hover {
+    background: #363636;
+}
+
+#cssmenu ul ul ul li.active a {
+    border-left: 1px solid #333
+}
+
+#cssmenu > ul > li.has-sub > ul > li.active > a,
+#cssmenu > ul ul > li.has-sub > ul > li.active> a {
+    border-top: 1px solid #333
+}
+
+@media screen and (max-width:1000px) {
+    .logo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 46px;
+        text-align: center;
+        padding: 10px 0 0 0;
+        float: none
+    }
+    .logo2 {
+        display: none
+    }
+    nav {
+        width: 100%;
+    }
+    #cssmenu {
+        width: 100%
+    }
+    #cssmenu ul {
+        width: 100%;
+        display: none
+    }
+    #cssmenu ul li {
+        width: 100%;
+        border-top: 1px solid #444
+    }
+    #cssmenu ul li:hover {
+        background: #363636;
+    }
+    #cssmenu ul ul li,
+    #cssmenu li:hover > ul > li {
+        height: auto
+    }
+    #cssmenu ul li a,
+    #cssmenu ul ul li a {
+        width: 100%;
+        border-bottom: 0
+    }
+    #cssmenu > ul > li {
+        float: none
+    }
+    #cssmenu ul ul li a {
+        padding-left: 25px
+    }
+    #cssmenu ul ul li {
+        background: #333!important;
+    }
+    #cssmenu ul ul li:hover {
+        background: #363636!important
+    }
+    #cssmenu ul ul ul li a {
+        padding-left: 35px
+    }
+    #cssmenu ul ul li a {
+        color: #ddd;
+        background: none
+    }
+    #cssmenu ul ul li:hover > a,
+    #cssmenu ul ul li.active > a {
+        color: #fff
+    }
+    #cssmenu ul ul,
+    #cssmenu ul ul ul {
+        position: relative;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        text-align: left
+    }
+    #cssmenu > ul > li.has-sub > a:after,
+    #cssmenu > ul > li.has-sub > a:before,
+    #cssmenu ul ul > li.has-sub > a:after,
+    #cssmenu ul ul > li.has-sub > a:before {
+        display: none
+    }
+    #cssmenu #head-mobile {
+        display: block;
+        padding: 23px;
+        color: #ddd;
+        font-size: 12px;
+        font-weight: 700
+    }
+    .button {
+        width: 55px;
+        height: 46px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        cursor: pointer;
+        z-index: 12399994;
+    }
+    .button:after {
+        position: absolute;
+        top: 22px;
+        right: 20px;
+        display: block;
+        height: 4px;
+        width: 20px;
+        border-top: 2px solid #dddddd;
+        border-bottom: 2px solid #dddddd;
+        content: ''
+    }
+    .button:before {
+        -webkit-transition: all .3s ease;
+        -ms-transition: all .3s ease;
+        transition: all .3s ease;
+        position: absolute;
+        top: 16px;
+        right: 20px;
+        display: block;
+        height: 2px;
+        width: 20px;
+        background: #ddd;
+        content: ''
+    }
+    .button.menu-opened:after {
+        -webkit-transition: all .3s ease;
+        -ms-transition: all .3s ease;
+        transition: all .3s ease;
+        top: 23px;
+        border: 0;
+        height: 2px;
+        width: 19px;
+        background: #fff;
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg)
+    }
+    .button.menu-opened:before {
+        top: 23px;
+        background: #fff;
+        width: 19px;
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg)
+    }
+    #cssmenu .submenu-button {
+        position: absolute;
+        z-index: 99;
+        right: 0;
+        top: 0;
+        display: block;
+        border-left: 1px solid #444;
+        height: 46px;
+        width: 46px;
+        cursor: pointer
+    }
+    #cssmenu .submenu-button.submenu-opened {
+        background: #262626
+    }
+    #cssmenu ul ul .submenu-button {
+        height: 34px;
+        width: 34px
+    }
+    #cssmenu .submenu-button:after {
+        position: absolute;
+        top: 22px;
+        right: 19px;
+        width: 8px;
+        height: 2px;
+        display: block;
+        background: #ddd;
+        content: ''
+    }
+    #cssmenu ul ul .submenu-button:after {
+        top: 15px;
+        right: 13px
+    }
+    #cssmenu .submenu-button.submenu-opened:after {
+        background: #fff
+    }
+    #cssmenu .submenu-button:before {
+        position: absolute;
+        top: 19px;
+        right: 22px;
+        display: block;
+        width: 2px;
+        height: 8px;
+        background: #ddd;
+        content: ''
+    }
+    #cssmenu ul ul .submenu-button:before {
+        top: 12px;
+        right: 16px
+    }
+    #cssmenu .submenu-button.submenu-opened:before {
+        display: none
+    }
+    #cssmenu ul ul ul li.active a {
+        border-left: none
+    }
+    #cssmenu > ul > li.has-sub > ul > li.active > a,
+    #cssmenu > ul ul > li.has-sub > ul > li.active > a {
+        border-top: none
+    }
+}
+
+
+/*************************************************************/
+
+
+.hader1 {
+    background: #efefef none repeat scroll 0 0;
+    box-shadow: 0 2px 5px #ccc;
+    display: inline-block;
+    width: 100%;
+
+}
+
+.right-part {
+    background: rgba(0, 0, 0, 0) linear-gradient(135deg, #0d63b0 0%, #1088c9 100%) repeat scroll 0 0;
+    box-shadow: -4px 0 2px #ddd;
+    height: 100%;
+    margin-top: 5px;
+    max-height: 605px;
+    overflow-y:hidden
+}
+
+.compaing-form {
+    background: #fff none repeat scroll 0 0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+    display: inline-block;
+    left: 410px;
+    max-width: 100%;
+    padding: 30px 31px;
+    position: absolute;
+    top: 150px;
+}
+
+.compaign-submit button {
+    background: red none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 5px;
+    color: #fff;
+    float: right;
+    font-size: 15px;
+    font-weight: 400;
+    margin-top: 30px;
+    padding: 10px 30px;
+    text-transform: uppercase;
+}
+
+
+.compaign-submit button:hover {
+
+    background:#0e6ab5;
+    transition: 0.3s;
+
+}
+
+
+.select-compaign-header h4 {
+    border-bottom: 1px solid #ddd;
+    color: #0d63b0;
+    font-weight: 400;
+    margin-bottom: 35px;
+    padding-bottom: 15px;
+    text-transform: uppercase;
+}
+.compaing-form select {
+    border: 1px solid #ddd;
+    height: 30px;
+    width: 100%;
+}
+
+@import url('/netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
+.accordion-toggle:after {
+    font-family: 'FontAwesome';
+    content: "\f078";    
+    float: right;
+}
+.accordion-opened .accordion-toggle:after {    
+    content: "\f054";    
+}
+
+.circle-number {
+    background: rgba(0, 0, 0, 0) linear-gradient(135deg, #0d63b0 0%, #1088c9 100%) repeat scroll 0 0;
+    border: medium none;
+    border-radius: 100%;
+    box-shadow: 0 0 2px #444;
+    color: #fff;
+    cursor: pointer;
+    height: 30px;
+    line-height: 32px;
+    margin-bottom: 5px;
+    text-align: center;
+    width: 30px;
+}
+
+.number-print input {
+    background: transparent none repeat scroll 0 0;
+    border-color: currentcolor currentcolor #ddd;
+    border-radius: 0;
+    border-style: none none solid;
+    border-width: medium medium 1px;
+    box-shadow: none;
+    color: #fff;
+    margin-bottom: 5px;
+    margin-left: 14px;
+    margin-top: 0;
+    padding-left: 4px;
+    width: 130px;
+}
+.number-print select {
+    background: transparent none repeat scroll 0 0;
+    border-color: currentcolor currentcolor #ddd;
+    border-radius: 0;
+    border-style: none none solid;
+    border-width: medium medium 1px;
+    box-shadow: none;
+    margin-bottom: 5px;
+    margin-left: 14px;
+    margin-top: 0;
+    padding-left: 4px;
+    width: 150px;
+}
+
+.accordion-heading {
+    background: #000 none repeat scroll 0 0;
+    display: inline-block;
+    width: 100%;
+    padding:12px;
+}
+
+.accordion-heading a {
+    color: #fff;
+    display: inline-block;
+    width: 100%;
+}
+
+.main-content-area {
+    margin-top: -10px;
+}
+
+.call-activities {
+    background: #fff none repeat scroll 0 0;
+    display: inline-block;
+    padding: 0px;
+    width: 100%;
+}
+
+.call-activities .col-md-3.col-sm-3 {
+    padding: 5px 3px;
+}
+
+.compaign-input form label {
+    color: #fff;
+    width: 100%;
+}
+
+.compaign-input select {
+    border: medium none;
+    border-radius: 2px;
+    color: #444;
+    float: left;
+    margin-right: 5px;
+    width: 85%;
+    height: 22px !important;
+    font-size:12px;}
+
+.compaign-icon .fa {
+    color: #fff;
+    font-size: 19px;
+    margin-top: 2px;
+    vertical-align: middle;
+}
+.compaign-input {
+    display: inline-block;
+    margin-bottom: 3px;
+    width: 100%;
+}
+
+.accordion-inner {
+    color: #fff;
+    padding:0px;
+}
+
+.info-box {
+    border: 1px solid #fff;
+    display: inline-block;
+    margin-bottom: -4px;
+    margin-left: 10px;
+    margin-top: 13px;
+    padding: 10px 0 0;
+    position: relative;
+    width: 90%;
+}
+
+.right-info > p {
+    font-size: 10px;
+    margin: 2px 0 -4px -15px;
+    min-height: 18px;
+}
+
+.info-title > p {
+    background: #ec232c none repeat scroll 0 0;
+    border-radius: 3px;
+    font-weight: 700;
+    left: 10px;
+    padding: 2px 20px;
+    position: absolute;
+    top: -11px;
+}
+
+.campaign-section .compaign-input label {
+    font-size: 12px;
+    margin: 0px;
+    padding-bottom: 1px;
+}
+
+.logout-button > button {
+    background: red none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 30px;
+    box-shadow: none;
+    color: #fff;
+    float: right;
+    margin-top: 11px;
+    padding: 5px 15px;
+}
+.number-pad .form-control {
+    background: transparent none repeat scroll 0 0 !important;
+}
+
+
+form #username {
+    border-radius: 0;
+}
+
+.call-activities .call-activites-img {
+    cursor: pointer;
+}
+.call-activities .col-md-3.col-sm-3 {
+    padding-bottom: 0;
+    padding-top: 0;
+}
+.left-info > p {
+    margin: 1px 0px 0px 0px;
+    font-size: 10px;
+    min-height: 0px;
+}
+
+.compaign-icon {
+    cursor: pointer;
+}
+
+.crm {
+    /*margin-right: 25px;*/
+    /*position: absolute;*/
+    /*top: 50px;*/
+    width: 100%;
+}
+
+.crm table{
+    border:1px solid #ddd;}
+
+.table-heading p {
+    background: #0D63B0 none repeat scroll 0 0;
+    color: #fff;
+    font-size: 16px;
+    margin-bottom: 0;
+    padding: 7px 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.table-heading p {
+    background: #0D63B0 none repeat scroll 0 0;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 0;
+    padding: 3px 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+.left-part table th {
+    background: #0e75bc none repeat scroll 0 0;
+    color: #fff;
+    font-weight: normal;
+    padding: 3px 9px !important;
+}
+.detailed-call-back {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    height: 175px;
+    max-width: 100%;
+    overflow: scroll;
+    padding: 5px;
+}
+.detailed-crm-log {
+    border: 1px solid #ddd;
+    margin-bottom: 25px;
+    height: 275px;
+    max-width: 100%;
+    overflow: scroll;
+    padding: 5px;
+}
+.detailed-crm-log table thead tr th{
+    background: #0D63B0;
+    color: #fff;
+}
+.dis_detailed-crm-log table thead tr th{
+    background: #0D63B0;
+    color: #fff;
+}
+.Other-compaign {
+    border: 1px solid #ddd;
+    float: left;
+    margin-bottom: 25px;
+    height: 150px;
+    max-width: 20%;
+    overflow: scroll;
+    padding: 5px;
+}
+
+.crm table{
+
+    margin-bottom:0px;}
+
+.box_with_input {
+    border: 1px solid #ddd;
+    display: inline-block;
+    float: right;
+    max-height: 180px;
+    padding: 5px;
+    width: 100%;
+}
+
+.box_with_input_min {
+    width: 30%;
+}
+
+.box_with_input_max {
+    width: 50%;
+}
+
+.input-box select {
+    border: 1px solid #ddd;
+    height: 29px;
+    margin-left: 10px;
+    width: 100%;
+}
+
+.input_inner_box {
+    border: 1px solid #ddd;
+    margin: 0px;
+    min-height: 50px;
+}
+.inner_title{
+    position:relative;}
+
+.inner_title h6 {
+    background: red none repeat scroll 0 0;
+    border-radius: 5px;
+    color: #fff;
+    left: 15px;
+    padding: 5px 10px;
+    position: absolute;
+    top: -22px;
+}	
+
+.input-box {
+    display: inline-block;
+    float: left;
+    margin-top: 10px;
+    /*width: 50%;*/
+}
+
+.input_function_imgs {
+    float: right;
+    margin-top: 6px;
+	margin-bottom: 20px;
+}
+
+.input_function_imgs span {
+    background: #0D63B0 none repeat scroll 0 0;
+    border: 1px solid #ddd;
+    color: #fff;
+    font-size: 13px;
+    margin-right: 6px;
+    padding: 7px 10px;
+   /* display:inline-block;*/
+}
+
+.li-status {
+    color: red;
+    float: right;
+    line-height: 30px;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+#cssmenu > ul {
+    margin-left: 200px;
+}
+
+
+
+.bottom-buttons {
+    border-top: 1px solid #ddd;
+    display: inline-block;
+    left: 0;
+    padding: 0px 0px 10px;
+    position: absolute;
+    width: 100%;
+    top:525px;
+}
+
+.button-box {
+    /*    box-shadow: 0 0 2px #ccc;*/
+    float: left;
+    height: 21px;
+    margin-right: 15px;
+    width: 55px;
+}
+
+
+
+
+.button-title {
+    margin-top: 1px;
+}
+
+.green {
+    background: #14941d none repeat scroll 0 0;
+}
+
+.yellow {
+    background: #f4fd4c none repeat scroll 0 0;
+}
+
+.red {
+    background: red none repeat scroll 0 0;
+}
+
+.dialpad_active {
+    border: 1px solid #0f65b1;
+    margin: 3px;
+}
+
+
+
+.left-part {
+    border: medium none;
+    margin-top: 20px;
+    overflow-y: scroll;
+    min-height: 500px;
+    max-height: 500px;
+}
+
+.left-part iframe{
+    border:none;}
+
+
+.callback .Other-compaign {
+    float: none;
+    max-width: 100%;
+}
+
+
+.callback .box_with_input {
+    float: left;
+    margin-right: 80px;
+}
+
+.input-box > input {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    height: 30px;
+    margin-left: 10px;
+    margin-right: 20px;
+}
+
+#detailed-callback td, #data-view td {
+    cursor: pointer;
+}
+
+.detailed-callback-active, .mo-table-active, .detailed-review-active {
+    background: #ddd none repeat scroll 0 0 !important;
+    border: 1px solid #ddd;
+}
+
+.ui-datepicker.ui-widget.ui-widget-content.ui-helper-clearfix.ui-corner-all {
+    max-height: 176px;
+    overflow-y: scroll;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background: #f60118 none repeat scroll 0 0 !important;
+    border: 1px solid #f60118 !important;
+    color: #fff;
+    font-size: 9px;
+}
+.ui-dialog {
+    top: 20px !important;
+    background: #fff;
+}
+
+#barge, #coach, #join-call, #info {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#mo-table-div {
+    height: 300px !important;
+    overflow: scroll;
+    margin-bottom: 30px;
+}
+.circle-button.qs.red, .circle-button.ra.red {
+    margin-left: 0px !important;
+}
+.chat-no, .email-no {
+    position: absolute;
+    background: red;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 9px;
+    top: 0px;
+    color: #fff;
+    right: -3px;
+    font-weight: 800;
+}
+#chat-campaign, #chat-groups{
+    min-height: 194px;
+}
+#campaign-user, #chat-group{
+    width: 230px !important;
+    height: 150px;
+}
+#chatUsers .user.user-active > a{
+    color:#fff !important;}
+
+#chat-campaign h5, #chat-groups h5 {
+    color: #fff;
+    padding-left: 10px;
+    text-transform: uppercase;
+}
+
+#chatUsers hr {
+    border-color: transparent;
+}
+
+#chat-campaign #cmp {
+    min-height: 23px;
+    padding-top: 3px;
+    text-transform: capitalize;
+    width: 200px;
+    margin-left: 10px;
+}
+#my-queue {
+    float: right !important;
+}
+.queueWait #camp-queue{
+    float:left;   
+}
+
+.queueWait .no {
+    display: inline-block;
+    float: left;
+    margin-left: 0px;
+    background: #0e6bb5;
+    padding: 5px 8px;
+    border-radius: 3px;
+}
+
+#camp-queue .no{
+    margin-left:12px;}
+
+.queueWait {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+    margin-top: 5px;
+    padding: 5px 5px 4px 5px;
+    color: #fff;
+    border-radius: 2px;
+    font-size: 14px;
+}
+
+.queueWait .txt {
+    font-size: 12px;
+    color: #444;
+    text-align: center;
+    margin-top:5px;
+
+}
+
+.crm-div-button {
+    display: inline-block;
+    width: 100%;
+}
+
+#crm-form .form-group {
+    min-height: 35px;
+}
+
+#cssmenu ul {
+    margin-bottom: 0px;
+}
+
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only {
+    border: medium none !important;
+    display: inline-block;
+    height: 31px !important;
+    float: right;
+    position: absolute;
+    right: -2px;
+    background: red !important;
+    top: -1px;
+    width: 30px;
+    border-radius: 0px 2px 2px 0px;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only:hover {
+    border: medium none !important;
+    display: inline-block;
+    height: 31px !important;
+    float: right;
+    position: absolute;
+    right: -2px;
+    background: red !important;
+    top: -1px;
+    width: 30px;
+    border-radius: 0px 2px 2px 0px;
+}
+
+#preloader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background: rgba(256, 256, 256, 0.7);
+}
+#preloader #status {
+    margin-top: 20%;
+    margin-left: 40%;
+    margin-bottom: 15%;
+}
+.box_with_input_max .input-box{
+    width: 30%;
+    margin-right: 10px; 
+}
+
+.skill-listitem-div {
+    /*width: 100px;*/
+    float: left;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+.skill-listitem {
+    font-size: 12px;
+}
+
+.box_with_input .input-box input, .box_with_input .input-box select {
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+    /*width: auto;*/
+}
+#detailed-disposition input::placeholder {
+    font-size: 12px; /* Adjust the size to your preference */
+  }

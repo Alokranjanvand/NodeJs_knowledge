@@ -1,0 +1,24 @@
+
+    <% if (rows && rows.length) {
+	rows.forEach(row => { %>
+    <tr>
+     <td><img src="assets/images/call.svg" alt=""  ondblclick='DialByLine("audio", "", "<%= row.phone %>", "", "", "MC", "<%= row.did %>")' /></td>
+       <td><%= row.rid %></td>
+	   <td><%= row.phone %></td>
+	   <td><%= row.calldate %></td>
+	   <td><%= row.calltime	%></td>
+	   <% 
+	   duration='';
+	   if(row.bill_sec) {
+         var duration = row.bill_sec.split(".");
+		 }
+       %>
+	   <td><%= duration[0]	%></td>
+	   <td><img class="show_recording" src="assets/images/recording.svg" alt="" style="cursor:pointer"  onclick="palyModal('<%= row.rid %>','<%= row.start_time %>')"/></td>
+     </tr>
+	<% }); %>
+    <% } else { %>
+	<tr>
+    <td colspan="2">No data found</td>
+	</tr>
+   <% } %>

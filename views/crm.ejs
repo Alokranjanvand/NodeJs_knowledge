@@ -1,0 +1,793 @@
+<% var result = dataToSend.result; %>
+<% var result = dataToSend.result; %>
+<% var data = dataToSend.data; %>
+<% var agent = dataToSend.agent; %>
+<% var code = dataToSend.code; %>
+<% var campaign = dataToSend.campaign; %>
+<% var NoMask = dataToSend.NoMask; %>
+
+
+<script type="text/javascript">
+var data_id='<%= dataToSend.dataid ? dataToSend.dataid : 0 %>';
+    localStorage.setItem("crm_data_id", data_id);
+    localStorage.setItem("CRMDataID", data_id);
+/*
+function unserializePHP(serializedString) {
+    const result = {};
+    const regex = /s:\d+:"([^"]*)";s:\d+:"([^"]*)";/g;
+    let match;
+
+    while ((match = regex.exec(serializedString)) !== null) {
+        const key = match[1];
+        const value = match[2];
+        result[key] = value;
+    }
+
+    return result;
+}
+*/
+ function unserialize(data) {
+            var that = this;
+            var utf8Overhead = function (chr) {
+                var code = chr.charCodeAt(0);
+                if (code < 0x0080) {
+                    return 0;
+                }
+                if (code < 0x0800) {
+                    return 1;
+                }
+                return 2;
+            };
+            var error = function (type, msg, filename, line) {
+                throw new that.window[type](msg, filename, line);
+            };
+            var read_until = function (data, offset, stopchr) {
+                var i = 2, buf = [], chr = data.slice(offset, offset + 1);
+
+                while (chr != stopchr) {
+                    if ((i + offset) > data.length) {
+                        error('Error', 'Invalid');
+                    }
+                    buf.push(chr);
+                    chr = data.slice(offset + (i - 1), offset + i);
+                    i += 1;
+                }
+                return [buf.length, buf.join('')];
+            };
+            var read_chrs = function (data, offset, length) {
+                var i, chr, buf;
+
+                buf = [];
+                for (i = 0; i < length; i++) {
+                    chr = data.slice(offset + (i - 1), offset + i);
+                    buf.push(chr);
+                    length -= utf8Overhead(chr);
+                }
+                return [buf.length, buf.join('')];
+            };
+            var _unserialize = function (data, offset) {
+                var dtype, dataoffset, keyandchrs, keys, contig,
+                    length, array, readdata, readData, ccount,
+                    stringlength, i, key, kprops, kchrs, vprops,
+                    vchrs, value, chrs = 0,
+                    typeconvert = function (x) {
+                        return x;
+                    };
+
+                if (!offset) {
+                    offset = 0;
+                }
+                dtype = (data.slice(offset, offset + 1)).toLowerCase();
+
+                dataoffset = offset + 2;
+
+                switch (dtype) {
+                    case 'i':
+                        typeconvert = function (x) {
+                            return parseInt(x, 10);
+                        };
+                        readData = read_until(data, dataoffset, ';');
+                        chrs = readData[0];
+                        readdata = readData[1];
+                        dataoffset += chrs + 1;
+                        break;
+                    case 'b':
+                        typeconvert = function (x) {
+                            return parseInt(x, 10) !== 0;
+                        };
+                        readData = read_until(data, dataoffset, ';');
+                        chrs = readData[0];
+                        readdata = readData[1];
+                        dataoffset += chrs + 1;
+                        break;
+                    case 'd':
+                        typeconvert = function (x) {
+                            return parseFloat(x);
+                        };
+                        readData = read_until(data, dataoffset, ';');
+                        chrs = readData[0];
+                        readdata = readData[1];
+                        dataoffset += chrs + 1;
+                        break;
+                    case 'n':
+                        readdata = null;
+                        break;
+                    case 's':
+                        ccount = read_until(data, dataoffset, ':');
+                        chrs = ccount[0];
+                        stringlength = ccount[1];
+                        dataoffset += chrs + 2;
+
+                        readData = read_chrs(data, dataoffset + 1, parseInt(stringlength, 10));
+                        chrs = readData[0];
+                        readdata = readData[1];
+                        dataoffset += chrs + 2;
+                        if (chrs != parseInt(stringlength, 10) && chrs != readdata.length) {
+                            error('SyntaxError', 'String length mismatch');
+                        }
+                        break;
+                    case 'a':
+                        readdata = {};
+
+                        keyandchrs = read_until(data, dataoffset, ':');
+                        chrs = keyandchrs[0];
+                        keys = keyandchrs[1];
+                        dataoffset += chrs + 2;
+
+                        length = parseInt(keys, 10);
+                        contig = true;
+
+                        for (i = 0; i < length; i++) {
+                            kprops = _unserialize(data, dataoffset);
+                            kchrs = kprops[1];
+                            key = kprops[2];
+                            dataoffset += kchrs;
+
+                            vprops = _unserialize(data, dataoffset);
+                            vchrs = vprops[1];
+                            value = vprops[2];
+                            dataoffset += vchrs;
+
+                            if (key !== i) {
+                                contig = false;
+                            }
+
+                            readdata[key] = value;
+                        }
+
+                        if (contig) {
+                            array = new Array(length);
+                            for (i = 0; i < length; i++) {
+                                array[i] = readdata[i];
+                            }
+                            readdata = array;
+                        }
+
+                        dataoffset += 1;
+                        break;
+                    default:
+                        error('SyntaxError', 'Unknown / Unhandled data type(s): ' + dtype);
+                        break;
+                }
+                return [dtype, dataoffset - offset, typeconvert(readdata)];
+            };
+
+            return _unserialize(data, 0)[2];
+}
+
+function generateHTML(array, data, agent, code, campaign, NoMask){
+	let i = 1;
+    let html = '';
+	//const detail = unserializePHP(array.ftypedesc);
+	const detail = unserialize(array.ftypedesc);
+	
+	const required = array.req == 1 ? "required='required'" : "";
+    const readonly = array.ltype == 1 ? "readonly='readonly'" : "";
+    var parent = array.parentElement;
+	if(array.dfid < 10){
+		return html;
+	}
+	html += "<div class='col-md-4'><div class='form-group'><label for='f" + array.dfid + "'>" + array.fcaption + (required ? "<span style='color:red'>*</span>" : "") + "</label>";
+	
+	let value = '';
+
+	if (data && typeof data === 'object') {
+		// Check if the property is undefined and set value accordingly
+		value = (typeof data["f" + array.dfid] === 'undefined' || data["f" + array.dfid] === undefined) ? '' : data["f" + array.dfid];
+	}
+   	switch (array.ftype) {
+        case "text":
+            if (!Array.isArray(detail.textlength)) {
+			if (array.is_masked == 1 || (array.dial == 1 && NoMask === "false")) {
+				html += '<input autocomplete="eee11-off" crmtype="' + array.fcaption.toLowerCase() + '" class="form-control" ' + required + ' ' + readonly + ' type="password" maxlength="' + detail.textlength + '" name="f' + array.dfid + '" id="f' + array.dfid + '" value="' + value + '" />';
+			} else if (detail.textlength > 100) {
+				html += '<textarea  crmtype="' + array.fcaption.toLowerCase() + '" class="form-control" ' + required + ' ' + readonly + ' name="f' + array.dfid + '" id="f' + array.dfid + '">' + ((data['f' + array.dfid] && data['f' + array.dfid].length > 0) ? data['f' + array.dfid] : "") + '</textarea>';
+			} else {
+				html += '<input  autocomplete="eee2-off" class="form-control" ' + required + ' ' + readonly + ' type="text" maxlength="' + detail.textlength + '" name="f' + array.dfid + '" id="f' + array.dfid + '" value="' + value + '" />';
+			}
+    }
+
+    if (array.dial == 1) {
+		html += '<style> #f'+array.dfid + ': {position:relative;}</style>';
+        html += '<span style="float: left;position: absolute;z-index: 1055;top: 40px;right: 30px;"><img src="assets/images/call.svg" width="20" height="20" onclick=\'DialByLine("audio","",document.getElementById("f' + array.dfid + '").value,"","","RD","")\' ondblclick=\'DialByLine("audio","",document.getElementById("f' + array.dfid + '").value,"","","RD","")\' /></span>';
+    }
+            break;
+        // Add more cases for different field types as needed
+		
+		case 'number':
+			if (!Array.isArray(detail.textlength)) {
+				if (array.is_masked == 1 || (array.dial == 1 && NoMask == "false")) {
+					html += '<input autocomplete="eee33-off" crmtype="' + array.fcaption.toLowerCase() + '" class="form-control" ' + required + ' ' + readonly + ' type="password" maxlength="' + detail.textlength + '" name="f' + array.dfid + '" id="f' + array.dfid + '" value="' + value + '" />';
+				} else if (detail.textlength > 100) {
+					html += '<textarea crmtype="' + array.fcaption.toLowerCase() + '" class="form-control" ' + required + ' ' + readonly + ' name="f' + array.dfid + '" id="f' + array.dfid + '">' + (data['f' + array.dfid].length > 0 ? data['f' + array.dfid] : "") + '</textarea>';
+				} else {
+					html += '<input autocomplete="eee1-off" class="form-control" ' + required + ' ' + readonly + ' type="text" maxlength="' + detail.textlength + '" name="f' + array.dfid + '" id="f' + array.dfid + '" value="' + value + '" />';
+				}
+
+					
+			}
+
+		if (array.dial == 1) {
+			html += '<style> #f'+array.dfid + ': {position:relative;}</style>';
+			html += '<span style="float: left;position: absolute;z-index: 1055;top: 40px;right: 30px;"><img src="assets/images/call.svg" width="20" height="20" onclick=\'DialByLine("audio","",document.getElementById("f' + array.dfid + '").value,"","","RD","")\' ondblclick=\'DialByLine("audio","",document.getElementById("f' + array.dfid + '").value,"","","RD","")\' /></span>';
+		}
+		
+		break;
+		
+		case 'alphanumeric':
+		   html += "<input crmtype='" + array.fcaption.toLowerCase() + "' class='form-control' " + required + " " + readonly +
+               " type='text' name='f" + array.dfid + "' id='f" + array.dfid + 
+               "' maxlength='" + detail.alphanumeric_option.length + "' placeholder='VALID FORMAT: " + detail.alphanumeric_option +
+               "' value='" + value + "' />";
+	
+		break;
+		
+		
+		case "date":
+			const dateValue = new Date(data['f' + array.dfid]);
+			const formattedDate = isNaN(dateValue.getTime()) || dateValue.toISOString().substring(0, 10) === "1970-01-01" ? "" : dateValue.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+			html += '<input class="form-control" ' + required + ' ' + readonly + ' type="datetime-local" name="f' + array.dfid + '" value="' + data['f' + array.dfid] + '" id="f' + array.dfid + '" />';
+			dateArray.push(array.dfid);
+		
+		break;
+		
+		case "radio" :
+           if (!Array.isArray(detail.radio_option)) {
+		   // Handling combo_option
+				const values = detail.radio_option && typeof detail.radio_option === 'string'
+				  ? detail.radio_option.split(',')
+				  : [];
+				html += '<br>';
+				values.forEach(value => {
+					html += '<label style="margin-right:10px;"><input style="height:auto !important; float: left;margin-top:3px;" type="radio" ' + required + ' ' + readonly + ' name="f' + array.dfid + '" id="f' + array.dfid + '" value="' + value.trim() + '" ' + ((value.trim() === data['f' + array.dfid]) ? "checked='checked'" : "") + ' /><span style="padding-left:5px;">' + value.trim().charAt(0).toUpperCase() + value.trim().slice(1) + "</span></label>";
+				});
+			}
+		break;	
+		
+	  case "checkbox" :
+           
+			 if (!Array.isArray(detail.checkbox_option)) {
+				const values = detail.checkbox_option && typeof detail.checkbox_option === 'string'
+				  ? detail.checkbox_option.split(',')
+				  : [];
+				const dbValues = (data['f' + array.dfid] || '').split(",");
+				html += '<br>';
+				values.forEach(value => {
+					html += '<label style="margin-right:10px;"><input style="height:auto !important; float: left;margin-top:3px;" type="checkbox" ' + required + ' ' + readonly + ' name="f' + array.dfid + '[]" id="f' + array.dfid + '" value="' + value.trim() + '" ' + (dbValues.includes(value.trim()) ? "checked='checked'" : "") + ' /><span style="padding-left:5px;">' + value.trim().charAt(0).toUpperCase() + value.trim().slice(1) + "</span></label>";
+				});
+			}
+		break;
+		
+		
+		case "combo":
+			html += '<select class="form-control" ' + required + ' ' + readonly + ' name="f' + array.dfid + '" id="f' + array.dfid + '"><option value="">Select</option>';
+
+			if (!Array.isArray(detail.combo_option)) {
+
+                //alert("detail.combo_option= "+JSON.stringify(detail.combo_option)+" array.dfid= "+array.dfid);
+                //console.log("Combo drop= "+JSON.stringify(detail.combo_option)+" array.dfid= "+array.dfid);
+
+				
+				const values = detail.combo_option && typeof detail.combo_option === 'string'
+				  ? detail.combo_option.split(',')
+				  : [];
+				const dbValues = (data['f' + array.dfid] || '').split(",");
+
+                //console.log("Selected value= "+dbValues);
+
+				values.forEach(value => {
+                    var selected_dropdown="";
+                    if(dbValues==value.trim())
+                    {
+                        selected_dropdown="selected";
+                    }
+					html += '<option value="' + value.trim() + '" ' +selected_dropdown+ '>' + value.trim().charAt(0).toUpperCase() + value.trim().slice(1) + '</option>';
+				});
+			}
+
+			html += "</select>";
+
+		
+		break;
+		
+		case "list":
+			 html += '<select class="form-control" ' + required + ' ' + readonly + ' multiple="multiple" style="height: auto !important;" name="f' + array.dfid + '[]" id="f' + array.dfid + '">';
+
+			if (!Array.isArray(detail.list_option)) {
+				const values = detail.list_option && typeof detail.list_option === 'string'
+				  ? detail.list_option.split(',')
+				  : [];
+				
+				const dbValues = (data['f' + array.dfid] || '').split(",");
+
+				values.forEach(value => {
+					html += '<option value="' + value.trim() + '" ' + (dbValues.includes(value.trim()) ? "selected='selected'" : "") + '>' + value.trim().charAt(0).toUpperCase() + value.trim().slice(1) + '</option>';
+				});
+			}
+
+			html += "</select>";
+
+		
+		break;
+    }
+	
+	 html += '</div></div>';
+	   i++;
+    return html;
+}
+
+</script>
+
+<%
+var link_df = '';
+var product_df = '';
+var mail_df = ''; 
+if (result && Array.isArray(result)) { 
+	result.forEach(element1 => { 
+		 if(element1.fcaption.toLowerCase() == 'meeting_link'){
+				let field_name = 'f' + element1.dfid;
+				link_df = field_name;
+		 } else if(element1.fcaption.toLowerCase() == 'product'){
+				let field_name = 'f' + element1.dfid;
+				product_df = field_name;
+		 }
+	});
+}
+%>
+				<input type="hidden" id="product_df" value="<%= product_df %>"/>
+				<input type="hidden" id="link_df" value="<%= link_df %>"/>
+				<input type="hidden" name="dataid" id="dataid" value="<%= dataToSend.dataid ? dataToSend.dataid : 0 %>" />
+                <input type="hidden" name="campaign" id="campaign" value="<%= dataToSend.campaign  %>" />
+                <input type="hidden" name="phone" id="phone" value="<%= dataToSend.data.phone ?  dataToSend.data.phone : dataToSend.phone %>" />
+                <input type="hidden" name="leadid" id="leadid" value="<%= dataToSend.leadid  %>" />
+                <input type="hidden" name="rid" id="rid" value="<%= dataToSend.rid  %>" />
+                <input type="hidden" name="agent" id="agent" value="<%= dataToSend.agent  %>" />
+                <input type="hidden" name="processType" id="processType" value="<%= dataToSend.processType  %>" />
+                <input type="hidden" name="code" id="code" value="<%= dataToSend.code  %>" />
+                <input type="hidden" name="redial" id="redial" value="<%= dataToSend.redial  %>" />
+                <input type="hidden" name="calltype" id="calltype" value="<%= dataToSend.calltype  %>" />
+                <input type="hidden" name="campaign_type" id="campaign_type" value="<%= dataToSend.campaign_type  %>" />
+                <input type="hidden" name="sip_id" id="sip_id" value="<%= dataToSend.exten  %>" />
+                <input type="hidden" name="priview_id" id="priview_id" value="<%= dataToSend.priview_id  %>" />
+				<input type="hidden" name="auto_att" id="auto_att" value="0" />
+                <div id="crm_container" class="row crm_container">
+				
+				</div>
+					
+					<%
+							var data =  dataToSend.data;
+							var displayPhone = data.phone ? data.phone : dataToSend.phone;
+							var maskedPhone = (dataToSend.NoMask.toLowerCase() === "false") ? 'X'.repeat(displayPhone.length) : displayPhone;
+							%>
+							<input  type="hidden" maxlength="10" class="form-control" value="<%= maskedPhone %>" readonly="readonly" id="phonedisplay" />
+							<input type="hidden" value="<%= displayPhone %>" id="phoneNumber" />
+							<input type="hidden" id="temp_disp" value="0"/>
+				<!--
+                 <div class="col-md-4">
+						<div class="form-group">
+							<label>Phone Number</label>
+							<%
+							var data =  dataToSend.data;
+							var displayPhone = data.phone ? data.phone : dataToSend.phone;
+							var maskedPhone = (dataToSend.NoMask.toLowerCase() === "false") ? 'X'.repeat(displayPhone.length) : displayPhone;
+							%>
+							<input  type="text" maxlength="10" class="form-control" value="<%= maskedPhone %>" readonly="readonly" id="phonedisplay" />
+							<input type="hidden" value="<%= displayPhone %>" id="phoneNumber" /><span style="float: left;"><img src="../image/dial.png" width="20" height="20" onclick="callNumber($('#phoneNumber').val())"></span>
+						</div>
+					</div>
+					
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>DID / TFN</label>
+							<%= dataToSend.tfn  %> 
+						</div>
+					</div>
+					
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>DID Name</label>
+							<%= dataToSend.didname  %> 
+						</div>
+					</div>
+					
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Intruction Number</label>
+							<%= dataToSend.rid  %> 
+						</div>
+					</div>
+					<% if(dataToSend.circlep) { %>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Circle</label>
+								<%= dataToSend.circlep  %> 
+							</div>
+						</div>
+					
+					<% } %>
+					
+					<% if(dataToSend.skill) { %>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Skill</label>
+								<%= dataToSend.skill  %> 
+							</div>
+						</div>
+					
+					<% } %>
+					
+					<% if(dataToSend.source) { %>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Source</label>
+								<%= dataToSend.source  %> 
+							</div>
+						</div>
+					
+					<% } %> -->
+                    <div id="error"></div>
+                  
+              
+
+
+
+<script>
+var tableBody = document.getElementById('crm_container');
+var lresult = <%- JSON.stringify(result) %>;
+localStorage.setItem('crm-data', JSON.stringify(lresult));
+var ldata = <%- JSON.stringify(data) %>;
+localStorage.setItem('crm-data-value', JSON.stringify(ldata));
+localStorage.setItem('crm-nomask', <%- dataToSend.NoMask %>);
+var dynamicVariables = {};
+<% var eparent; %>   
+<% if (result && Array.isArray(result)) { %>
+    <% result.forEach(element => { %>
+        var rhtml = generateHTML(<%- JSON.stringify(element) %>, <%- JSON.stringify(dataToSend.data) %>, '<%- dataToSend.agent %>', '<%- dataToSend.code %>', '<%- dataToSend.campaign %>', '<%- dataToSend.NoMask %>');
+        tableBody.innerHTML += rhtml;
+
+        // Handle parent-child relationships
+        var array = <%- JSON.stringify(element) %>;
+        var detail = unserialize(array.ftypedesc);
+	   var required = array.req == 1 ? "required='required'" : "";
+        var readonly = array.ltype == 1 ? "readonly='readonly'" : "";
+        var data = <%- JSON.stringify(dataToSend.data) %>;
+        var parent = array.parentElement;
+        if(parent !='')
+        {
+        // Initialize dynamicVariables object
+        var fieldNo = array.dfid; // Define fieldNo here
+        // AJAX call to retrieve children
+        $.ajax({
+            url: '/api/get-children',
+            method: 'GET',
+            async: false,
+            data: {
+                parent: array.parentElement,
+                code: '<%- dataToSend.code %>',
+                campaign: '<%- dataToSend.campaign %>',
+                agent: '<%- dataToSend.agent %>'
+            },
+            success: function(response) {
+                let childnode = Array.isArray(response.children) ? response.children.filter(Boolean) : (response.children ? response.children.split(",").filter(Boolean) : []);
+
+                var fieldNo = array.dfid; // Redefine fieldNo within this scope
+
+                dynamicVariables['childnode<%= element.dfid %>'] = JSON.stringify(childnode);
+                dynamicVariables['fcaption<%= element.dfid %>'] = array.fcaption;
+
+                // Define childnodeArray
+                let childnodeArray = JSON.parse(dynamicVariables['childnode<%= element.dfid %>']);
+				localStorage.setItem('childnode<%= element.dfid %>',childnodeArray);
+				<% if (element.parentElement.length > 0) { %>
+
+                // Update child nodes based on parent's value
+                var childNodes = childnodeArray;
+				 var parentId = '<%- element.parentElement %>';	
+				<% if (element.parentElement.length > 0) { %>
+				 $.ajax({
+                    url: '/api/get-parent-dfid',
+                    method: 'GET',
+                    async: false,
+                    data: {
+                        parent: parentId,
+                        code: '<%- dataToSend.code %>',
+                        campaign: '<%- dataToSend.campaign %>',
+                        agent: '<%- dataToSend.agent %>'
+                    },
+                    success: function(response) {
+                        let parent = response.parentDfid;
+                        <% if (result && Array.isArray(result)) { %>
+							
+							<% 
+								result.forEach(function(item) { %>
+								<% if (item.fcaption.toLowerCase() == element.parentElement.toLowerCase()) { %>
+									<%  eparent = item.dfid; 
+									%>
+								<% } %>
+							<% }); %>
+						<% } %>
+						
+                        let fcaption = array.fcaption.replace(/\s+/g, '');
+
+                        if (array.ftype === "number") {
+                            array.ftype = "text";
+                        }
+                        new_dfid='f<%= element.dfid %>';
+                        let dbValues = new_dfid.split(',');
+                        let keys = detail[array.ftype + '_option'] ? Object.keys(detail[array.ftype + '_option']).map(key => key.trim()) : [];
+                        let values = detail[array.ftype + '_option'] ? Object.values(detail[array.ftype + '_option']).map(value => value.trim()) : [];
+                        let ftypedesc = keys.length && values.length ? Object.fromEntries(keys.map((_, i) => [keys[i], values[i]])) : {};
+
+                        if (Object.keys(ftypedesc).length === 0) {
+                            ftypedesc = {};
+                        }
+                        //console.log("dbValues= "+JSON.stringify(dbValues)+"ftypedesc"+JSON.stringify(ftypedesc));
+                        dynamicVariables['<%= element.dfid %>dbval'] = JSON.stringify(dbValues);
+                        dynamicVariables['<%= element.dfid %>JS'] = JSON.stringify(ftypedesc);
+						
+						if (array.ftype === "text") {
+                            $('#f<%= element.dfid %>').hide();
+                        }
+						let childnode1Value = localStorage.getItem('childnode<%= eparent %>');	
+				
+                        $('body').on('change', '#f<%= eparent %>', function() {
+                           // alert("hello 1");
+                            var abc='childnode<%= element.dfid %>';
+                            var dfid_node='<%= element.dfid %>';
+                            var def='childnode<%= eparent %>';
+                            //console.log("Dynamic Variables="+JSON.stringify(dynamicVariables)+" Parent= #f<%= eparent %>");
+                            //console.log("Dynamic abc="+abc+" eparent= "+def+" childnode1Value= "+childnode1Value);
+						   if (array.ftype !== "text") {
+                                if (typeof dynamicVariables['childnode<%= element.dfid %>'] !== 'undefined') {
+									if($(this).val() == ''){
+										if (childnode1Value !== null) {
+											let childnode1Array = childnode1Value.split(','); 
+											for (let e1 in childnode1Array) {
+											$('#f' + childnode1Array[e1]).html('<option value="">Select</option>');
+											}
+										}
+										}
+										else{
+
+
+                                            //console.log("Dynamic xyz="+JSON.stringify(dynamicVariables['childnode<%= element.dfid %>']));
+                                            
+								
+											for (let e in dynamicVariables['childnode<%= element.dfid %>']) {
+												 if (dynamicVariables['childnode<%= element.dfid %>'][e] !== '' && parseInt(fieldNo) <= parseInt(dynamicVariables['childnode<%= element.dfid %>'][e])) {
+														if ($('#f' + dynamicVariables['childnode<%= element.dfid %>'][e]).is('select')) {
+															$('#f' + dynamicVariables['childnode<%= element.dfid %>'][e]).html('<option value="">Select</option>');
+														}
+													}
+												}
+									}
+								}
+                                let jsObject = JSON.parse(dynamicVariables['<%= element.dfid %>JS']);
+								let val = $.trim($(this).val());
+								 if (jsObject.hasOwnProperty(val)) {
+                                    let options = jsObject[val].split(',');
+                                    let str = '<option value="">Select</option>';
+                                    for (let i in options) {
+                                        if(data.f<%= element.dfid %> == options[i]){
+										 str += "<option value='" + options[i] + "' selected>" + options[i] + "</option>";
+										
+										}else{
+                                        str += "<option value='" + options[i] + "'    >" + options[i] + "</option>";
+										}
+                                    }
+                                    $('#f<%= element.dfid %>').html(str);
+                                }
+                            } else {
+                                let val = $.trim($(this).val());
+                                $('#f<%= element.dfid %>').show();
+                                let jsObject = JSON.parse(dynamicVariables['<%= element.dfid %>JS']);
+                                let dbValues<%= element.dfid %> = JSON.parse(dynamicVariables['<%= element.dfid %>dbval']);
+                                if (jsObject.hasOwnProperty(val)) {
+                                    let options = jsObject[val].split(',');
+                                    let str = '<option value="">Select</option>';
+                                    for (let i in options) {
+										if(data.f<%= element.dfid %> == options[i]){
+										 str += "<option value='" + options[i] + "' selected>" + options[i] + "</option>";
+										
+										}else{
+                                        str += "<option value='" + options[i] + "' >" + options[i] + "</option>";
+										}
+                                    }
+                                    $('#f<%= element.dfid %>').html(str);
+                                }
+                                if (jsObject.hasOwnProperty(val) && jsObject[val] === 'show') {
+                                    //$('#f<%= element.dfid %>').show();
+                                } else {
+                                    //$('#f<%= element.dfid %>').hide();
+                                }
+                            }
+                        });
+
+                        if ($('body #f<%= eparent %>').val() !== '') {
+                            $('body #f<%= eparent %>').trigger('change');
+										 // If the field type is not "text"
+                            if (array.ftype !== "text") {
+                                let dbValues<%= element.dfid %> = JSON.parse(dynamicVariables['<%= element.dfid %>dbval']);
+								$('body #f<%= element.dfid %> option').each(function(i, obj) {
+                                    if ($.inArray(obj.value, dbValues<%= element.dfid %>) !== -1) {
+										$('body #f<%= element.dfid %>').val(obj.value);
+										$('body #f<%= element.dfid %>').trigger('change');
+                                    }
+                                });
+                            } else {
+                                // If dynamicVariables['childnode' + array.dfid] is defined
+                                let childnodeArray = JSON.parse(dynamicVariables['childnode<%= element.dfid %>'] || '[]');
+                                let dbValues = JSON.parse(dynamicVariables['<%= element.dfid %>dbval']);
+
+                                for (let e in childnodeArray) {
+                                    if (childnodeArray[e] !== '') {
+                                        let $childNode = $('#f' + childnodeArray[e]);
+                                        if ($childNode.is('select')) {
+                                            if ($childNode.attr('multiple')) {
+                                                $childNode.find('option').each(function() {
+                                                    let $this = $(this);
+                                                    if ($.inArray($this.val(), dbValues) >= 0) {
+                                                        $this.prop('selected', true);
+                                                    }
+                                                });
+                                            } else {
+                                                $childNode.find('option').each(function(i, obj) {
+                                                    if ($.inArray(obj.value, dbValues) !== -1) {
+                                                        $childNode.val(obj.value);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    },
+                    error: function(err) {
+                        console.error('Error retrieving parent dfid:', err);
+                    }
+                });
+           <% } %>
+				<% } %>
+
+            },
+            error: function(err) {
+                console.error('Error retrieving children:', err);
+            }
+        });
+
+    }
+		
+		
+
+        // Handle numeric input fields
+        <% if (element.ftype === "number") { %>
+            call_dfid = <%- element.dfid %>;
+            try {
+                var inputField = document.getElementById('f<%= element.dfid %>');
+                tableBody.addEventListener('keydown', function(event) {
+                    if (event.target.matches('input[type="text"][id="f<%= element.dfid %>"]')) {
+                        var inputField = event.target;
+                        if ([46, 8, 9, 27, 13, 110].includes(event.keyCode) ||
+                            (event.keyCode === 65 && (event.ctrlKey === true || event.metaKey === true)) ||
+                            (event.keyCode >= 35 && event.keyCode <= 40)) {
+                            return;
+                        }
+                        if ((event.shiftKey || (event.keyCode < 48 || event.keyCode > 57)) &&
+                            (event.keyCode < 96 || event.keyCode > 105)) {
+                            event.preventDefault();
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error parsing JSON:", error);
+            }
+        <% } %>
+
+        // Handle alphanumeric input fields
+        <% if (element.ftype === "alphanumeric") { %>
+            call_dfid = <%- element.dfid %>;
+		    var ser_detail = '<%- element.ftypedesc %>';
+			
+            var detail = unserialize(ser_detail);
+			 try {
+                $("#f<%= element.dfid %>").keypress(function(e) {
+                    if (e.shiftKey || e.ctrlKey || e.altKey) {
+                        e.preventDefault();
+                    }
+                    var code = e.keyCode || e.which;
+                    var definedPattern = detail.alphanumeric_option;
+                    var value = $(this).val();
+                    if (code == 13 || code == 8 || code == 46 || (code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122)) {
+                        if (definedPattern.charAt(value.length) == "X" && !(/[a-z]/i).test(String.fromCharCode(code))) {
+                            $("#f<%= element.dfid %>").css({ "border": "1px #F00 solid !important" });
+                            return false;
+                        }
+                        if (definedPattern.charAt(value.length) == "N" && !(/[0-9]/).test(String.fromCharCode(code))) {
+                            $("#f<%= element.dfid %>").css({ "border": "1px #F00 solid !important" });
+                            return false;
+                        }
+                    } else
+                        return false;
+                });
+
+            } catch (error) {
+                console.error("Error parsing JSON:", error);
+            }
+        <% } %>
+
+    <% }); %>
+<% } %>
+
+
+
+autodispose = '<%- dataToSend.autodispose %>';
+autodispose = isNaN(parseInt(autodispose)) ? 0 : parseInt(autodispose);
+<% 
+    var mandatoryFields = dataToSend.mandatory_fields ? dataToSend.mandatory_fields.split(",") : [];
+%>
+    var dateFields = dateArray.join(",");
+	dateArray = dateFields.split(",");
+	mandatory = <%- JSON.stringify(mandatoryFields) %>;
+    mandatory = mandatory.filter(Boolean);
+    dateArray = dateArray.filter(Boolean);
+	if (dateArray.length > 0) {
+        for (var i in dateArray) {
+            if (dateArray[i]) {
+               // $('#f' + dateArray[i]).datetimepicker();
+            }
+        }
+    }
+
+	
+function updateTips(t) {
+	tips.text(t).addClass("ui-state-highlight");
+	setTimeout(function () {
+		tips.removeClass("ui-state-highlight", 1500);
+	}, 500);
+}
+
+function checkLength(o, n, min, max) {
+	if (o.val().length > max || o.val().length < min) {
+		o.addClass("ui-state-error");
+		updateTips("Length of " + n + " must be between " + min + " and " + max + ".");
+		return false;
+	} else {
+		return true;
+	}
+}
+
+
+function checkRegexp(o, regexp, n) {
+	if (!(regexp.test(o.val()))) {
+		o.addClass("ui-state-error");
+		updateTips(n);
+		return false;
+	} else {
+		return true;
+	}
+}
+
+</script>

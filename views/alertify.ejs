@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Simple jQuery Toast Notifications (Growl)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel="stylesheet" href="../alertify.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<div id="toasts"></div>
+
+<!-- start demo code -->
+<button data-type="generic">Toast</button>
+<button data-type="html">Custom HTML</button>
+<button data-type="auto">Auto-dismiss</button>
+
+<h1>Types</h1>
+<button data-type="types" data-kind="success">Success</button>
+<button data-type="types" data-kind="error">Error</button>
+<button data-type="types" data-kind="warning">Warning</button>
+<button data-type="types" data-kind="Jeetu">Info</button>
+<!-- end demo code -->
+<!-- partial -->
+  <script  src="../alertify.js"></script>
+  <script>
+  $('button').click(function(){
+  var data = this.dataset;
+ $.toast('This is a Alok ranjan toast.');
+  
+});
+  
+  </script>
+
+</body>
+</html>

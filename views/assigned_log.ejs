@@ -1,0 +1,32 @@
+<% if (rows && rows.length) { %>
+		<table class="logstable table table-hover">
+			<% rows.forEach(row => { %>
+	<tr>
+	<td>
+	<p class="logname"><%= row.f1 %></p>
+	<p class="logno" ondblclick='DialByLine("audio","","<%= row.phone %>","","","PV","<%= row.id %>")'><%= row.phone %></p>
+	</td>
+	<td style="text-align: right;">
+	<p class="logname-date"><%= row.calldate %></p>
+	<div class="btn-group">
+	<p class="logdotes" data-toggle="dropdown"
+	aria-haspopup="true" aria-expanded="false"
+	style="cursor: pointer;">
+	<i class="fa fa-ellipsis-h"></i>
+   <div class="dropdown-menu"
+    style="position: absolute;transform: translate3d(-56px, 18px, 0px);top: -18px;left: 0px;will-change: transform;">
+    <a class="dropdown-item" href="#!" onclick="showWhatapp('<%= row.phone %>')">WhatsApp</a>
+	<a class="dropdown-item" href="#!" onclick="CallLog_show('<%= row.id %>')">Call</a>
+	<a class="dropdown-item" href="#!" onclick="smsLog('<%= row.id %>')">SMS </a>
+	<a class="dropdown-item" href="#!"  onclick="emailLog('<%= row.id %>')">email </a>
+	</div>
+	</p>
+			
+	</div>
+	</td>
+</tr>    </tr>
+															  
+    <% }); %>
+</table>
+    <% } else { %>No data found<% } %>
+   

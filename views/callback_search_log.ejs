@@ -1,0 +1,165 @@
+<div style="width:100%; height:25px; background-color:#0D63B0"><span style="text-transform: uppercase;
+text-align:center;padding:10px;font-weight:bold; color:white">Detailed Callback Logs</span></div>
+<div style="width:100%; height:250px; overflow:auto" id="newrecall_history">
+	<table class="table table-hover table-bordered" style="cellpadding:5px; cellspacing:5px">
+		<thead style="background-color: #ffffffbf;">
+			<tr>
+				<th style="border:none;" nowrap>S.NO.</th>
+				<th style="border:none;" nowrap>PHONE NO.</th>
+				<th style="border:none;" nowrap>CALLBACK TIME</th>
+				<th style="border:none;" nowrap>DISPOSITION</th>
+				<th style="border:none;" nowrap>SUB DISPOSITION</th>
+				<th style="border:none;" nowrap>ADDED BY</th>
+				<th style="border:none;" nowrap>CREATED ON</th>
+				<th style="border:none;" nowrap>CAMPAIGN</th>
+				<% crm_field.forEach(name=> { %>
+					<th style="border:none;" nowrap>
+						<%= name[0] %>
+					</th>
+					<% }); %>
+						%>
+			</tr>
+		</thead>
+		<tbody>
+			<% let sn=0; if (rows && rows.length) { rows.forEach(row=> {
+				sn++;
+				%>
+				<tr class="add-recall" onclick="show_reschedule('<%= row.id %>','<%= row.dataid %>','<%= row.callback_datetime %>')">
+					<td nowrap style="font-weight:bold">
+						<%= sn+'.'%>
+					</td>
+					<td style="cursor: pointer;" nowrap
+						ondblclick="manual_callback_dial('<%= row.phone %>','<%= row.campaign %>','<%= row.dataid %>','<%= row.recall_id %>')">
+						<%= row.phone %>
+					</td>
+					<td nowrap>
+						<%= row.cdate %>
+					</td>
+					<td nowrap>
+						<%= row.disposition %>
+					</td>
+					<td nowrap>
+						<%= row.sub_disposition %>
+					</td>
+					<td nowrap>
+						<%= row.recall_by %>
+					</td>
+					<td nowrap>
+						<%= row.update_time %>
+					</td>
+					<td nowrap>
+						<%= row.campaign %>
+					</td>
+					<% let j=0; crm_field.forEach(name=> {
+						j++;
+						const s = 'f' + j;
+						%>
+						<td nowrap>
+							<%= row[s] %>
+						</td>
+						<% }); %>
+				</tr>
+				<% }); %>
+					<% } else { %>
+						<tr>
+							<td colspan="8" style="color: red;">No Data Found...!</td>
+						</tr>
+						<% } %>
+		</tbody>
+	</table>
+</div>
+<div style="width:100%; height:25px; background-color:#0D63B0"><span style="text-transform: uppercase;
+text-align:center;padding:10px;font-weight:bold; color:white">Other Campaign Callback Logs</span></div>
+<div style="width:100%; height:250px; overflow:auto" >
+	<table class="table table-hover" style="cellpadding:5px; cellspacing:5px">
+		<thead style="background-color: #ffffffbf;">
+			<tr>
+				<th style="border:none;" nowrap>S.NO.</th>
+				<th style="border:none;" nowrap>PHONE NO.</th>
+				<th style="border:none;" nowrap>CALLBACK TIME</th>
+				<th style="border:none;" nowrap>DISPOSITION</th>
+				<th style="border:none;" nowrap>SUB DISPOSITION</th>
+				<th style="border:none;" nowrap>ADDED BY</th>
+				<th style="border:none;" nowrap>CREATED ON</th>
+				<th style="border:none;" nowrap>CAMPAIGN</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% let sno=0; if (rowso && rowso.length) { rowso.forEach(row=> {
+				sno++;
+				%>
+				<tr class="add-recall"  onclick="show_reschedule('<%= row.id %>','<%= row.dataid %>','<%= row.callback_datetime %>')">
+					<td nowrap style="font-weight:bold">
+						<%= sno+'.'%>
+					</td>
+					<td style="cursor: pointer;" nowrap
+						ondblclick="manual_callback_dial('<%= row.phone %>','<%= row.campaign %>','<%= row.dataid %>','<%= row.recall_id %>')">
+						<%= row.phone %>
+					</td>
+					<td nowrap>
+						<%= row.cdate %>
+					</td>
+					<td nowrap>
+						<%= row.disposition %>
+					</td>
+					<td nowrap>
+						<%= row.sub_disposition %>
+					</td>
+					<td nowrap>
+						<%= row.recall_by %>
+					</td>
+					<td nowrap>
+						<%= row.update_time %>
+					</td>
+					<td nowrap>
+						<%= row.campaign %>
+					</td>
+				</tr>
+				<% }); %>
+					<% } else { %>
+						<tr>
+							<td colspan="8" style="color: red;">No Data Found...!</td>
+						</tr>
+						<% } %>
+		</tbody>
+	</table>
+</div>
+<div style="width:100%; height:auto; background-color:#0D63B0"><span style="text-transform: uppercase;
+	text-align:center;padding:10px;font-weight:bold; color:white">Reschedule Callback</span></div>
+<div style="width:100%; height:100px; overflow:auto">
+	<div class="row">
+
+		<div class="col-md-4 mt-4 ml-3">
+			<div class="form-group">
+				<input type="hidden" id="reschedule_recall_id" />
+				<input type="hidden" id="reschedule_data_id" />
+				<input type="datetime-local" class="form-control" id="re_schedule_calldate" />
+				<span id="err_re_schedule_calldate" style="color: red; font-size: 12px; display: none;"></span>
+			</div>
+		</div>
+		<div class="col-md-4 mt-4"> 
+			<button type="button" class="btn btn-primary" onclick="save_reschedule_data()">
+				<i class="fa fa-save" aria-hidden="true"></i> Save
+			</button>
+			<div id="bg_success" style="color: green; font-size: 12px;"></div>
+		</div>
+	</div>
+</div>
+<style>
+	.highlight {
+		background-color: #a1eaf1 !important; /* Background color on click */
+	}
+</style>
+<script>
+	$(document).ready(function() {
+	var now = new Date();
+	var year = now.getFullYear();
+	var month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+	var day = String(now.getDate()).padStart(2, '0');
+	var hours = String(now.getHours()).padStart(2, '0');
+	var minutes = String(now.getMinutes()).padStart(2, '0');
+	var minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+	$('#re_schedule_calldate').attr('min', minDateTime);
+});
+
+</script>

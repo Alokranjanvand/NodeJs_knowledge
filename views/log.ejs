@@ -1,0 +1,63 @@
+<div class="crm">
+    <div id="disposition-data" class="detailed-crm-log">
+        <div class="table-heading"><p>Detailed Disposition Logs</p></div>
+        <div class="form-group">
+            <label for="search-txt" class="control-label col-md-1">Filter:</label>
+            <div class="col-md-11">
+                <input type="text" name="search-txt" id="search-txt" class="form-control" />
+            </div>
+        </div>
+        <div class="data"></div>
+    </div>
+    <div class="detailed-crm-log">
+        <div class="table-heading"><p>Detailed Disposition Logs</p></div>
+        <table class="table" id="detailed-disposition">
+            <thead></thead>
+            <tbody></tbody>
+            <tfoot></tfoot>
+        </table>
+        <iframe width="100%" height="275px" id="iframe"></iframe>
+    </div>
+    <div class="Other-compaign">
+        <div class="table-heading"><p>Disposition Summary</p></div>
+        <table class="table" id="summary-disposition">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>DISPOSITION</th>
+                    <th>COUNT</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box_with_input">
+        <div class="table-heading"><p>Recent Call</p></div>
+        <div class="input_inner_box">
+            <div class="input-box">
+                <input type="text" class="custom-select mb-2 mr-sm-2 mb-sm-0" id="start-date-disposition-search" value="<%= startDate +' 00:00' %>" name="start-date-disposition-search" />
+                <input type="text" class="custom-select mb-2 mr-sm-2 mb-sm-0" id="end-date-disposition-search" value="<%= endDate %>"name="end-date-disposition-search" />
+                <select style='width:120px; height:25px' id='time_formate'>
+                 </select>		
+			    <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="disposition-disposition-search" name="disposition-disposition-search"></select>
+                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sub-disposition-disposition-search" name="sub-disposition-disposition-search"></select>
+            </div>
+            <div class="input_function_imgs">
+                <span title="Call Log" class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                <span title="User Session Log" class="save-icon"><i class="fa fa-floppy-o" aria-hidden="true"></i></span>
+            </div>
+        </div>
+        <div class="input_inner_box">
+            <div class="input-box">
+                <input type="text" class="custom-select mb-2 mr-sm-2 mb-sm-0" id="searchtxt" name="searchtxt" />
+            </div>
+            <div class="input_function_imgs">
+                <span title="CRM Search" class="crm-search-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                <span title="Disposition Search" class="disposition-search-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                <span title="Directory Search" class="directory-search-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+            </div>
+        </div>
+    </div>
+</div>

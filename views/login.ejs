@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Webrtc Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Favicon icon -->
+    <link rel="icon" href="assets1/images/favicon.ico" type="image/x-icon">
+    <!-- fontawesome icon -->
+    <link rel="stylesheet" href="assets1/fonts/fontawesome/css/fontawesome-all.min.css">
+    <!-- animation css -->
+    <link rel="stylesheet" href="assets1/plugins/animation/css/animate.min.css">
+    <!-- vendor css -->
+    <link rel="stylesheet" href="assets1/css/style.css">
+    <!-- Alertify Css code -->
+    <link rel="stylesheet" href="assets/alertify/alertify.core.css?v=5.17.1" />
+    <link rel="stylesheet" href="assets/alertify/alertify.default.css?v=5.17.1" />
+    <link rel="stylesheet" href="assets/alertify/toastr.css?v=5.17.1" type="text/css" />
+    <link rel="stylesheet" href="alertify.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    <!-- Alertify Javascript code -->
+    <script src="assets/alertify/alertify.min.js?v=5.17.1"></script>
+    <script src="assets/alertify/modernizr.js?v=5.17.1"></script>
+    <script src="assets/alertify/toastr.js?v=5.17.1"></script>
+    <script type="text/javascript" src="assets/sipjs/all_constant.js?v=5.17.1"></script>
+    <div id="toasts"></div>
+    <style>
+    .full_width{ width: 100% !important;}
+    #succes_msg{ display: none;}
+    #error_msg{ display: none;}
+    </style>
+    
+        
+</head>
+
+<body>
+
+    
+    <div id="toasts"></div>
+    <div class="auth-wrapper">
+        <div class="auth-content">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
+            </div>
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="feather icon-unlock auth-icon"></i>
+                    </div>
+                    <h3 class="mb-4">Login</h3>
+                    <form method="post" action="/login_webrtc" name="validate_user">
+                        <div>
+                            <b class="text-success" id="succes_msg">this is testing</b>
+                            <b class="text-danger" id="error_msg">this is testing</b>
+                        </div>
+                    <div class="input-group mb-3">
+                        <input type="hidden" id="db_user" name="db_user" />
+                        <input type="hidden" id="db_password" name="db_password" />
+                        <input type="hidden" id="db_server"  name="db_server" />
+                        <input type="hidden" id="voice_server" name="voice_server" />
+                        <input type="hidden" id="cs_server" name="cs_server" />
+                        <input type="hidden" id="as_id" name="as_id" />
+                        <input type="hidden" id="user_status_id" name="user_status_id" />
+                        <input type="hidden" id="web_server" name="web_server" />
+                        <input type="hidden" id="extension_data"  name="extension_data" />
+                        <input type="hidden" name="my_ip" id="my_ip" value="<%= ip_address  %>" name="my_ip" />
+                        <input type="hidden" name="client_id" id="client_id"  class="form-control full_width" placeholder="Client ID"><br/>
+						<input type="hidden" name="user_id" id="user_id">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" name="username" id="username"  class="form-control full_width" placeholder="Username"><br/>
+                        <span style="color:red; font-weight:normal; font-size:9px;" id="err_email"></span>
+                    </div>
+                    <div class="input-group mb-4">
+                        <input type="password" name="password" id="password"  class="form-control full_width" placeholder="Password"><br/>
+                        <span style="color:red; font-weight:normal; font-size:9px;" id="err_password"></span>
+                    </div>
+                    <div class="form-group text-left">
+                        <div class="checkbox checkbox-fill d-inline">
+                            <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" checked="">
+                            <label for="checkbox-fill-a1" class="cr"> Save Details</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary shadow-2 mb-4" id="login_data">Login</button>
+                    <div>
+                        <img src="assets1/images/galaxypro.png">
+                    </div>
+                </div>
+                </div></form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Required Js -->
+    <script src="assets1/js/vendor-all.min.js"></script>
+    <script src="assets1/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script  src="alertify.js"></script>
+    <script>
+     localStorage.clear();
+      function sweet_success(msg)
+      {
+            Swal.fire({
+            title: "Good job!",
+            text: msg,
+            icon: "success"
+            });
+      }
+      function sweet_error(msg)
+      {
+            Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: msg,
+            });
+      }
+      function sweet_confirm(msg)
+      {
+            Swal.fire({
+            title: msg,
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+            }).then((result) => {
+                return result;
+            /* Read more about isConfirmed, isDenied below 
+            if (result.isConfirmed) {
+            Swal.fire("Saved!", "", "success");
+            } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+            }
+            */
+            });
+      }
+      function success_alertify_toast(msg)
+      {
+        $.toast('success',msg);
+        $(".toast").delay(1000).fadeOut(1000);
+      }
+      function error_alertify_toast(msg)
+      {
+        $.toast('error',msg);
+        $(".toast").delay(1000).fadeOut(1000);
+      }
+      function warn_alertify(msg)
+      {
+        $.toast('warning',msg);
+        $(".toast").delay(1000).fadeOut(1000);
+      }
+      function error_alertify(msg)
+      {
+        $("#succes_msg").css("display", "none");
+        $("#error_msg").css("display", "block");
+        $("#error_msg").html(msg);
+        $("#error_msg").fadeOut(3000);
+      }
+      function success_alertify(msg)
+      {
+        $("#error_msg").css("display", "none");
+        $("#succes_msg").css("display", "block");
+        $("#succes_msg").html(msg);
+        $("#succes_msg").fadeOut(3000);
+      }
+      function ajax_login() 
+      {
+            var client_id = $('#client_id').val();
+			userdata= $('#username').val();
+			var newarr = userdata.split("@");
+			var username= newarr[0];
+			var user_id= newarr[0];
+            var password = $('#password').val();
+            var my_ip = $('#my_ip').val();
+            var extension = $('#extension_data').val();
+			var db_user=$("#db_user").val();
+			var db_pass=$("#db_password").val();
+			var db_server=$("#db_server").val();
+			var voice_server=$("#voice_server").val();
+			var cs_server=$("#cs_server").val();
+			var web_server=$("#web_server").val();
+            $("#alert_login").html('<img src="images/loading.gif"/>');
+            $.post(webrtcloginURL, {username: username, password: password, client_id: client_id, extension: extension, myip: my_ip, db_user:db_user, db_pass:db_pass, db_server:db_server, voice_server:voice_server, cs_server:cs_server, web_server:web_server}, function (result) {
+                $("#alert_login").html('');
+                //alert(JSON.stringify(result));
+                console.log(JSON.stringify(result));
+                if (result.ok == 'true' || result.ok == true) 
+                {
+                    let detial=JSON.stringify(result);
+                    //alert(result.data.User_Status_ID);
+                    //alert(result.data.AS_ID);
+                    $("#as_id").val(result.data.AS_ID);
+                    $("#user_status_id").val(result.data.User_Status_ID);
+                    //success_alertify("Not an available Sip. Please contact admin");
+                    window.localStorage.setItem('ClientID', client_id);
+                    window.localStorage.setItem('USER_ID', username);
+                    window.localStorage.setItem('MYIP', my_ip);
+                    window.localStorage.setItem('SIP_ID', extension);
+                    window.localStorage.setItem('password', password);
+                    window.localStorage.setItem('TMCCount', 0);
+                    window.localStorage.setItem('TOBCount', 0);
+                    window.localStorage.setItem('TIBCount', 0);
+                    window.localStorage.setItem('TRCCount', 0);
+                    window.localStorage.setItem('TTCCount', 0);
+                    window.localStorage.setItem('TCCCount', 0);
+                    window.localStorage.setItem('Call_Ob_Count', 0);
+                    window.localStorage.setItem('Call_In_Count', 0);
+                    window.localStorage.setItem('Call_Mc_Count', 0);
+                    window.localStorage.setItem('Recall_Count', 0);
+                    window.localStorage.setItem('Transfer_Count', 0);
+                    window.localStorage.setItem('Conference_Count', 0);
+                    window.localStorage.setItem('Mo_count', 0);
+                    window.localStorage.setItem('EMAIL_COUNT', 0);
+                    window.localStorage.setItem('SMS_COUNT', 0);
+                    window.localStorage.setItem('ApiCall', 0);
+                    for (var i in result.data) {
+                        window.localStorage.setItem(i, result.data[i]);
+                    }
+                    success_alertify("sucess result");
+                    document.validate_user.submit();
+                } else {
+                    switch (result.msg) {
+                        case 'sipnotfound':
+                            sweet_error("Not an available Sip. Please contact admin");
+                            break;
+                        case 'webrtcagent':
+                            sweet_error("Allotted extension not valid for Webrtc Agent...!");
+                            break;
+                        case 'invalid':
+                             sweet_error("Invalid Userid , Password...!");
+                            break;
+                        case 'inactive':
+                            sweet_error("Your Id is block Please contact right person...!");
+                            break;
+                        case 'clientid':
+                            sweet_error("Client Code Mismatched. Please contact administrator.");
+                            break;
+                        case 'license':
+                            sweet_error("Your license limit exceeded. Please contact administrator.");
+                            break;
+                        case 'dba-not':
+                            sweet_error("DB User Name OR Password Invalid.");
+                            break;
+                        case 'already login':
+                            alertify.error("Some One already Logged In..!");
+                            alertify.confirm("Are You Sure Want to Free...", function (e) {
+                                if (e) {
+									var db_user=$("#db_user").val();
+									var db_pass=$("#db_password").val();
+									var db_server=$("#db_server").val();
+									var voice_server=$("#voice_server").val();
+									var cs_server=$("#cs_server").val();
+									var web_server=$("#web_server").val();
+                                    $.post(FreeAgentUrl, {id: result.data.id, db_user:db_user, db_pass:db_pass, db_server:db_server, voice_server:voice_server, cs_server:cs_server, web_server:web_server}, function (res) {
+										if(res.ok==true)
+										{
+											ajax_login();
+										}
+										else
+										{
+											alertify.error(res.msg);
+										}
+									},'json');
+                                } else {
+                                    return false;
+                                }
+                            });
+                            break;
+                         case 'sce':
+                            sweet_error("Server communication error...!");
+                            break;
+							case 'expire':
+                            sweet_error("Password has been Expired..!");
+                            $("#succes_msg").css("display", "none");
+			                $("#error_msg").css("display", "block");
+                            $("#error_msg").html("Password has been Expired..!");
+                            return false;
+                            let change_request = "Password has been Expired..! Click on Ok to Reset Password...";
+                           
+                                if (alertify.confirm(change_request) == true) 
+                                {
+									 window.localStorage.setItem('ClientID', client_id);
+                                     window.localStorage.setItem('USER_ID', username);
+									 window.localStorage.setItem('db_user', db_user);
+                                     window.localStorage.setItem('db_pass', db_pass);
+									 window.localStorage.setItem('db_server', db_server);
+                                    window.location = ChangePassUrl;
+                                
+                                }
+                            break;
+                        default:
+                    }
+                }
+            }
+            , 'json');
+        }
+        
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('#login_data').click(function(){
+					userdata= $('#username').val();
+					const myArray = userdata.split("@");
+					var username= myArray[0];
+					var client_name= myArray[1];
+                    password = $('#password').val();
+                    if(username=='')
+                    {
+                        document.getElementById("err_email").innerHTML="Please enter username";
+                        document.getElementById("username").style.border="1px solid red";
+                        document.getElementById("username").focus();
+                        return false;
+                    }
+                    else
+                    {
+                        document.getElementById("username").style.border="1px solid  green";
+                        $("#err_email").hide();
+                    }
+                    if(password=='')
+                    {
+                        document.getElementById("err_password").innerHTML="Please enter password";
+                        document.getElementById("password").style.border="1px solid red";
+                        document.getElementById("password").focus();
+                        return false;
+                    }
+                    else
+                    {
+                        document.getElementById("password").style.border="1px solid  green";
+                        $("#err_password").hide();
+                    }
+					$.ajax({
+        url:"/api_calling/client_name",
+        method:"POST",
+        data:{username:client_name},
+        dataType:"JSON",
+        success:function(data)
+        {
+			if(data.status==false)
+			{
+				//alert("Invalid Username");
+                sweet_error("Invalid Username OR Password");
+				$("#err_email").show();
+				document.getElementById("err_email").innerHTML="Please valid username";
+				document.getElementById("username").style.border="1px solid red";
+				document.getElementById("username").focus();
+			}else
+			{
+				console.log("true data= "+data[0].client_code);
+				$("#client_id").val(data[0].client_code);
+                $.post("/sip_assign_data", {client_id: data[0].client_code,agent:username,extentype:'webrtcagent'}, function (sip_result) {
+                    var res_sip= sip_result.split("|");
+                    //console.log("Sip1= "+res_sip[0]+"sip2= "+res_sip[1]+"sip3= "+res_sip[2]);
+                    if(res_sip[1] !='')
+                    {
+                        $("#extension_data").val(res_sip[1]);
+                        $.post(databaseAPIUrl, {client_id: data[0].client_code}, function (result) {
+                        var res= result.split("~");
+                        if(res[0]=='True')
+                        {
+                            $("#db_user").val(res[5]);
+                            $("#db_password").val(res[6]);
+                            $("#db_server").val(res[1]);
+                            $("#voice_server").val(res[2]);
+                            $("#cs_server").val(res[3]);
+                            $("#web_server").val(res[4]);
+                            ajax_login();
+
+                        }
+                        else
+                        {
+                            //error_alertify("Database Connection Error!...");
+                            sweet_error("Database Connection Error!...");
+                            return false;
+                        }
+                        });
+
+                    }else
+                    {
+                        sweet_error("Extension not available...!");
+						return false;
+                    }
+					
+			    });
+                
+				
+			}
+			
+        }
+    })
+                    
+                   
+                    
+                    return false;
+                    
+                });
+                
+            });
+            
+            
+            </script>
+            <script>
+                var_settimeout = setInterval(function () {
+                    call_dashboard();}, 1000);
+                function call_dashboard(){
+                    let sess_client_id='<%= session.client_id  %>';
+                    let sess_username='<%= session.username  %>';
+                    let main_user_id=localStorage.getItem("USER_ID");
+                    console.log(sess_client_id+sess_username+main_user_id);
+                    
+                    //console.log(" sess_client_id= "+sess_client_id+" sess_username= "+sess_username);
+                    if(sess_client_id !='' && sess_username !='' && main_user_id != '' && main_user_id != null)
+                    {
+                        location.replace("/dashboard");
+                    }
+                        
+                   
+                }
+            </script>
+
+</body>
+
+</html>

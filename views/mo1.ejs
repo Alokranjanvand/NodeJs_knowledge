@@ -1,0 +1,484 @@
+
+<style>
+    #mo-table-div{
+        height: 300px;
+        overflow-y: scroll;
+    }
+    #mo-table{ display: table !important;}
+    .mo-table-active{ background: red !important;}
+</style>
+<div id="mo-table-div">
+    <table id="mo-table" class="table table-bordered table-responsive">
+        <thead>
+            <tr><th>No</th><th>Agent</th><th>SIP</th><th>Mode</th><th>Duration</th><th>Status</th><th>Phone</th><th>MC</th><th>OB</th><th>IB</th></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <input type="hidden" id="selectedID" name="selectedID" />
+</div>
+<div class="col-md-12 col-sm-12">
+    <div class="row">
+        <div class="col-md-4 col-sm-4">
+            <div class="row">
+                <div class="col-md-6 col-sm-6" title="BARGE CALL"><button class="btn btn-primary" type="button"  id="BARGE" onclick="mo_type_calling('BARGE')">BARGE</button></div>
+                <div class="col-md-6 col-sm-6" title="COACH CALL"><button class="btn btn-primary"  type="button" id="COACH" onclick="mo_type_calling('COACH')">COACH</button></div>
+                <div class="col-md-6 col-sm-6" title="INFO CALL"><button class="btn btn-primary"  type="button" id="INFO" onclick="mo_type_calling('INFO')">INFO</button></div>
+                <div class="col-md-6 col-sm-6" title="JOIN CALL"><button class="btn btn-primary" type="button"  id="CONF"  onclick="mo_type_calling('CONF')">JOIN CALL</button></div>
+            </div>
+
+        </div>
+        <div class="col-md-4 col-sm-4">
+            <h4>Campaign</h4>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="row">
+                    <div class="col-md-10 col-sm-10">
+                        <select class="form-control" name="mo-campaign" id="mo-campaign">
+                        </select>
+                    </div>
+                    <div class ="col-md-2 col-sm-2" title="Save Campaign">
+                        <i class="fa fa-floppy-o fa-2x" onclick="chooseCampaign()"></i>
+                    </div>
+                </div>
+ 
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4 col-sm-4">
+            <h4>Remarks</h4>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-10 col-sm-10">
+                            <textarea class="form-control" name='mo-remarks' id="mo-remarks"></textarea>
+                        </div>
+                        <div class ='col-md-2 col-sm-2' title="Save Remarks">
+                            <i class="fa fa-floppy-o fa-2x" onclick="saveCampaign()"></i>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+        
+    </div>
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    function mo_type_calling(type,extension = '')
+    {
+        //alert("type= "+type+" extension= "+extension);
+        
+        if (extension.length > 0) {
+            $('#mo-table tbody tr').each(function (e) {
+                if ($(this).attr("custom-attr") == extension) {
+                    $('#selectedID').val($(this).attr('id'));
+                }
+            });
+            $('#' + type).trigger("click");
+        }
+        var selectedID = $('#selectedID').val();
+        var selectedID = selectedID.split("-");
+        if (getLocalVariable('MOPanel') != '1') {
+                alertify.error("MO panel access denial");
+                return false;
+            }
+        if (getLocalVariable('isLineBusy') != 'READY' || getLocalVariable('isLine2Busy') != '') {
+                alertify.error("Please Dispose last call first.");
+                return false;
+            }
+        if (getLocalVariable('WaitingMoDisposition') == true) {
+            alertify.error("Please save last call remarks first.");
+            return false;
+        }
+        if (selectedID[0] == '') {
+            alertify.error("Please select agent.");
+            return false;
+        } else if (selectedID[0].length != 5) {
+            alertify.error("Please select agent.");
+            return false;
+        } else if (selectedID[1] != 'ONCALL' && selectedID[1] != 'ON CALL') {
+            alertify.error("No Active Call On Selected User...!");
+            return false;
+        }
+        //20013-ONCALL-alok-8285248951
+        var ourdata=selectedID.toString();
+        var res= ourdata.split(",");
+        console.log('Barge_call = GB'+res[0]);
+        var USER_ID=localStorage.getItem("USER_ID");
+        var MoType=type;
+        var MoAgentName=res[2];
+        var MoAgentSip=res[0];
+        var MoCustomerPhone=res[3];
+        var MoStartTime=formatDateTime();
+        var ClientID=localStorage.getItem("ClientID");
+        var CampaignName=localStorage.getItem("CampaignName");
+        var MoCampaign=$('#mo-campaign').val();
+        var Mo_count=localStorage.getItem("Mo_count");
+        datetime_sip=formatDate();
+        var SIP_ID=window.localStorage.getItem('SIP_ID');
+        var RecordID=datetime_sip+SIP_ID;
+        var calltype='';
+        var MoRID='';
+        if(type=='BARGE')
+        {
+            calltype='BC';
+            MoRID='';
+        }
+        else if(type=='COACH')
+        {
+            calltype='CC';
+            MoRID='';
+        }
+        else if(type=='INFO')
+        {
+            calltype='IC';
+            MoRID='';
+        }
+        else if(type=='CONF')
+        {
+            calltype='JC';
+            MoRID=RecordID;
+        }
+        
+        
+        var sendinp={USER_ID:USER_ID,MoType:MoType,MoAgentName:MoAgentName,MoAgentSip:MoAgentSip,MoCustomerPhone:MoCustomerPhone,MoStartTime:MoStartTime,ClientID:ClientID,CampaignName:CampaignName,MoCampaign:MoCampaign,Mo_count:Mo_count,calltype:calltype,MoRID:MoRID};
+        console.log("Send input data= "+JSON.stringify(sendinp));
+        $.ajax({
+        url:"/api_calling/save_mo_call",
+        method:"POST",
+        data:sendinp,
+        dataType:"JSON",
+        success:function(data)
+        {
+            var element = document.getElementById("my_offcanvas2");
+            element.classList.add("show");
+            if (data.status == true) 
+            {
+                if (Object.keys(data).length > 0) {
+                    updateLocalVariables(data);
+                }
+            }
+            if(type=='BARGE')
+            {
+                
+                MODialing('audio','','GB'+res[0]);
+                alertify.success("Barge Calling...!");
+            }
+            else if(type=='COACH')
+            {
+                MODialing('audio','','GC'+res[0]);
+                alertify.success("Coach Calling...!");
+            }
+            else if(type=='INFO')
+            {
+                MODialing('audio','','GI'+res[0]);
+                alertify.success("Info Calling...!");
+            }
+            else if(type=='CONF')
+            {
+                var dialstring='GF'+res[0]+'-JC-'+ClientID+'-'+RecordID+'-'+res[3]+'-'+CampaignName+'-'+res[2]+'~'+USER_ID;
+                MODialing('audio','',dialstring);
+                alertify.success("Conference Calling...!");
+            }
+            
+        }
+        })
+    }
+$(document).ready(function(){
+    function formatDate() 
+    {
+        const now = new Date();
+        const year = now.getFullYear().toString().slice(-2); // Get last two digits of year
+        const month = ('0' + (now.getMonth() + 1)).slice(-2); // Months are zero-based
+        const day = ('0' + now.getDate()).slice(-2);
+        const hours = ('0' + now.getHours()).slice(-2);
+        const minutes = ('0' + now.getMinutes()).slice(-2);
+        const seconds = ('0' + now.getSeconds()).slice(-2);
+        const milliseconds = ('00' + now.getMilliseconds()).slice(-3); // Ensure 3 digits for milliseconds
+        return year + month + day + hours + minutes + seconds + milliseconds;
+    }
+    function formatDateTime() {
+        // Get the components of the date
+        let date=new Date();
+        let year = date.getFullYear();
+        let month = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero-indexed
+        let day = ("0" + date.getDate()).slice(-2);
+        let hours = ("0" + date.getHours()).slice(-2);
+        let minutes = ("0" + date.getMinutes()).slice(-2);
+        let seconds = ("0" + date.getSeconds()).slice(-2);
+        // Format the components into the desired format
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+    
+        var SIP_ID=window.localStorage.getItem('SIP_ID');
+        $('#barge').click(function () {
+            var selectedID = $('#selectedID').val();
+            var selectedID = selectedID.split("-");
+           if (getLocalVariable('isLineBusy') != 'READY' || getLocalVariable('isLine2Busy') != '') {
+                alertify.error("Please Dispose last call first.");
+                return false;
+            }
+            if (getLocalVariable('WaitingMoDisposition') == true) {
+                alertify.error("Please save last call remarks first.");
+                return false;
+            }
+            if (selectedID[0] == '') {
+                alertify.error("Please select agent.");
+                return false;
+            } else if (selectedID[0].length != 5) {
+                alertify.error("Please select agent.");
+                return false;
+            } else if (selectedID[1] != 'ONCALL' && selectedID[1] != 'ON CALL') {
+                alertify.error("No Active Call On Selected User...!");
+                return false;
+            }
+           //20013-ONCALL-alok-8285248951
+            var ourdata=selectedID.toString();
+            var res= ourdata.split(",");
+            console.log('Barge_call = GB'+res[0]);
+            var USER_ID=localStorage.getItem("USER_ID");
+            var MoType='BARGE';
+            var MoAgentName=res[2];
+            var MoAgentSip=res[0];
+            var MoCustomerPhone=res[3];
+            var MoStartTime=formatDateTime();
+            var ClientID=localStorage.getItem("ClientID");
+            var CampaignName=localStorage.getItem("CampaignName");
+            var MoCampaign=$('#mo-campaign').val();
+            var Mo_count=localStorage.getItem("Mo_count");
+            var calltype='BI';
+            var MoRID='';
+            var sendinp={USER_ID:USER_ID,MoType:MoType,MoAgentName:MoAgentName,MoAgentSip:MoAgentSip,MoCustomerPhone:MoCustomerPhone,MoStartTime:MoStartTime,ClientID:ClientID,CampaignName:CampaignName,MoCampaign:MoCampaign,Mo_count:Mo_count,calltype:calltype,MoRID:MoRID};
+            console.log("Send input data= "+JSON.stringify(sendinp));
+            $.ajax({
+            url:"/api_calling/save_mo_call",
+            method:"POST",
+            data:sendinp,
+            dataType:"JSON",
+            success:function(data)
+            {
+                if (data.status == true) {
+                        if (Object.keys(data).length > 0) {
+                            updateLocalVariables(data);
+                        }
+                        alertify.success("Mo disposition saved.");
+                        $('#mo-remarks').val('');
+                        $('#selectedID').val('');
+                    }
+                MODialing('audio','','GB'+res[0]);
+            }
+            })
+           
+        });
+
+        $('#coach').click(function () {
+            var selectedID = $('#selectedID').val();
+            var selectedID = selectedID.split("-");
+            if (getLocalVariable('isLineBusy') != 'READY' || getLocalVariable('isLine2Busy') != '') {
+                alertify.error("Please Dispose last call first.");
+                return false;
+            }
+            if (getLocalVariable('WaitingMoDisposition') == true) {
+                alertify.error("Please save last call remarks first.");
+                return false;
+            }
+            if (selectedID[0] == '') {
+                alertify.error("Please select agent.");
+                return false;
+            } else if (selectedID[0].length != 5) {
+                alertify.error("Please select agent.");
+                return false;
+            } else if (selectedID[1] != 'ONCALL' && selectedID[1] != 'ON CALL') {
+                alertify.error("No Active Call On Selected User...!");
+                return false;
+            }
+            var ourdata=selectedID.toString();
+            var res= ourdata.split(",");
+            console.log('Coach_call = GC'+res[0]);
+           MODialing('audio','','GC'+res[0]);
+        });
+
+        $('#info').click(function () {
+            var selectedID = $('#selectedID').val();
+            var selectedID = selectedID.split("-");
+            if (getLocalVariable('isLineBusy') != 'READY' || getLocalVariable('isLine2Busy') != '') {
+                alertify.error("Please Dispose last call first.");
+                return false;
+            }
+            if (getLocalVariable('WaitingMoDisposition') == true) {
+                alertify.error("Please save last call remarks first.");
+                return false;
+            }
+            if (selectedID[0] == '') {
+                alertify.error("Please select agent.");
+                return false;
+            } else if (selectedID[0].length != 5) {
+                alertify.error("Please select agent.");
+                return false;
+            } else if (selectedID[1] != 'ONCALL' && selectedID[1] != 'ON CALL') {
+                alertify.error("No Active Call On Selected User...!");
+                return false;
+            }
+            var ourdata=selectedID.toString();
+            var res= ourdata.split(",");
+            console.log('Info_call = GI'+res[0]);
+            //BargeCall('GI'+res[0]);
+            MODialing('audio','','GI'+res[0]);
+
+           
+        });
+
+        $('#join-call').click(function () {
+            var selectedID = $('#selectedID').val();
+            var selectedID = selectedID.split("-");
+            if (getLocalVariable('isLineBusy') != 'READY' || getLocalVariable('isLine2Busy') != '') {
+                alertify.error("Please Dispose last call first.");
+                return false;
+            }
+            if (getLocalVariable('WaitingMoDisposition') == true) {
+                alertify.error("Please save last call remarks first.");
+                return false;
+            }
+            if (selectedID[0] == '') {
+                alertify.error("Please select agent.");
+                return false;
+            } else if (selectedID[0].length != 5) {
+                alertify.error("Please select agent.");
+                return false;
+            } else if (selectedID[1] != 'ONCALL' && selectedID[1] != 'ON CALL') {
+                alertify.error("No Active Call On Selected User...!");
+                return false;
+            }
+            var ourdata=selectedID.toString();
+            var res= ourdata.split(",");
+            console.log(res[0]);
+            var ClientID=window.localStorage.getItem('ClientID');
+            var Campaign_name=window.localStorage.getItem('CampaignName');
+            datetime_sip=formatDate();
+            var SIP_ID=window.localStorage.getItem('SIP_ID');
+            var USER_ID=window.localStorage.getItem('USER_ID');
+            var RecordID=datetime_sip+SIP_ID;
+            var dialstring='GF'+res[0]+'-JC-'+ClientID+'-'+RecordID+'-'+res[3]+'-'+Campaign_name+'-'+res[2]+'~'+USER_ID;
+            console.log('Join_call ='+dialstring);
+            MODialing('audio','',dialstring);
+            //BargeCall('GI'+res[0]);
+            
+        });
+    });
+
+    $(document).off('click', '#mo-table-div #mo-table tbody tr').on('click', '#mo-table-div #mo-table tbody tr', function () {
+        $('#mo-table-div #mo-table tbody tr').removeClass("mo-table-active");
+        var selectedID = $(this)[0].id;
+        $('#selectedID').val(selectedID);
+       // alert(selectedID);
+        $('#' + selectedID).addClass("mo-table-active");
+    });
+
+    function chooseCampaign() {
+        var campaign = $('#mo-campaign').val();
+        if (getLocalVariable('WaitingMoDisposition') == true) {
+            alertify.error("Please save last call remarks first.");
+            return false;
+        }
+        if (campaign == '') {
+            alertify.error("Please select campaign.");
+            return false;
+        }
+        getAgents();
+    }
+
+    function saveCampaign() {
+        var remarksTxt = $('#mo-remarks').val();
+        if (getLocalVariable('WaitingMoDisposition') == false) {
+            alertify.error("No Call To Save Remarks...!");
+            return false;
+        }
+        if (remarksTxt.length == 0 || remarksTxt == '') {
+            alertify.error("Please enter the remarks for the call.");
+            return false;
+        }
+        var datarecord={
+            tag: 'call-remarks-save',
+            MoRemarksID: getLocalVariable('MoRemarksID'),
+            lineSelected: getLocalVariable('lineSelected'),
+            isLine2Busy: getLocalVariable('isLine2Busy'),
+            isLineBusy: getLocalVariable('isLineBusy'),
+            ClientID: getLocalVariable('ClientID'),
+            SIP_ID: getLocalVariable('SIP_ID'),
+            SERVER_IP: getLocalVariable('SERVER_IP'),
+            CS_API_Port: getLocalVariable('CS_API_Port'),
+            LoginHourID: getLocalVariable('LoginHourID'),
+            ModeDBId: getLocalVariable('ModeDBId'),
+            emailCount: getLocalVariable('EMAIL_COUNT'),
+            smsCount: getLocalVariable('SMS_COUNT'),
+            idleDuration: getLocalVariable('Idle_Duration'),
+            wrapupDuration: getLocalVariable('Wrapup_Duration'),
+            holdCount: getLocalVariable('Hold_Count'),
+            holdDuration: getLocalVariable('Hold_Duration'),
+            recallCount: getLocalVariable('Recall_Count'),
+            recallDuration: getLocalVariable('Recall_Duration'),
+            breakDuration: getLocalVariable('Break_Duration'),
+            moDuration: getLocalVariable('Mo_Duration'),
+            transferCount: getLocalVariable('Transfer_Count'),
+            User_Status_ID: getLocalVariable('User_Status_ID'),
+            remarksTxt: remarksTxt
+        };
+
+        $.ajax({
+            url:"/api_calling/save-mo-remarks-click",
+            method:"POST",
+            data:datarecord,
+            dataType:"JSON",
+            success:function(result)
+            {
+                if (result.ok == true) {
+                    if (Object.keys(result.data).length > 0) {
+                        updateLocalVariables(result.data);
+                    }
+                    alertify.success("Mo disposition saved.");
+                    $('#mo-remarks').val('');
+                    $('#selectedID').val('');
+                    if (websocketConnected == 1) {
+                    var sendlist = {
+                        type: 'agentstatus',
+                        status: 'READY',
+                        line2: getLocalVariable('isLine2Busy'),
+                        phone2: getLocalVariable('NumberToDial2'),
+                        phone: getLocalVariable('NumberToDial'),
+                        client_id: getLocalVariable('ClientID'),
+                        exten: getLocalVariable('SIP_ID'),
+                        campaign: getLocalVariable('CampaignName'),
+                        agent: getLocalVariable('USER_ID'),
+                        mode: getLocalVariable('UserModeIndex'),
+                        did_number: getLocalVariable('ManualCallerIDList'),
+                        recall: getLocalVariable('Recall_Count'),
+                        transfer: getLocalVariable('Transfer_Count'),
+                        conference: getLocalVariable('Conference_Count'),
+                        login_id: getLocalVariable('LoginHourID'),
+                        action_id: getLocalVariable('ModeDBId'),
+                        manual: getLocalVariable('Call_Mc_Count'),
+                        outbound: getLocalVariable('Call_Ob_Count'),
+                        inbound: getLocalVariable('Call_In_Count'),
+                        modeduration: getLocalVariable('CurrentAgentStateTime'),
+                        skill: getLocalVariable('crm_skill')
+                        };
+                        console.log("MO Dispose= "+JSON.stringify(sendlist));
+		                websocket.send(JSON.stringify(sendlist));
+                        setLocalVariable('AutoDisposeTime', 0);
+                        setLocalVariable('AutoDispCounter', 0);
+                        setLocalVariable('AutoDispTimeDiff', 0);
+                        setLocalVariable('lineSelected', 1);
+                        setLocalVariable('WaitingDisposition', 'false');
+                        setLocalVariable('isLineBusy', 'READY');
+                        setLocalVariable('DisplayCallerID', '');
+                        setLocalVariable('NumberToDial', '');
+                        setLocalVariable('NumberToDial2', '');
+                        setLocalVariable('isLine2Busy', '');
+                    }
+                }
+            }
+            })
+        console.log("Hello save mo record= "+JSON.stringify(datarecord));
+    }
+</script>

@@ -1,0 +1,35 @@
+<tr>
+	<th style="text-align: right;">Call Datetime</th>
+	<th style="text-align: right;">Agent Attempt</th>
+	<th style="text-align: right;">Leadid</th>
+	<th style="text-align: right;">Agent</th>
+	<th style="text-align: right;">Call Type</th>
+	<th style="text-align: right;">Disposition</th>
+	<th style="text-align: right;">Sub Disposition</th>
+	<th style="text-align: right;">Phone</th>
+	<% 
+		 crm_field.forEach(name => { %>
+		  <th style="border:none;" nowrap><%= name %></th>
+		 <% }); %>
+		%>
+</tr> 
+    <% if (rows && rows.length) {
+	rows.forEach(row => { %>
+	<tr ondblclick="ReviewCallMode(<%= row.phone %>)">
+			
+			<% 
+      for (let key in row) { 
+		%>
+			<td nowrap><%= row[key] %></td>
+		<% 
+      }
+		%>
+     </tr>                                 
+															  
+    <% }); %>
+    <% } else { %>
+	<tr>
+    <td colspan="2">No data found</td>
+	</tr>
+   <% } %>
+   

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Call Log Show</title>
+
+</head>
+<body>
+  <table class="table table-hover" style="cellpadding:5px; cellspacing:5px">
+    <thead style="background-color: #ffffffbf;">
+    <tr>
+		<th style="border:none;" nowrap>PHONE NO.</th>
+		<th style="border:none;" nowrap>CALLBACK TIME</th>
+		<th style="border:none;" nowrap>DISPOSITION</th>
+		<th style="border:none;" nowrap>SUB DISPOSITION</th>
+		<th style="border:none;" nowrap>ADDED BY</th>
+		<th style="border:none;" nowrap>CREATED ON</th>
+		<th style="border:none;" nowrap>CAMPAIGN</th>
+		<% 
+		 crm_field.forEach(name => { %>
+		  <th style="border:none;" nowrap><%= name[0] %></th>
+		 <% }); %>
+		%>
+    </tr>
+    </thead>
+    <tbody>                                               
+    <% if (rows && rows.length) {
+	rows.forEach(row => { %>
+    <tr>
+       <td style="cursor: pointer;" nowrap ondblclick="manual_callback_dial('<%= row.phone %>','<%= row.campaign %>','<%= row.dataid %>','<%= row.recall_id %>')"><%= row.phone %></td>
+	   <td nowrap><%= row.cdate %></td>
+	   <td nowrap><%= row.disposition %></td>
+	   <td nowrap><%= row.sub_disposition	%></td>
+       <td nowrap><%= row.recall_by %></td>
+	   <td nowrap><%= row.update_time %></td>
+	   <td nowrap><%= row.campaign %></td>
+	   <% 
+		  let j = 0;
+		  crm_field.forEach(name => { 
+			j++;
+			const s = 'f' + j;
+		%>
+			<td nowrap><%= row[s] %></td>
+		<% 
+		  }); 
+		%>
+     </tr>
+	<% }); %>
+    <% } else { %>
+	<tr>
+    <td colspan="2">No data found</td>
+	</tr>
+   <% } %>
+   </tbody>
+   </table>
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GalaxyPRO Dialer Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  
+    <!-- Favicon icon -->
+    <link rel="icon" href="assets1/images/favicon.ico" type="image/x-icon">
+    <!-- fontawesome icon -->
+    <link rel="stylesheet" href="assets1/fonts/fontawesome/css/fontawesome-all.min.css">
+    <!-- animation css -->
+    <link rel="stylesheet" href="assets1/plugins/animation/css/animate.min.css">
+    <!-- vendor css -->
+    <link rel="stylesheet" href="assets1/css/style.css">
+    <!-- Alertify Css code -->
+    <link rel="stylesheet" href="assets/alertify/alertify.core.css?v=5.17.1" />
+    <link rel="stylesheet" href="assets/alertify/alertify.default.css?v=5.17.1" />
+    <link rel="stylesheet" href="assets/alertify/toastr.css?v=5.17.1" type="text/css" />
+     <!-- vendor css -->
+    <link href="assets1/css/bootstrap-switch-button.css" rel="stylesheet">
+    <script
+        src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js"></script>
+		<!-- You Own Scripts -->
+        <link rel="stylesheet" type="text/css" href="https://dtd6jl0d42sve.cloudfront.net/lib/jquery/jquery-ui.min.css"/>
+        
+        <script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/jquery/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/jquery/jquery-ui.min.js"></script>
+        <script lang="javascript">
+                let width = 400;
+                let height = 700;
+
+                let windowObj = null;
+        </script>
+        
+</head>
+
+<body id='mdiv'>
+<div id=content></div>
+
+    <!-- [ navigation menu ] start -->
+    <%- include('../views/sidebar') %>
+	
+    <!-- [ navigation menu ] end -->
+
+    <!-- [ Header ] start -->
+    
+    <!-- [ Header ] end -->
+
+    <!-- [ Main Content ] start -->
+	
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <section id="tab_section">
+                                <div class="card-body">
+                                    <ul class="nav nav-pills mb-4 light">
+                                        <li class=" nav-item">
+                                            <a href="#navpills-1" class="nav-link active" data-toggle="tab" aria-expanded="false">Basic Information</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#navpills-2" class="nav-link" data-toggle="tab" aria-expanded="false">CRM</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#navpills-3" class="nav-link" data-toggle="tab" aria-expanded="false">LOG</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#navpills-4" class="nav-link" data-toggle="tab" aria-expanded="false">SCRIPT</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#navpills-5" class="nav-link" data-toggle="tab" aria-expanded="false">CALLBACK</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#navpills-6" class="nav-link" data-toggle="tab" aria-expanded="false">CHAT</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#navpills-7" class="nav-link" data-toggle="tab" aria-expanded="false">MO</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#navpills-8" class="nav-link" data-toggle="tab" aria-expanded="false">EMAIL</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#navpills-9" class="nav-link" data-toggle="tab" aria-expanded="false">REVIEW</a>
+                                        </li>
+                                       
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div id="navpills-1" class="tab-pane active">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table class="table">
+                                                  
+                                                        <tr>
+                                                            <td>Username</td>
+                                                            <td><%= session.username  %></td>
+                                                            </tr>
+                                                        <tr>
+                                                            <td>Password</td>
+                                                        <td> <%= session.password  %></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Client Id</td>
+                                                        <td><%= session.client_id  %></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Database User</td>
+                                                            <td><%= session.db_user  %></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Database Password</td>
+                                                        <td><%= session.db_password  %></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Database Server</td>
+                                                        <td><%= session.db_server  %></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Voice Server</td>
+                                                        <td><%= session.voice_server  %></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Cs server</td>
+                                                            <td><%= session.cs_server  %></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Web server</td>
+                                                            <td><%= session.web_server  %></td>
+                                                        </tr>
+                                                        <tr><td>Extension</td>
+                                                            <td><%= session.extension_data  %></td></tr>
+                                                            <tr>
+                                                                <td>As Id</td>
+                                                                <td><%= session.as_id  %></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>User Status Id</td>
+                                                                <td><%= session.user_status_id  %></td>
+                                                            </tr>
+                                                </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="navpills-2" class="tab-pane">
+                                            <div id="crm_div1">
+                                                <div id="crm_div">
+                                                    
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Phone Number</label>
+                                                <input type="text" class="form-control" id="crm_phone_number">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>DID / TFN</label>
+                                                <input type="text" class="form-control" id="crm_did_number">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>DID Name</label>
+                                                <input type="text" class="form-control" id="crm_did_name">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Intruction Number</label>
+                                                <input type="email" class="form-control" id="crm_rid">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Skill</label>
+                                                <input type="email" class="form-control" id="crm_skill">
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Remark-->
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Remarks</label>
+                                                <textarea class="form-control" id="remarks" name="remarks"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Disposition</label>
+                                                <select id="disposition" name="disposition" class="form-control" placeholder="Select Disposition">
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Sub Disposition</label>
+                                                <select id="sub_disposition" name="sub_disposition" class="form-control" placeholder="Select Sub Disposition">
+                                                    <option value="">Select Sub Disposition</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Callback</label>
+                                                <input type="text" class="form-control" name="callbackdate" id="callbackdate">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group text-center crm-div-button">
+                                                <div class="btn-group">
+                                                    <button id="updateBtn" class="btn btn-primary">Dispose</button>
+                                                    <button id="getNewBtn" class="btn btn-primary">Get New</button>
+                                                    <button id="emailBtn" class="btn btn-primary">Email</button>
+                                                    <button id="smsBtn" class="btn btn-primary">SMS</button>
+                                                    <button id="whatsappBtn" class="btn btn-primary">Whatsapp</button>
+                                                    <button id="historyBtn" class="btn btn-primary">History</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                                                </div>
+                                                CRM
+                                            </div>
+                                        </div>
+                                        <div id="navpills-3" class="tab-pane">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    Log Information
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="navpills-4" class="tab-pane">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    Script Information
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="navpills-5" class="tab-pane">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    Call Back Information
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="navpills-6" class="tab-pane">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    Chat Information
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="navpills-7" class="tab-pane">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    Mo Information
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="navpills-8" class="tab-pane">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    Email Information
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="navpills-9" class="tab-pane">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    Review Information
+													<fieldset style="border: 1px solid rgb(70, 139, 167); border-radius: 5px;">
+                <legend>Create & Destroy</legend>
+                <p>
+                <button onclick="OpenAsWindow()"> Phone</button>
+                </p>
+               
+            </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+
+                            </section>
+                            
+
+                            
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+	
+    <!-- offcanvas panel right -->
+	 <!-- Dial Pad panel right -->
+    <%- include('../views/dialpad2') %>
+   
+   	 <!--End  Dial Pad panel right -->
+
+    <!-- Js -->
+    <script src="assets1/js/jquery-2.2.4.min.js"></script>
+    <script src="assets/sipjs/include.js?v=5.17.1" type="text/javascript"> </script>
+    
+    <script src="assets1/js/rightpanel.js"></script>
+    <script src="assets1/js/vendor-all.min.js"></script>
+    <script src="assets1/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets1/js/pcoded.min.js"></script>
+	<script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/jquery/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/jquery/jquery-ui.min.js"></script>
+        <script lang="javascript">
+                let width = 400;
+                let height = 700;
+
+                let windowObj = null;
+        </script>
+        <script lang="javascript">
+            // Sample 1
+            function OpenAsWindow(num){
+                if(windowObj != null){
+                    console.warn("Phone window already open");
+                }
+
+                var iframe = $('<iframe/>');
+                iframe.css("width", "100%");
+                iframe.css("height", "100%");
+                iframe.attr("frameborder", "0");
+                iframe.attr("id", "ThePhone");
+                iframe.attr("src", "ephone");
+                // Create Window
+                windowObj = $('<div/>').html(iframe).dialog({
+                    autoOpen: false,
+                    title: "GalaxyPro Dialer",
+                    modal: true,
+                    width: width,
+                    height: height,
+                    resizable: true,
+                    beforeClose: function( event, ui ) {
+                        let phoneContext = $("#ThePhone").get(0).contentWindow;
+                        // console.log(phoneContext);
+
+                        // check if any active calls
+                        let callCount =  phoneContext.countSessions(0);
+                        if(callCount > 0){
+                            console.warn("You are on a call:", callCount);
+                            alert("You are on a call, please end the call before closing this window.");
+                            return false;
+                        } else {
+                            phoneContext.Unregister(true);
+                            return true;
+                        }
+                    },
+                    close: function(event, ui) {
+                        windowObj.dialog("destroy");
+                        windowObj = null;
+                    }
+                });
+
+                windowObj.dialog("open");
+
+                CenterWindow();
+            }
+
+            // Sample 2
+            function ConfirmAndCall(num){
+                if(num && confirm(`Would you like to call the number: ${num}`)){
+                    OpenAsWindow(num);
+                }
+            }
+
+            // Sample 3
+            function OpenAsHidden(){
+                if(windowObj != null){
+                    windowObj.dialog("open");
+                    return;
+                }
+
+                var iframe = $('<iframe/>');
+                iframe.css("width", "100%");
+                iframe.css("height", "100%");
+                iframe.attr("frameborder", "0");
+                iframe.attr("id", "ThePhone");
+                iframe.attr("src", "ephone");
+
+                // Create Window
+                windowObj = $('<div/>').html(iframe).dialog({
+                    autoOpen: false,
+                    title: "Browser Phone",
+                    modal: true,
+                    width: width,
+                    height: height,
+                    resizable: true,
+                    close: function(event, ui) {
+                        windowObj.dialog("close");
+                    }
+                });
+
+                windowObj.dialog("open");
+                windowObj.dialog("close"); // to open as hidden
+
+                CenterWindow();
+            }
+            function ShowPhone(){
+                if(windowObj) windowObj.dialog("open");
+            }
+
+            // Window Tools
+            function CloseWindow(){
+                if(windowObj){
+                    windowObj.dialog("destroy");
+                    windowObj = null;
+                }
+            }
+            function CenterWindow(){
+                var windowWidth = $(window).outerWidth();
+                var windowHeight = $(window).outerHeight();
+                var offsetTextHeight = windowObj.parent().outerHeight();
+
+                windowObj.parent().css('left', windowWidth/2 - width/2 + 'px');
+                windowObj.parent().css('top', windowHeight/2 - offsetTextHeight/2 + 'px');
+
+                if(windowWidth <= width) {
+                    windowObj.parent().css('left', '0px');
+                } 
+                if(windowHeight <= offsetTextHeight) {
+                    windowObj.parent().css('top', '0px');
+                }
+            }
+        </script>
+    
+    
+</body>
+</html>

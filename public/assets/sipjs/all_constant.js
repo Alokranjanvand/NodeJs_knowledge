@@ -1,0 +1,24 @@
+const main_base_url='https://devwebrtc.parahittech.com/';
+//const ajaxURL = main_base_url+'galaxyv5-agent/index.php/call-request';
+//const webURL = main_base_url+'galaxyv5-agent/index.php';
+//const loginURL = main_base_url+'galaxyv5-agent/index.php/login';
+//const webrtcloginURL = main_base_url+'galaxyv5-agent/index.php/webrtc-login';
+const baseURL = main_base_url+'galaxyv5-agent';
+const wsUri = "wss://172.20.10.198:18888/cs";
+const cs_status_url = "https://172.20.10.198:18888/cs";
+//const FreeAgentUrl = main_base_url+"galaxyv5-agent/index.php/free-agent";
+//const ChangePassUrl = main_base_url+"galaxyv5-agent/index.php/changepass";
+//const databaseAPIUrl = main_base_url+"galaxyv5/login/database_api";
+//const remove_cs_agent = main_base_url+"galaxyv5/login/logout_cs_data";
+//const agent_free_list = main_base_url+"galaxyv5/login/agent_free_list_api";
+//const assign_extension = main_base_url+"galaxyv5/login/assign_sip_api2";
+//const progressive_call_url = main_base_url+"galaxyv5/login/webrtc_api/progressive_call";
+const audio_call_api = main_base_url+"webrtc_api/webrtc_recording_api.php";
+const astcontrolserver_url = "devsiphanger.parahittech.com";
+const astcontrolserver_urllocal= "172.20.10.196";
+const astsocketport= "8089";
+const what_chat_url= "https://omniqa.parahittech.com/chat/chat_view_data";
+const chatpanel_url= "https://alok.parahittech.com:9010/";
+const control_server_ip= "172.20.10.198";
+const control_port= "18777";
+

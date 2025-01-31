@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree View</title>
+    <link rel="stylesheet" href="assets/tree/css/style.css" type="text/css" media="all">
+        <!-- BEGIN GLOBAL MANDATORY STYLES -->
+        <link
+            href="https://fonts.googleapis.com/css?family=Nunito:400,600,700"
+            rel="stylesheet"/>
+        <link href="assets/tree/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/tree/css/main.css" rel="stylesheet" type="text/css" />
+        <!-- END GLOBAL MANDATORY STYLES -->
+       
+
+		
+</head>
+<body>
+   
+  <%- treeViewHtml %> 
+
+
+
+<style>
+    <% Object.keys(menus.items).forEach(function(key) { %>
+        .bg_<%= menus.items[key].id %>{background:<%= menus.items[key].bk_color %> !important; color:<%= menus.items[key].text_color %>;padding:5px; font-size:13px;}
+<% }); %>
+</style>
+</body>
+</html>

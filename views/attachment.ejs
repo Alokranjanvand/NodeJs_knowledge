@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Email Attachment</title>
+   
+    </head>
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
+    <body style="background-color: #efefef;">
+        <form method="post" action="tree.php" enctype="multipart/form-data" id="form" name='form'>
+            <div class="col-sm-10">
+                <input type="file" id="attachment-file" name="attachment-file" class="form-control text ui-widget-content ui-corner-all" />
+            </div>
+            <input type="hidden" name="tag" id="tag" value="attachment" />
+            <input type="hidden" name="client_id" id="client_id" value="<?php echo $code; ?>" />
+            <input type="hidden" name="agent" id="agent" value="<?php echo $agent; ?>" />
+            <input type="hidden" name="campaign" id="campaign" value="<?php echo $campaign; ?>" />
+            <div class="col-sm-12" id="attachment-file-div"></div>
+        </form>
+    </body>
+    <script>
+        getAttachments("<?php echo $code; ?>", "<?php echo $agent; ?>", "<?php echo $campaign; ?>");
+        $('#attachment-file').change(function () {
+            $('#form').submit();
+        });
+
+        function getAttachments(client_id, agent, campaign) {
+            $.post('tree.php', {tag: 'get-attachment', client_id: client_id, agent: agent, campaign: campaign}, function (result) {
+                if (result.ok == true) {
+                    $('#attachment-file-div').html(result.html);
+                    $('#showAttachment').show();
+                } else {
+                    $('#attachment-file-div').html('');
+                    $('#showAttachment').hide();
+                }
+            }, 'json');
+        }
+
+        function deleteAttachment(id, client_id, agent, campaign) {
+            $.post('tree.php', {tag: 'delete-attachment', id: id}, function (result) {
+                if (result.ok == true) {
+                    getAttachments(client_id, agent, campaign);
+                }
+            }, 'json');
+        }
+    </script>
+</html>

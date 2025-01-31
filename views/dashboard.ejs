@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        <title>GalaxyPro Dialer</title>
+        <meta name="description" content="">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+
+        <!-- Progressive Web App (PWA) -->
+        <meta name="HandheldFriendly" content="true">
+        <meta name="format-detection" content="telephone=no"/>
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f6f6">
+        <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#292929">
+            <!-- Favicon icon -->
+    <link rel="icon" href="assets1/images/favicon.ico" type="image/x-icon">
+    <!-- fontawesome icon -->
+    <link rel="stylesheet" href="assets1/fonts/fontawesome/css/fontawesome-all.min.css">
+    <!-- animation css -->
+    <link rel="stylesheet" href="assets1/plugins/animation/css/animate.min.css">
+    <!-- vendor css -->
+    <link rel="stylesheet" href="assets1/css/style.css">
+    <!-- Alertify Css code -->
+    <link rel="stylesheet" href="assets/alertify/alertify.core.css?v=5.17.1" />
+    <link rel="stylesheet" href="assets/alertify/alertify.default.css?v=5.17.1" />
+    <link rel="stylesheet" href="assets/alertify/toastr.css?v=5.17.1" type="text/css" />
+     <!-- vendor css -->
+    <link href="assets1/css/bootstrap-switch-button.css" rel="stylesheet">
+    <script
+        src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js"></script>
+    <link href="assets/sipjs/toastr.css" rel="stylesheet" type="text/css" />
+    <link href="assets/sipjs/crmlog.css" rel="stylesheet" type="text/css" />
+		<!-- Javascript code -->
+    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    <!-- Alertify Javascript code -->
+    <script src="assets/alertify/alertify.min.js?v=5.17.1"></script>
+    <script src="assets/alertify/modernizr.js?v=5.17.1"></script>
+    <script src="assets/alertify/toastr.js?v=5.17.1"></script>
+    <script type="text/javascript">
+        function preventBack() {
+            window.history.forward();
+        }
+
+        setTimeout("preventBack()", 0);
+
+        window.onunload = function () {
+            null
+        };
+    </script>
+      <style>
+      
+
+	#modalOverlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 99999;
+			height: 100%;
+			width: 100%;
+	}
+.modalPopup {
+			position: absolute;
+			top: 30%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: #fff;
+			width: 50%;
+			padding: 0 0 30px;
+			-webkit-box-shadow: 0 2px 10px 3px rgba(0,0,0,.2);
+			-moz-box-shadow: 0 2px 10px 3px rgba(0,0,0,.2);
+			box-shadow: 0 2px 10px 3px rgba(0,0,0,.2);
+	}
+.modalContent {padding: 30px 30px;}
+.headerBar {
+		width: 100%;
+		background: #000;
+		margin: 0;
+	  text-align: center;
+      color: #fff;
+      padding: 10px;
+	}
+.headerBar h1 {
+        color: #fff;
+        font-size: 20px;
+	}
+      </style>
+
+        <link rel="apple-touch-icon" type="image/png" href="icons/512.png">
+        <link rel="manifest" type="application/manifest+json" href="Phone/manifest.json">
+        <script type="text/javascript">
+            // If you don't want to use a service worker, you can just take this code out.
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register("sw.js").catch(function(error) {
+                    console.error('Service Worker Error', error);
+                });
+            } else {
+                console.warn("Cannot make use of ServiceWorker");
+            }
+        </script>
+
+        <!-- Cache -->
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+        <meta http-equiv="Expires" content="0"/>
+
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+        <!-- Styles -->
+        <link rel="stylesheet" type="text/css" href="https://dtd6jl0d42sve.cloudfront.net/lib/Normalize/normalize-v8.0.1.css"/>
+        <link rel="stylesheet preload prefetch" type="text/css" as="style" href="https://dtd6jl0d42sve.cloudfront.net/lib/fonts/font_roboto/roboto.css"/>
+        <link rel="stylesheet preload prefetch" type="text/css" as="style" href="https://dtd6jl0d42sve.cloudfront.net/lib/fonts/font_awesome/css/font-awesome.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://dtd6jl0d42sve.cloudfront.net/lib/jquery/jquery-ui-1.13.2.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://dtd6jl0d42sve.cloudfront.net/lib/Croppie/Croppie-2.6.4/croppie.css"/>
+        <link rel="stylesheet" type="text/css" href="phone.css"/>
+
+        <!-- Provisioning -->
+        <script type="text/javascript">
+        var sip='<%= session.extension_data  %>';
+        if(sip !='')
+        {            
+            var user_id = sip;
+        }else
+        {
+            var user_id = localStorage.getItem('SIP_ID');
+        }
+        
+		console.log(" user_id= "+user_id+" password="+user_id);
+            // Provision runtime options can go here.
+            var phoneOptions = {
+                welcomeScreen:false,
+                loadAlternateLang: true,
+                profileName:user_id,
+                wssServer:"devsiphanger.parahittech.com",
+                WebSocketPort:"8089",
+                ServerPath:"/ws",
+                SipDomain:"devsiphanger.parahittech.com",
+                SipUsername: user_id,
+                SipPassword:user_id,
+                EnableConference:true,
+                EnableAccountSettings:false,
+                EnableAppearanceSettings:false,
+                EnableNotificationSettings:true,
+                DisableBuddies:true,
+            }
+			console.log("sip register request= "+JSON.stringify(phoneOptions));
+
+            // Occurs After the Language Packs load, at the start of the InitUi() function 
+            var web_hook_on_before_init = function(){
+                // console.warn("web_hook_on_before_init");
+            }
+            // Occurs at the end of the InitUi() function, before the User Agent is created.
+            // In order to follow events after the User Agent is created, use the register
+            // and transport events below. 
+            var web_hook_on_init = function(){
+                // console.warn("web_hook_on_init");
+            }
+
+            // Connection and Calling Events
+            var web_hook_on_transportError = function(t, ua){
+                // console.warn("web_hook_on_transportError",t, ua);
+            }
+            var web_hook_on_register = function(ua){
+                // console.warn("web_hook_on_register", ua);
+            }
+            var web_hook_on_registrationFailed = function(e){
+                // console.warn("web_hook_on_registrationFailed", e);
+            }
+            var web_hook_on_unregistered = function(){
+                // console.warn("web_hook_on_unregistered");
+            }
+            var web_hook_on_invite = function(session){
+                // console.warn("web_hook_on_invite", session);
+            }
+            var web_hook_on_message = function(message){
+                // console.warn("web_hook_on_message", message);
+            }
+            var web_hook_on_modify = function(action, session){
+                // console.warn("web_hook_on_modify", action, session);
+            }
+            var web_hook_on_dtmf = function(item, session){
+                // console.warn("web_hook_on_dtmf", item, session);
+            }
+            var web_hook_on_terminate = function(session){
+                // console.warn("web_hook_on_terminate", session);
+            }
+            var web_hook_on_notify = function(ContentType, buddyObj, notify){
+                // console.warn("web_hook_on_notify", ContentType, buddyObj, notify);
+            }
+            var web_hook_on_self_notify = function(ContentType, notify){
+                // console.warn("web_hook_on_self_notify", ContentType, notify);
+            }
+
+            // UI events
+            var web_hook_dial_out = function(event){
+                //console.warn("web_hook_dial_out", event);
+            }
+            var web_hook_on_add_buddy = function(event){
+                // console.warn("web_hook_on_add_buddy", event);
+            }
+            var web_hook_on_edit_buddy = function(buddyJson){
+                // console.warn("web_hook_on_edit_buddy", buddyJson);
+            }            
+            var web_hook_on_config_menu = function(event){
+                // console.warn("web_hook_on_config_menu", event);
+            }
+            var web_hook_on_messages_waiting = function(newMsg, oldMsg, ugentNew, ugentOld){
+                // console.warn("web_hook_on_messages_waiting", newMsg, oldMsg, ugentNew, ugentOld);
+            }
+            var web_hook_on_missed_notify = function(missed){
+                // console.warn("web_hook_on_missed_notify", missed);
+            }
+            var web_hook_on_expand_video_area = function(lineNum){
+                // console.warn("web_hook_on_expand_video_area", lineNum);
+            }
+            var web_hook_on_restore_video_area = function(lineNum){
+                // console.warn("web_hook_on_restore_video_area", lineNum);
+            }
+            var web_hook_on_message_action = function(buddy, obj){
+                // console.warn("web_hook_on_message_action", buddy, obj);
+            }
+            var web_hook_disable_dnd = function(){
+                // console.warn("web_hook_disable_dnd");
+            }
+            var web_hook_enable_dnd = function(){
+                // console.warn("web_hook_enable_dnd");
+            }
+            var web_hook_on_edit_media = function(lineNum, obj){
+                // console.warn("web_hook_on_edit_media", lineNum, obj);
+            }
+            var web_hook_sort_and_filter = function(event){
+                // console.warn("web_hook_sort_and_filter", event);
+            }
+           
+            
+			
+        </script>
+    </head>
+    <body id='mdiv'>
+        <!--- Modal-->
+        <div id="modalOverlay">
+            <div class="modalPopup">
+                <div class="headerBar">
+                    <h1>Campaign Mapping</h1>
+                </div>
+                <div class="modalContent">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label>Campaignlist:</label>
+                            <select class="form-control" aria-label="Default select example" id="campaign">
+                                <option value="">Select Campaign</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label>Mode:</label>
+                            <div id="res_user_mode">
+                            <select class="form-control" name="user-mode" id="user-mode">
+                                <option value="">Select UserMode</option>
+                                
+                             </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="main-search">
+                                <div class="input-group mt-4">
+                                    <button type="button" id="set-campaign" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <!---End Modal-->
+    
+        <!-- [ Pre-loader ] start -->
+        <div class="loader-bg">
+            <div class="loader-track">
+                <div class="loader-fill"></div>
+            </div>
+        </div>
+        <!-- [ Pre-loader ] End -->
+        <!-- [ navigation menu ] start -->
+        <%- include('../views/sidebar') %>
+        <!-- [ navigation menu ] end -->
+    
+        <!-- [ Header ] start -->
+        <%- include('../views/header') %>
+        <!-- [ Header ] end -->
+    
+        <!-- [ Main Content ] start -->
+        
+        <div class="pcoded-main-container">
+            <div class="pcoded-wrapper">
+                <div class="pcoded-content">
+                    <div class="pcoded-inner-content">
+                        <div class="main-body">
+                            <div class="page-wrapper">
+                                <!-- [ Main Content ] start -->
+                                <section id="tab_section">
+                                    <div class="card-body">
+                                        <ul class="nav nav-pills mb-4 light">
+                                            
+                                            <li class="nav-item">
+                                                <a href="#navpills-2" class="nav-link active" data-toggle="tab" aria-expanded="false">CRM</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#navpills-3" class="nav-link" data-toggle="tab" aria-expanded="false">LOG</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#navpills-4" class="nav-link" data-toggle="tab" aria-expanded="false">SCRIPT</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#navpills-5" class="nav-link" data-toggle="tab" aria-expanded="false">CALLBACK</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#navpills-6" class="nav-link" data-toggle="tab" aria-expanded="false">CHAT</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#navpills-7" class="nav-link" data-toggle="tab" aria-expanded="false">MO</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#navpills-8" class="nav-link" data-toggle="tab" aria-expanded="false">EMAIL</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#navpills-9" class="nav-link" data-toggle="tab" aria-expanded="false">REVIEW</a>
+                                            </li>
+                                           
+                                        </ul>
+                                        <div class="tab-content">
+                                            
+                                            <div id="navpills-2" class="tab-pane active">
+                                                <div id="crm_div1">
+                                                    <div id="crm_div">
+                                                        
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Phone Number</label>
+                                                    <input type="text" class="form-control" id="crm_phone_number">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>DID / TFN</label>
+                                                    <input type="text" class="form-control" id="crm_did_number">
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>DID Name</label>
+                                                    <input type="text" class="form-control" id="crm_did_name">
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Intruction Number</label>
+                                                    <input type="email" class="form-control" id="crm_rid">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Skill</label>
+                                                    <input type="email" class="form-control" id="crm_skill">
+                                                </div>
+                                            </div>
+    
+    
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Remark-->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Remarks</label>
+                                                    <textarea class="form-control" id="remarks" name="remarks"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Disposition</label>
+                                                    <select id="disposition" name="disposition" class="form-control" placeholder="Select Disposition">
+                                                    </select>
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Sub Disposition</label>
+                                                    <select id="sub_disposition" name="sub_disposition" class="form-control" placeholder="Select Sub Disposition">
+                                                        <option value="">Select Sub Disposition</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Callback</label>
+                                                    <input type="text" class="form-control" name="callbackdate" id="callbackdate">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group text-center crm-div-button">
+                                                    <div class="btn-group">
+                                                        <button id="dispose_call" class="btn btn-primary">Dispose</button>
+                                                        <!--<button id="updateBtn" class="btn btn-primary">Dispose</button>
+                                                        <button id="getNewBtn" class="btn btn-primary">Get New</button>
+                                                        <button id="emailBtn" class="btn btn-primary">Email</button>
+                                                        <button id="smsBtn" class="btn btn-primary">SMS</button>
+                                                        <button id="whatsappBtn" class="btn btn-primary">Whatsapp</button>
+                                                        <button id="historyBtn" class="btn btn-primary">History</button>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+    
+    
+                                        </div>
+                                    </div>
+                                </div>
+                                                    </div>
+                                                    CRM
+                                                </div>
+                                            </div>
+                                            <div id="navpills-3" class="tab-pane">
+                                                <div class="row">
+                                                    <a href='javascript:void(0);' id="log-menu" onclick="crmLog();">LOG</a>
+                                                    <div class="col-md-12" id="main_cont">
+                                                        Log Information
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="navpills-4" class="tab-pane">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        Script Information
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="navpills-5" class="tab-pane">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        Call Back Information
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="navpills-6" class="tab-pane">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        Chat Information
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="navpills-7" class="tab-pane">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        Mo Information
+
+                                                        <button onclick="showMoPanel();"> Mo</button>
+                                                        <div id="moinfo"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="navpills-8" class="tab-pane">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        Email Information
+                                                        
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="navpills-9" class="tab-pane">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        Review Information
+                                                    </div>
+                                                </div>
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+    
+                                </section>
+                                
+    
+                                
+                                <!-- [ Main Content ] end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ Main Content ] end -->
+        
+        <!-- offcanvas panel right -->
+         <!-- Dial Pad panel right -->
+        <%- include('../views/dialpad2') %>
+       
+            <!--End  Dial Pad panel right -->
+    
+        <!-- Js -->
+
+       
+            <!-- Loading Animation -->
+            <div class=loading>
+                <span class="fa fa-circle-o-notch fa-spin"></span>
+            </div>
+    
+            <!-- The Phone -->
+            
+    </body>
+    <script src="assets/sipjs/include.js?v=5.17.1" type="text/javascript"> </script>
+    <!-- Loadable Scripts -->
+    <script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/jquery/jquery-3.6.1.min.js"></script>
+    <script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/jquery/jquery-ui-1.13.2.min.js"></script>
+    <script type="text/javascript" src="phone_new.js"></script>
+
+    <!-- Deferred Scripts -->
+    <script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/jquery/jquery.md5-min.js" defer="true"></script>
+    <script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/Chart/Chart.bundle-2.7.2.min.js" defer="true"></script>
+    <script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/SipJS/sip-0.20.0.min.js" defer="true"></script>
+    <script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/FabricJS/fabric-2.4.6.min.js" defer="true"></script>
+    <script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/Moment/moment-with-locales-2.24.0.min.js" defer="true"></script>
+    <script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/Croppie/Croppie-2.6.4/croppie.min.js" defer="true"></script>
+    <script type="text/javascript" src="https://dtd6jl0d42sve.cloudfront.net/lib/XMPP/strophe-1.4.1.umd.min.js" defer="true"></script>
+    <script>
+        var count = 0;
+
+        $(".digit").on('click', function () {
+            var num = ($(this).clone().children().remove().end().text());
+            //alert(num);
+            if (count < 11) {
+                $("#output").append('<span>' + num.trim() + '</span>');
+				 
+				 var sd=$("#output").text();  
+					//sd=parseInt(sd);
+					//alert(sd);
+					
+					$("#txtPhoneNumber").val(sd);
+
+                count++
+            }
+        });
+
+        
+		 $('.icon-delete').click(
+        function(){
+            var inputString = $('#txtPhoneNumber').val();
+            var shortenedString = inputString.substr(0,(inputString.length -1));
+            $('#txtPhoneNumber').val(shortenedString);
+			 $('#output span:last-child').remove();
+			 
+            count--;
+        });
+        function getManualCallerID() {
+    if (typeof (getLocalVariable('all_campaign_group')) != "undefined") {
+        var groups = JSON.parse(getLocalVariable('all_campaign_group'));
+        var group = Object.keys(groups);
+        setLocalVariable('ManualCallerID', '');
+        setLocalVariable('Campaign_Group', group[0]);
+        
+        var callerID = groups[group[0]];
+        setLocalVariable('Campaign_map_did', callerID);
+        setLocalVariable('ManualCallerIDList', callerID);
+
+        if (getLocalVariable('manualRouteSelect') == "1") {
+            $('#route-name').html('');
+            var html = "<option value=''></option>";
+            for (var i in group) {
+                html += "<option value='" + group[i] + "'>" + group[i] + "</option>";
+            }
+            $('#route-name').html(html);
+        }
+        $('#route-select-img').attr('title', "Route: " + getLocalVariable('Campaign_Group') + "\nDID: " + getLocalVariable('ManualCallerID'));
+    }
+    }
+    transfer_agentlist();
+    function transfer_agentlist()
+    {
+        const agent_free_list = "https://devwebrtc.parahittech.com/galaxyv5/login/agent_free_list_api";
+        var campaign='demoptl';
+        var agent='alok';
+        var client_id='3181';
+        $.get(agent_free_list+"?client_id="+client_id+"&campaign="+campaign+"&agent="+agent, function(data, status){
+            console.log(" agent free list Data: " + data + " Status: " + status);
+        });
+    }
+    campaign_list();
+    function campaign_list()
+    {
+        var username=localStorage.getItem("USER_ID");
+        var client_id=localStorage.getItem("ClientID");
+		console.log("username= "+username+"client_id= "+client_id);
+        $.ajax({
+        url:"/api_calling/campaign_list",
+        method:"POST",
+        data:{username:username,client_id:client_id},
+        dataType:"JSON",
+        success:function(data)
+        {
+            //console.log(JSON.stringify(data));
+            campaign_data=data.campaign;
+            console.log("campaign length= "+data.Queue_Priority.length);
+            if(data.Queue_Priority.length>0)
+            {
+                var serializedData = JSON.stringify(data.Queue_Priority);
+                localStorage.setItem("Queue_Priority", serializedData);
+            }
+            $("#campaign").attr('disabled', false);
+            $("#dialpad_campaign").attr('disabled', false);
+                $.each(campaign_data,function(key, value)
+                {
+                    var selectdate='';
+                    var CampaignName=localStorage.getItem("CampaignName");
+                    if(CampaignName !='' && value.campaign_id==CampaignName)
+                    {
+                        selectdate='selected';
+                        var UserModeIndexLabel=localStorage.getItem("UserModeIndexLabel");
+                        var jsonData=JSON.parse(UserModeIndexLabel);
+                        var select = $('<select class="form-control" name="user-mode" id="user-mode"></select>') 
+                        .attr("name", "user-mode");  
+                        var select2= $('<select class="form-control" style="border-color: #0D63B0; background-color: #fff;" id="dial_mode"></select>') 
+                        .attr("name", "dial_mode");  
+                        var selectsubdata='';
+                        $.each(jsonData, function(subkey, subvalue) 
+                        {
+                            var UserMode=localStorage.getItem("UserMode");
+                            console.log("Alok user mode"+UserMode);
+                            if(UserMode !='' && subvalue==UserMode)
+                            {
+                                select.append($("<option selected></option>").attr("value", subvalue).text(subvalue)); 
+                                select2.append($("<option selected></option>").attr("value", subvalue).text(subvalue)); 
+                            }else
+                            {
+                                select.append($("<option></option>").attr("value", subvalue).text(subvalue)); 
+                                select2.append($("<option></option>").attr("value", subvalue).text(subvalue));   
+                            }
+                           
+                            
+                        });
+                        $("#res_user_mode").html(select);
+                        $("#show_user_mode").html(select2);
+                        
+                    }
+                    //$("#campaign").append('<option value='+value.campaign_id+'~'+value.campaign_type+'>' + value.campaign_id + '</option>');
+                    $("#campaign").append('<option value='+value.campaign_id+' '+selectdate+' >' + value.campaign_id + '</option>');
+                    $("#dialpad_campaign").append('<option value='+value.campaign_id+' '+selectdate+'>' + value.campaign_id + '</option>');
+                    
+                });
+        }
+    })
+    }
+    function logout_agent()
+    {
+
+        alertify.confirm("Are you sure you want to log out?", function (e) 
+        {
+            if (e)
+            {
+                var clientID=getLocalVariable('ClientID');
+                var AS_ID=getLocalVariable('AS_ID');
+                var CampaignName=getLocalVariable('CampaignName');
+                var USER_ID=getLocalVariable('USER_ID');
+                var SIP_ID=getLocalVariable('SIP_ID');
+                var Campaign_Type=getLocalVariable('Campaign_Type');
+                var LoginHourID=getLocalVariable('LoginHourID');
+                var ModeDBId=getLocalVariable('ModeDBId');
+                var MYIP=getLocalVariable('MYIP');
+                var ChatLoginID=getLocalVariable('ChatLoginID');
+                var emailCount=getLocalVariable('emailCount');
+                var smsCount=getLocalVariable('smsCount');
+                var idleDuration=getLocalVariable('idleDuration');
+                var wrapupDuration=getLocalVariable('wrapupDuration');
+                var holdCount=getLocalVariable('holdCount');
+                var holdDuration=getLocalVariable('holdDuration');
+                var recallCount=getLocalVariable('recallCount');
+                var recallDuration=getLocalVariable('recallDuration');
+                var breakDuration=getLocalVariable('breakDuration');
+                var moDuration=getLocalVariable('moDuration');
+                var transferCount=getLocalVariable('transferCount');
+                var userStatusID=getLocalVariable('userStatusID');
+                var SERVER_IP=getLocalVariable('SERVER_IP');
+                var ActivityID=getLocalVariable('ActivityID');
+                var getNotificationInMode=getLocalVariable('getNotificationInMode');
+                var leadAssignTime=getLocalVariable('leadAssignTime');
+                var previousSQL=getLocalVariable('previousSQL');
+                var CS_API_Port=getLocalVariable('CS_API_Port');
+                var Manual_Caller_ID=getLocalVariable('Manual_Caller_ID');
+                var jsonData={clientID:clientID,AS_ID:AS_ID,CampaignName:CampaignName,USER_ID:USER_ID,SIP_ID:SIP_ID,Campaign_Type:Campaign_Type,LoginHourID:LoginHourID,ModeDBId:ModeDBId,MYIP:MYIP,ChatLoginID:ChatLoginID,emailCount:emailCount,smsCount:smsCount,idleDuration:idleDuration,wrapupDuration:wrapupDuration,holdCount:holdCount,holdDuration:holdDuration,recallCount:recallCount,recallDuration:recallDuration,breakDuration:breakDuration,moDuration:moDuration,transferCount:transferCount,userStatusID:userStatusID,SERVER_IP:SERVER_IP,ActivityID:ActivityID,getNotificationInMode:getNotificationInMode,leadAssignTime:leadAssignTime,previousSQL:previousSQL,CS_API_Port:CS_API_Port,Manual_Caller_ID:Manual_Caller_ID
+                };
+                $.get(remove_cs_agent+"?client_id="+clientID+"&exten="+SIP_ID+"&campaign="+CampaignName+"&agent="+USER_ID, function(data, status){
+                  console.log("Data: " + data + " Status: " + status);
+                });
+
+
+                fetch('/agent_logout', {method: 'POST',headers: {'Content-Type': 'application/json'},body: JSON.stringify(jsonData)}).then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+                 })
+            .then(data => {
+            if(data.status==1){
+            localStorage.clear();
+            location.replace("/logout");
+            }
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            });   
+                
+            } else {
+                return false;
+            }
+        });
+           
+    }
+    </script>
+    <script src="assets1/js/rightpanel.js"></script>
+    <script src="assets1/js/vendor-all.min.js"></script>
+    <script src="assets1/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets1/js/pcoded.min.js"></script>
+
+    <script src="assets/sipjs/toastr.js"></script> 
+    <script src="assets/sipjs/all_constant.js?v=5.17.1" type="text/javascript"></script>
+    <script src="assets/sipjs/include.js?v=5.17.1" type="text/javascript"> </script>
+    <script type="text/javascript" src="assets/sipjs/webSocket.js?v=5.17.1"></script>
+    <script type="text/javascript" src="assets/sipjs/custom.js?v=5.17.1"></script>
+    <script type="text/javascript" src="assets/sipjs/custom_ajax.js?v=5.17.1"></script>
+    <script>
+        $(document).ready(function(){
+
+            
+            if(getLocalVariable('CampaignName') !='')
+            {
+                $("#modalOverlay").css("display", "none");
+            }
+
+            $('#updateBtn').click(function () {
+
+                alert("Hello disposition");
+			if((getLocalVariable('reviewMode') == '0' || getLocalVariable('reviewMode') == '') && (getLocalVariable('UserDisableDisposition') == '1' || getLocalVariable('CampaignDisableDisposition') == '1')) {
+				if(getLocalVariable('UserDisableDisposition') == '1')
+					alertify.error("Disposition disabled for you");
+				else 
+					alertify.error("Disposition disabled");
+				return false;
+			}
+            if ((getLocalVariable('reviewMode') == '0' || getLocalVariable('reviewMode') == '') && !(getLocalVariable('isLineBusy').toUpperCase() == "HANGUP" || getLocalVariable('isLineBusy').toUpperCase() == "READY") && getLocalVariable('isLineBusy') != '') {
+                alertify.error("Hang Up the call first.");
+                return false;
+            }
+            $('#updateBtn').attr("disabled", "disabled");
+            var data = $('form').serialize();
+            mandatory='';
+            if (mandatory.length > 0) {
+                for (x in mandatory) {
+                    if (mandatory[x] != '') {
+                        if ($('#f' + mandatory[x]).val().length == 0) {
+                            alertify.error("Star(*) fields are mandatory");
+                            $('#updateBtn').removeAttr("disabled");
+                            return false;
+                        }
+                    }
+                }
+            }
+            if ($('#disposition').val() == '0') {
+                alertify.error("Please select disposition");
+                $('#updateBtn').removeAttr("disabled");
+                return false;
+            }
+            if ($('#sub_disposition').children('option').length > 1 && $('#sub_disposition').val() == '0') {
+                alertify.error("Please select sub-disposition");
+                $('#updateBtn').removeAttr("disabled");
+                return false;
+            }
+            var is_callback = 0;
+            if (callback.hasOwnProperty($('#disposition').val().toLowerCase().replace(" ", "_"))) {
+                is_callback = parseInt(callback[$('#disposition').val().toLowerCase().replace(" ", "_")]);
+                if (isNaN(is_callback)) {
+                    is_callback = 0;
+                }
+            }
+            if (is_callback == 1 && $('#callbackdate').val().length == 0) {
+                alertify.error("Please select the date for recalling");
+                $('#updateBtn').removeAttr("disabled");
+                return false;
+            }
+            var numbertodial = '';
+            var data = '';
+            checkNumberInLead($('#crm_phone_number').val(), $('#disposition').val(), data, 0, 1, numbertodial);
+            return false;
+        });
+          
+        });
+        </script>
+        
+</html>

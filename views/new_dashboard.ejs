@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>GalaxyPRO Dialer Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Favicon icon -->
+    <link rel="icon" href="assets1/images/favicon.ico" type="image/x-icon">
+    <!-- fontawesome icon -->
+    <link rel="stylesheet" href="assets1/fonts/fontawesome/css/fontawesome-all.min.css">
+    <!-- animation css -->
+    <link rel="stylesheet" href="assets1/plugins/animation/css/animate.min.css">
+    <!-- vendor css -->
+    <link rel="stylesheet" href="assets1/css/style.css">
+    <link href="assets1/css/bootstrap-switch-button.css" rel="stylesheet">
+    <script
+        src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js"></script>
+
+    <style>
+        .table td,
+        .table th {
+            border-top: 1px solid #eaeaea;
+            white-space: nowrap;
+            padding: 0.05rem 0.5rem;
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+    <!-- [ navigation menu ] start -->
+    <nav class="pcoded-navbar">
+        <div class="navbar-wrapper">
+            <div class="navbar-brand header-logo">
+                <a href="index.html" class="b-brand">
+                    <div class="b-bg">
+
+                    </div>
+                    <span><img src="assets/images/logo.png" /></span>
+                </a>
+                <a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
+            </div>
+            <div class="navbar-content scroll-div">
+                <ul class="nav pcoded-inner-navbar">
+                    <li class="nav-item pcoded-menu-caption">
+                        <label>Navigation</label>
+                    </li>
+                    <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project"
+                        class="nav-item active">
+                        <a href="index.html" class="nav-link "><span class="pcoded-micon"><i
+                                    class="feather icon-home"></i></span><span class="pcoded-mtext">Dashboard</span></a>
+                    </li>
+                    <li class="nav-item pcoded-menu-caption">
+                        <label>CALL DATA</label>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link "><span class="pcoded-micon"><i
+                                    class="feather icon-phone"></i></span><span class="pcoded-mtext">Call log</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link "><span class="pcoded-micon"><i
+                                    class="feather icon-search"></i></span><span class="pcoded-mtext">CRM
+                                Search</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link "><span class="pcoded-micon"><i
+                                    class="feather icon-search"></i></span><span class="pcoded-mtext">Disposition
+                                search</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link "><span class="pcoded-micon"><i
+                                    class="feather icon-search"></i></span><span class="pcoded-mtext">Directory
+                                search</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link "><span class="pcoded-micon"><i
+                                    class="feather icon-log-in"></i></span><span class="pcoded-mtext">User session
+                                log</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link "><span class="pcoded-micon"><i
+                                    class="feather icon-phone-outgoing"></i></span><span
+                                class="pcoded-mtext">Callback</span></a>
+                    </li>
+
+
+                    <li class="nav-item pcoded-menu-caption">
+                        <label>ACTIVITIES</label>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link "><span class="pcoded-micon"><i
+                                    class="feather icon-message-square"></i></span><span
+                                class="pcoded-mtext">SMS</span></a>
+                    </li>
+                    <li data-username="Table bootstrap datatable footable" class="nav-item">
+                        <a href="#" class="nav-link "><span class="pcoded-micon"><i
+                                    class="feather icon-mail"></i></span><span class="pcoded-mtext">Email</span></a>
+                    </li>
+
+                    <li data-username="Table bootstrap datatable footable" class="nav-item">
+                        <a href="#" class="nav-link "><span class="pcoded-micon"><i
+                                    class="feather icon-message-circle"></i></span><span
+                                class="pcoded-mtext">Chat</span></a>
+                    </li>
+
+                    <li data-username="Table bootstrap datatable footable" class="nav-item">
+                        <a href="#" class="nav-link "><span class="pcoded-micon"><i
+                                    class="feather icon-message-circle"></i></span><span class="pcoded-mtext">What’s
+                                up</span></a>
+                    </li>
+
+
+
+
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- [ navigation menu ] end -->
+
+    <!-- [ Header ] start -->
+    <header class="navbar pcoded-header navbar-expand-lg navbar-light">
+        <div class="m-header">
+            <a class="mobile-menu" id="mobile-collapse1" href="javascript:"><span></span></a>
+            <a href="index.html" class="b-brand">
+                <div class="b-bg">
+
+                </div>
+                <span><img src="assets/images/logo.png" /></span>
+
+            </a>
+        </div>
+        <a class="mobile-menu" id="mobile-header" href="javascript:">
+            <i class="feather icon-more-horizontal"></i>
+        </a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:" data-toggle="dropdown">Change Campaign</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="javascript:">Campaign 1</a></li>
+                        <li><a class="dropdown-item" href="javascript:">Campaign 2</a></li>
+                        <li><a class="dropdown-item" href="javascript:">Campaign 3</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:" data-toggle="dropdown">Dialing Mode</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="javascript:">Auto</a></li>
+                        <li><a class="dropdown-item" href="javascript:">Mannual</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <div class="main-search">
+                        <div class="input-group">
+                            <input type="text" id="m-search" class="form-control" placeholder="Search . . .">
+                            <a href="javascript:" class="input-group-append search-close">
+                                <i class="feather icon-x input-group-text"></i>
+                            </a>
+                            <span class="input-group-append search-btn btn btn-primary">
+                                <i class="feather icon-search input-group-text"></i>
+                            </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li style="color: #111;">
+                    Rakesh <i class="fas fa-circle text-c-green f-10 m-r-15"></i>
+                    <!-- <i class="fas fa-circle text-c-red f-10 m-r-15"></i> -->
+                </li>
+                <li>
+                    <div class="dropdown drp-user">
+                        <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon feather icon-settings"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right profile-notification">
+                            <div class="pro-head">
+                                <img src="assets/images/user/avatar-1.jpg" class="img-radius" alt="User-Profile-Image">
+                                <span>Rakesh Chopra</span><br>
+                                <span><small>Agent Id : PARA345255346</small></span>
+                                <a href="auth-signin.html" class="dud-logout" title="Logout">
+                                    <i class="feather icon-log-out"></i>
+                                </a>
+                            </div>
+                            <ul class="pro-body">
+                                <li><a href="#" class="dropdown-item"><i class="feather icon-corner-up-right"></i>
+                                        Exten</a></li>
+                                <li><a href="javascript:" class="dropdown-item"><i class="feather icon-file-text"></i>
+                                        Campaign Name</a></li>
+                                <li><a href="#" class="dropdown-item"><i class="feather icon-compass"></i>
+                                        Mode status</a></li>
+                                <li><a href="#" class="dropdown-item"><i class="feather icon-clock"></i>
+                                        login time</a></li>
+                                <li><a href="#" class="dropdown-item"><i class="feather icon-clock"></i>
+                                        Mode time</a></li>
+                                <li><a href="#" class="dropdown-item"><i class="feather icon-clock"></i>
+                                        Duration</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <!-- [ Header ] end -->
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroup-sizing-default">Phone</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Phone No."
+                                            aria-describedby="inputGroup-sizing-default">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h6 class="mb-1"><b>DID / TFN</b></h6>
+                                            <p class="m-0">238967589</p>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <h6 class="mb-1"><b>DID Name</b></h6>
+                                            <p class="m-0">Lorem Ipsum is simply…</p>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <h6 class="mb-1"><b>Intraction Number</b></h6>
+                                            <p class="m-0">238967589876</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Calling Person Name</label>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Alternate No</label>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Email ID</label>
+                                                <input type="email" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Alternate Email ID</label>
+                                                <input type="email" class="form-control">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Company Name</label>
+                                                <select class="form-control">
+                                                    <option>TATA</option>
+                                                    <option>APPLE</option>
+                                                    <option>HCL</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Department</label>
+                                                <select class="form-control">
+                                                    <option>TATA</option>
+                                                    <option>APPLE</option>
+                                                    <option>HCL</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Catagory</label>
+                                                <select class="form-control">
+                                                    <option>TATA</option>
+                                                    <option>APPLE</option>
+                                                    <option>HCL</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Sub Catagory</label>
+                                                <select class="form-control">
+                                                    <option>TATA</option>
+                                                    <option>APPLE</option>
+                                                    <option>HCL</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Sub Sub Catagory</label>
+                                                <select class="form-control">
+                                                    <option>TATA</option>
+                                                    <option>APPLE</option>
+                                                    <option>HCL</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Country Code</label>
+                                                <select class="form-control">
+                                                    <option>TATA</option>
+                                                    <option>APPLE</option>
+                                                    <option>HCL</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Address of Company</label>
+                                                <textarea class="form-control" id="exampleFormControlTextarea1"
+                                                    rows="3"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Remarks</label>
+                                                <textarea class="form-control" id="exampleFormControlTextarea1"
+                                                    rows="3"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Disposition</label>
+                                                <select class="form-control">
+                                                    <option>TATA</option>
+                                                    <option>APPLE</option>
+                                                    <option>HCL</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Sub Disposition</label>
+                                                <select class="form-control">
+                                                    <option>TATA</option>
+                                                    <option>APPLE</option>
+                                                    <option>HCL</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="col-md-12">
+                                            <button type="button" class="btn btn-danger">Dispose</button>
+                                            <button type="button" class="btn btn-primary">Get New</button>
+                                            <button type="button" class="btn btn-light">Email</button>
+                                            <button type="button" class="btn btn-light">SMS</button>
+                                            <button type="button" class="btn btn-light">History</button>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+
+    <!-- Route and did info model start-->
+    <div class="modal fade" id="didModal" tabindex="-1" role="dialog" aria-labelledby="didModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="didModal">Route and DID</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <select class="form-control" style="border-color: #0D63B0; background-color: #fff;">
+                            <option>APPLE</option>
+                            <option>HCL</option>
+                        </select>
+
+
+                        <select multiple class="form-control" id="exampleFormControlSelect2"
+                            style="border-color: #0D63B0; background-color: #fff;width: 100%;margin-top: 5px;border-radius: 5px;padding: 10px;">
+                            <option>235235235235</option>
+                            <option>235235235235</option>
+                            <option>3233252355</option>
+                            <option>4325325235</option>
+                            <option>532532523525</option>
+                        </select>
+
+                    </div>
+
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Route and did info model end-->
+
+
+    <!-- info model start-->
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="infoModalLabel">Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead style="background-color: #000; color: #fff;">
+                            <tr>
+                                <th scope="col">Timer</th>
+                                <th scope="col"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Login</th>
+                                <td>10 : 16 : 49</td>
+
+                            </tr>
+                            <tr>
+                                <th scope="row">Mode</th>
+                                <td>10 : 16 : 49</td>
+
+                            </tr>
+                            <tr>
+                                <th scope="row">Duration</th>
+                                <td>10 : 16 : 49</td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <table class="table">
+                        <thead style="background-color: #000; color: #fff;">
+                            <tr>
+                                <th scope="col">User Info</th>
+                                <th scope="col"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <th scope="row">User</th>
+                                <td>alok</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Exten</th>
+                                <td>20003</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Camp</th>
+                                <td>demoptl</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Mode</th>
+                                <td>Break</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">IP</th>
+                                <td>172.20.13.9</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Status</th>
+                                <td>-</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+
+                    <table class="table">
+                        <thead style="background-color: #000; color: #fff;">
+                            <tr>
+                                <th scope="col">Call Info</th>
+                                <th scope="col"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <th scope="row">Phone</th>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">DID</th>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Queue</th>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Call type</th>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">IVR key</th>
+                                <td>-</td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+
+                    <table class="table">
+                        <thead style="background-color: #000; color: #fff;">
+                            <tr>
+                                <th scope="col">Call Count</th>
+                                <th scope="col"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <th scope="row">Phone</th>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">DID</th>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Queue</th>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Call type</th>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">IVR key</th>
+                                <td>-</td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                    <table class="table">
+                        <thead style="background-color: #000; color: #fff;">
+                            <tr>
+                                <th scope="col">Call Back</th>
+                                <th scope="col"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <th scope="row">Phone</th>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">DID</th>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Queue</th>
+                                <td>-</td>
+                            </tr>
+
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- info model end-->
+
+
+
+    <!-- offcanvas panel right -->
+    <aside class="offcanvas offcanvas-right" id="my_offcanvas2">
+        <header class="p-4 bg-light border-bottom">
+            <h6>Heading</h6>
+
+
+            <button class="btn-xs btn-outline-danger btn-close "> &times </button>
+
+            <a href="#" class="badge badge-dark" data-toggle="modal" data-target="#didModal">Route</a>
+            <a href="#" class="badge badge-dark" data-toggle="modal" data-target="#infoModal">Info</a>
+        </header>
+        <div class="container">
+            <div id="output">
+                <i class="feather icon-delete dig" aria-hidden="true"
+                    style="position: absolute; right: 5px; top: 104px; color: #a3a3a3;font-size: 20px;"></i>
+            </div>
+
+            <div class="row">
+                <div class="digit" id="one">1</div>
+                <div class="digit" id="two">2
+                    <div class="sub">ABC</div>
+                </div>
+                <div class="digit" id="three">3
+                    <div class="sub">DEF</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="digit" id="four">4
+                    <div class="sub">GHI</div>
+                </div>
+                <div class="digit" id="five">5
+                    <div class="sub">JKL</div>
+                </div>
+                <div class="digit">6
+                    <div class="sub">MNO</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="digit">7
+                    <div class="sub">PQRS</div>
+                </div>
+                <div class="digit">8
+                    <div class="sub">TUV</div>
+                </div>
+                <div class="digit">9
+                    <div class="sub">WXYZ</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="digit">*
+                </div>
+                <div class="digit">0
+                </div>
+                <div class="digit">#
+                </div>
+            </div>
+
+            <div class="botrow">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <button type="button" class="btn btn-success btn-block"><i class="feather icon-phone"
+                                aria-hidden="true" style="margin-right: 0px;"></i></button>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <button type="button" class="btn btn-danger btn-block"><i class="feather icon-phone-off"
+                                aria-hidden="true" style="margin-right: 0px;"></i></button>
+                    </div>
+
+                    <div class="col-md-6 mb-2">
+                        <!-- <button type="button" class="btn btn-outline-primary btn-block">Mute</button> -->
+                        <input type="checkbox" data-toggle="switchbutton" checked data-onlabel="Mute"
+                            data-offlabel="Unmute" data-onstyle="primary" data-offstyle="dark" style="width: 100%;">
+                    </div>
+
+                    <div class="col-md-6 mb-2">
+                        <!-- <button type="button" class="btn btn-outline-primary btn-block">Hold</button> -->
+                        <input type="checkbox" data-toggle="switchbutton" checked data-onlabel="Hold"
+                            data-offlabel="Unhold" data-onstyle="primary" data-offstyle="dark" style="width: 100%;">
+                    </div>
+
+                    <div class="col-md-12 mb-2">
+                        <!-- <button type="button" class="btn btn-outline-primary btn-block">Conference</button> -->
+                        <button type="button" class="btn btn-light"><img src="assets/images/l1.svg"></button>
+                        <button type="button" class="btn btn-light"><img src="assets/images/l2.svg"></button>
+                        <button type="button" class="btn btn-light"><img
+                                src="assets/images/bliend-transfer.svg"></button>
+                        <button type="button" class="btn btn-light"><img src="assets/images/call-transfer.svg"></button>
+                        <button type="button" class="btn btn-light"><img src="assets/images/confrence.svg"></button>
+                        <button type="button" class="btn btn-light"><img src="assets/images/camp-transfer.svg"></button>
+                        <button type="button" class="btn btn-light"><img src="assets/images/refresh.svg"></button>
+
+                    </div>
+
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label style="float: left;">Select Campaign </label> <span
+                                style="float: right; color: red;"><i class="feather icon-save"></i></span>
+                            <select class="form-control" style="border-color: #0D63B0; background-color: #fff;">
+                                <option>Select Campaign</option>
+                                <option>APPLE</option>
+                                <option>HCL</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="float: left;">Dialing Mode </label> <span style="float: right; color: red;"><i
+                                    class="feather icon-save"></i></span>
+                            <select class="form-control" style="border-color: #0D63B0; background-color: #fff;">
+                                <option>Select Campaign</option>
+                                <option>APPLE</option>
+                                <option>HCL</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label style="float: left;">Transfer </label> <span style="float: right; color: red;"><i
+                                    class="feather icon-corner-up-right"></i></span>
+                            <select class="form-control" style="border-color: #0D63B0; background-color: #fff;">
+                                <option>Select Campaign</option>
+                                <option>APPLE</option>
+                                <option>HCL</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label style="float: left;">Queue Transfer </label> <span
+                                style="float: right; color: red;"><i class="feather icon-corner-up-right"></i></span>
+                            <select class="form-control" style="border-color: #0D63B0; background-color: #fff;">
+                                <option>Select Campaign</option>
+                                <option>APPLE</option>
+                                <option>HCL</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label style="float: left;">Skill Transfer </label> <span
+                                style="float: right; color: red;"><i class="feather icon-corner-up-right"></i></span>
+                            <select class="form-control" style="border-color: #0D63B0; background-color: #fff;">
+                                <option>Select Campaign</option>
+                                <option>APPLE</option>
+                                <option>HCL</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </aside>
+    <!-- offcanvas panel right .end -->
+
+
+
+
+
+    <div class="arrow-container animated fadeInDown" data-trigger="#my_offcanvas2">
+        <div class="arrow-2">
+            <img src="assets/images/dial.svg" style="position: absolute;
+    top: 17px;
+    left: 16px;" />
+        </div>
+        <div class="arrow-1 animated hinge infinite zoomIn"></div>
+    </div>
+
+
+
+    <!-- Js -->
+
+    <script src="assets1/js/jquery-2.2.4.min.js"></script>
+    <script>
+        var count = 0;
+
+        $(".digit").on('click', function () {
+            var num = ($(this).clone().children().remove().end().text());
+            if (count < 11) {
+                $("#output").append('<span>' + num.trim() + '</span>');
+
+                count++
+            }
+        });
+
+        $('.icon-delete').on('click', function () {
+            $('#output span:last-child').remove();
+            count--;
+        });
+    </script>
+
+
+
+    <script src="assets1/js/rightpanel.js"></script>
+    <script src="assets1/js/vendor-all.min.js"></script>
+    <script src="assets1/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets1/js/pcoded.min.js"></script>
+
+
+
+</body>
+
+</html>

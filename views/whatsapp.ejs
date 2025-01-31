@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+
+    <link rel="stylesheet" href="assets/whatsapp/css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700,300">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div class="page" style="height: 500px;">
+        <div class="marvel-device nexus5">
+            <div class="screen">
+                <div class="screen-container">
+
+                    <div class="chat" style="height:550px;">
+                        <div class="chat-container">
+                            <div class="user-bar">
+                            </div>
+                             <!----
+                            <div class="conversation-leftpanel">
+                                <div class="row searchBox">
+                                    <div class="col-sm-12 searchBox-inner">
+                                        <div class="form-group has-feedback">
+                                            <input id="searchText" type="text" class="form-control" name="searchText"
+                                                placeholder="Search">
+                                            <span style="float: right; position: relative; top: -30px;
+    right: 12px;"><a href="#"><i class="zmdi zmdi-search"></i></a></span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                               <div class="sideBar"  id="res_sidebar" style="overflow-x: hidden;">
+                                    Loading...!
+                                </div>
+                                
+                            </div>-->
+
+                            <div class="conversation">
+                                <div class="conversation-container">
+                                    <input type="hidden" id="agent_number">
+                                    <input type="hidden" id="cust_number" value="<%= phone_number; %>">
+                                    <div id="conference_div">
+
+                                    </div>
+                                    <div id="chat_res">
+                                       
+                                    </div>
+                                    
+                                    
+                                    
+                                </div>
+                                <div id="chat-input"  style="display: none;">
+                                    <div class="conversation-compose">
+                                        <textarea class="input-msg" name="msg_input" id="msg_input" placeholder="Type a message" autocomplete="off" autofocus ></textarea>
+                                        <button class="send" type="button" onclick="return send_msg();">
+                                            <div class="circle">
+                                                <i class="zmdi zmdi-mail-send"></i>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="chat-not-allow" style="display: none;">
+                                    <div class="conversation-compose">
+<!--                                            <div class="emoji">&#9000;</div>-->
+<!--                                            <input class="input-msg" name="msg_input" id="msg_input" placeholder="The customer has not responded in the last 24 hours, so you cannot chat with them right now." readonly autocomplete="off" autofocus />-->
+                                        <textarea class="input-msg" name="msg_input" id="msg_input" placeholder="The customer has not responded in the last 24 hours, so you cannot chat with them right now." readonly autocomplete="off" autofocus ></textarea>
+                                        <button class="send" type="button" disabled>
+                                            <div class="circle">
+                                                <i class="zmdi zmdi-mail-send"></i>
+                                            </div>
+                                        </button>                                        
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#searchText').on('keyup click', function() {
+                search = $('#searchText').val();
+                phone = $('#cust_number').val();
+                //business_number = '7669875771';
+                business_number = getLocalVariable('whatsapp_business_number');
+                $.post('/wa_sidebar', {
+                    search_string: search,
+                    business_number: business_number,
+                    phone_number: phone
+                }, function(data) {
+                    //alert(data);
+                    $("#res_sidebar").html(data);
+                });
+            });
+            $(document).on('input', '#allow_chat', function() {
+                // Check the value of the input field
+                var inputValue = $(this).val();
+
+                // Perform your desired action based on the input value
+                if (inputValue === "1") {
+                    $("#chat-input").show();
+                    $("#chat-not-allow").hide();
+                } else {
+                    $("#chat-input").hide();
+                    $("#chat-not-allow").show();
+                }
+            });
+            //setInterval(fetchsidebar, 2000);
+            //setInterval(fetchdata, 2000);
+        });
+        function fetchsidebar() {
+            
+            //alert("hello");
+            search = $('#searchText').val();
+            phone = $('#cust_number').val();
+            //business_number = '7669875771';
+            //phone = '';
+            business_number = getLocalVariable('whatsapp_business_number');
+            $.post('/wa_sidebar', {
+            search_string: search,
+            business_number: business_number,
+            phone_number : phone
+            }, function(data) {
+            // alert(data);
+            var currentContent1 = $("#res_sidebar").html();
+            if (currentContent1 !== data) {
+            $("#res_sidebar").html(data);
+            }
+            });
+        }
+        function getChat(id) {
+            $("#chat_res").html("loading...");
+            business_number = getLocalVariable('whatsapp_business_number');
+            //business_number = '7669875771';
+            var remove_element = document.getElementById("Whatsap-tab");
+            remove_element.classList.remove("green_mode");
+
+            $("#cust_number").val(id);
+            $(".sideBar-main").addClass("activesidebar");
+            msg_status = "read";
+            $.post('wa_loadchat', {
+                phone_number: id,
+                business_number: business_number,
+                msg_status: msg_status
+            }, function(data) {
+                // Check if the content has changed
+                var currentContent = $("#chat_res").html();
+                
+                if (currentContent !== data) {
+                    $("#chat_res").html(data);
+                    // Trigger the input event to handle the value of #allow_chat
+                    $('#allow_chat').trigger('input');
+
+                    // Scroll to the bottom
+                    //$(".conversation-container").scrollTop($(".conversation-container")[0].scrollHeight);  //it's also working
+                    $(".conversation-container").animate({ scrollTop: $(".conversation-container").prop('scrollHeight') }, "fast");
+                }
+            });
+            // Initial trigger to set the initial state based on #allow_chat value
+            $('#allow_chat').trigger('input');
+        }
+        setInterval(fetchData, 5000);
+    function fetchData() {
+    const businessNumber = getLocalVariable('whatsapp_business_number');
+    const custNumber = $('#cust_number').val();
+    const msgStatus = '';
+    const currentContent = $("#chat_res");
+    const currentLen = currentContent.children().length;
+    unreadmsg = parseInt($('#unreadmsg').val());
+    var what_read_msg=parseInt(getLocalVariable('what_read_msg'));
+    //console.log("unreadmsg= "+unreadmsg+" what_read_msg= "+what_read_msg);
+    if (unreadmsg !== what_read_msg) 
+    {
+        setLocalVariable('what_read_msg', unreadmsg);
+        if (unreadmsg > what_read_msg) {
+            var new_element = document.getElementById("Whatsap-tab");
+            new_element.classList.add("green_mode");
+            alertify.success("🔔 New Message Alert! ");
+        }
+    }
+    
+
+    if (custNumber !== '') {
+        $.ajax({
+            type: 'POST',
+            url: 'wa_loadchat',
+            data: {
+                phone_number: custNumber,
+                business_number: businessNumber,
+                msg_status: msgStatus
+            },
+            success: function(response, textStatus, xhr) {
+                if (xhr.status === 200) {
+                    // Only execute if the response status code is 200
+
+                    // Replace the content only if it's different
+                    const newContentLen = $(response).children().length;
+                    if (currentLen !== newContentLen) {
+                        $("#chat_res").html(response);
+
+                        // Trigger the input event to handle the value of #allow_chat
+                        $('#allow_chat').trigger('input');
+
+                        // Scroll to the bottom of the conversation container
+                        $(".conversation-container").animate({
+                            scrollTop: $(".conversation-container").prop('scrollHeight')
+                        }, "fast");
+
+                        // Call a function after success or set a timeout
+                        onSuccess(); // Call your function here
+                    }
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error loading chat data:", status, error);
+            }
+        });
+    }
+
+    // Initial trigger to set the state based on #allow_chat value
+    $('#allow_chat').trigger('input');
+}
+
+// Function to be called on successful data load
+function onSuccess() {
+    console.log("Chat data successfully loaded!");
+
+    // You can also use setTimeout to delay the execution of another function
+    setTimeout(function() {
+        console.log("This happens after a delay.");
+        // Your delayed code here
+    }, 5000); // 5000ms = 5 seconds delay
+}
+
+        function send_msg()
+        {
+            business_number = getLocalVariable('whatsapp_business_number');
+            cust_number = $('#cust_number').val(); 
+            msg_input = $('#msg_input').val(); 
+            
+            $.ajax({
+                    type: 'POST',
+                    url: 'send_whatsapp',
+                    data: {
+                        phone_number: cust_number,
+                        business_number: business_number,
+                        send_msg: msg_input
+                    },
+                    success: function(responce) {
+                        //alert(JSON.stringify(responce));
+                        if(responce.status==true)
+                        {
+                            alertify.success("Message send successfully...!");
+                            $('#msg_input').val(''); 
+                        }
+                        else if(responce.status==false && responce.permission=='No')
+                        {
+                            alertify.error(responce.msg);
+                            $('#msg_input').val(''); 
+                        }
+                        else
+                        {
+                            alertify.error("Message not sent.");
+                            $('#msg_input').val(''); 
+                        }                   
+                        
+                    }
+                });  
+        }
+    </script>
+    <style>
+.green_mode::after {
+    font-family: "Font Awesome 5 Free"; 
+    font-weight: 900;
+    content: "\f111"; 
+    margin-left: 8px;
+    color: green;
+    font-size: 10px;
+}
+    </style>
+</body>
+
+</html>

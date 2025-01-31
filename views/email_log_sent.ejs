@@ -1,0 +1,35 @@
+<% if (rows && rows.length) { var sn=0;%>
+  <table class="table table-hover">
+    <thead style="background-color: #ffffffbf;">
+      <tr>
+          <th style="border:none;">Interactions</th>
+          <th style="border:none;">Interactions ID</th>
+          <th style="border:none;">Email ID</th>
+          <th style="border:none;">Date</th>
+          <th style="border:none;">Time</th>
+          <th style="border:none;">Email Type</th>
+          <th style="border:none;">Action</th>
+       </tr>
+   </thead>
+   <tbody>
+        <% rows.forEach(row => {
+         sn=sn+1;	%>
+          <tr>
+		   <td><img src="assets/images/mail.svg" alt="" /></td>
+		   <td><%= row.rid %></td>
+		    <td title="<%= row.email_subject %>"><%= row.recipient_id %></td>
+           <td><%= row.emaildate %></td>
+             <td><%= row.emailtime %></td>
+			  <td><%= 'SENT' %></td>
+			  <td>
+             <img src="assets/images/view.svg" alt=""  style="cursor:pointer"  onclick="openModal('<%= row.email_content %>')"/>
+           </td>
+          </tr>
+        <% }); %>
+      <% } else { %>
+      </tbody>
+    </table>
+          <p style="color: red; font-weight: bold; font-size: 15px;">No data found...!</p>
+      <% } %>
+   </body>
+</html>

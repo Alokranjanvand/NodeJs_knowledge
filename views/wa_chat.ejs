@@ -1,0 +1,92 @@
+    <%
+     function dateformat(date_format)
+     {
+        let date = date_format;
+        let year = date.getFullYear();
+        let month = String(date.getMonth() + 1).padStart(2, '0');
+        let day = String(date.getDate()).padStart(2, '0');
+        let hours = date.getHours() % 12 || 12;
+        let minutes = String(date.getMinutes()).padStart(2, '0');
+        let ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+
+        let formattedDate = `${year}-${month}-${day} ${hours}:${minutes} ${ampm}`;
+        return formattedDate;
+     }
+     function onlydate(date_format)
+     {
+        let date = date_format;
+        let year = date.getFullYear();
+        let month = String(date.getMonth() + 1).padStart(2, '0');
+        let day = String(date.getDate()).padStart(2, '0');
+        let hours = date.getHours() % 12 || 12;
+        let minutes = String(date.getMinutes()).padStart(2, '0');
+        let ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+
+        let formattedDate = `${year}-${month}-${day}`;
+        return formattedDate;
+     }
+     let new_date = new Date();
+     let current_date=onlydate(new_date);
+    %>
+    <% if (data && data.length>0) {
+        data.forEach(row => { %>
+            <% if (row.body && row.body.trim() !== '') { %>
+            <div class="message received">
+                <div class="senderno"><%= row.cust_name %></div>
+                <span class='multiline-text'><%= row.body %></span>
+                <span class="metadata">
+                    <span class="time">
+                        <% let send_date=onlydate(row.date);
+                        if(send_date==current_date){%>
+                            Today
+                            <% } else { %>
+                        <%= dateformat(row.date) %>
+                        <% }  %>
+                    </span>
+                </span>
+            </div>
+            <% } %>
+            <% if (row.content != '' && row.template_name != '') {
+                let str_body = row.content.replace("{v1}", row.cust_name);
+                str_body = str_body.replace("{v2}", row.cust_phone);
+                %>
+                <% if (row.content && row.content.trim() !== '') { %>
+                <div class="message sent">
+                    <div class="senderno">+91-<%= row.business_number %></div>
+                        <span class='multiline-text'><%= str_body %></span>
+                
+                <% }  else { %>
+                    <%= row.template_name %>
+                    <br><b>To view message text, <br> Please contact to Support Team.</b>
+               <% } %>
+               <span class="metadata">
+                <span class="time">
+                    <% let res_date=onlydate(row.response_dt);
+                    if(res_date==current_date){%>
+                        Today
+                        <% } else { %>
+                    <%= dateformat(row.response_dt) %>
+                    <% }  %>
+                </span>
+                <%  if (row.status == 'read') { %>
+                    <span class="tick"><img src="assets/whatsapp/img/blue-tick.png" width="16" height="15"></span>
+                    <%  } else if (row.status == 'delivered') { %>
+                    <span class="time"></span><span class="tick"><img src="assets/whatsapp/img/grey-tick.png" width="16" height="15"></span>
+                    <%  } else { %>
+                    <span class="time"></span><span class="tick"><img src="assets/whatsapp/img/single-tick.png" width="16" height="15"></span>
+                    <%  } %>
+            </span>
+        </div>
+            <% } %>
+   
+    <% }); %>
+    <% } else { %>
+        <div>No data found</div>
+       <% } %>
+       <%  if (hour_count < 24 && hour_count != '') { %>
+       <input type="hidden" id="allow_chat" value="1" />
+       <%  } else { %>
+        <input type="hidden" id="allow_chat" value="0" />
+        <%  } %>
+        <input type="hidden" id="unreadmsg" value="<%= data.length %>" />
+        

@@ -1,0 +1,61 @@
+<nav class="pcoded-navbar navbar-collapsed">
+    <div class="navbar-wrapper">
+        <div class="navbar-brand header-logo">
+            <a href="#" class="b-brand">
+                <div class="b-bg">
+
+                </div>
+                <span><img src="assets1/images/logo.png" /></span>
+            </a>
+            <a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
+        </div>
+        <div class="navbar-content scroll-div">
+            <ul class="nav pcoded-inner-navbar">
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Navigation</label>
+                </li>
+                <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item active">
+                    <a href="javascript:void(0)" onclick="show_dashboard_view()" class="nav-link"><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Home</span></a>
+                </li>
+                <li class="nav-item pcoded-menu-caption">
+                    <label>CALL DATA</label>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:void(0)" class="nav-link " onclick="calllog_report()"><span class="pcoded-micon"   ><i
+                                class="feather icon-phone"></i></span><span class="pcoded-mtext" >My Log</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" id="reviewOpenModalBtn" class="nav-link "><span class="pcoded-micon"><i
+                                class="feather icon-search"></i></span><span class="pcoded-mtext">Review</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" id="openModalBtn" class="nav-link" ><span class="pcoded-micon"><i
+                                class="feather icon-message-square"></i></span><span
+                            class="pcoded-mtext">Script</span></a>
+                </li>
+                <!--<li class="nav-item">
+                    <a href="#" id="openModalBtn" class="nav-link " onclick="get_infostarttimer(2)"><span class="pcoded-micon"><i
+                                class="feather icon-message-square"></i></span><span
+                            class="pcoded-mtext">new timer</span></a>
+                </li>---->
+               
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="audio-container"  style="display: none;">
+    <div class="audio-message">
+        <table width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+            <tr style="padding:0px;">
+                <td style="padding: 0px;text-align: center;">
+                    <img src="assets/images/accept1.svg" id="answer_call" onclick="new_call_status(1)" style="display: none;" >
+                </td>
+                <td style="padding: 0px;text-align: center;">
+                    <img src="assets/images/reject1.svg" id="reject_call" onclick="new_call_status(2)">
+                </td>
+            </tr>
+        </table>
+        <div class="audio-triangle"></div>
+        
+    </div>
+</div>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMS</title>
+
+</head>
+<body>
+ <table class="logstable table table-hover">
+ 	<tr id="show_greendata" style="display: none;">
+  
+	</tr>
+    <% if (rows && rows.length) {
+	rows.forEach(row => { %>
+	<tr>
+	<td>
+	<p class="logname"><%= row.f1 %></p>
+	<p class="logno" ondblclick='DialByLine("audio","","<%= row.phone %>")'><%= row.phone %></p>
+	</td>
+	<td style="text-align: right;">
+	<p class="logname-date" title='<%= row.calldate %>''>
+		<% if (row.calldate == current_date) { %>
+			Today
+		<% } else if (row.calldate == yesterday_date) { %>
+			Yesterday 
+		<% } else if (search_type == '7') { %>
+			<%= row.callday %>
+		<% } else { %>
+			<%= row.calldate %>
+		<% } %>
+	</p>
+	<div class="btn-group">
+	<p class="logdotes" data-toggle="dropdown"
+	aria-haspopup="true" aria-expanded="false"
+	style="cursor: pointer;">
+	<i class="fa fa-ellipsis-h"></i>
+   <div class="dropdown-menu"
+    style="position: absolute;transform: translate3d(-56px, 18px, 0px);top: -18px;left: 0px;will-change: transform;">
+    <a class="dropdown-item" href="#!" onclick="showWhatapp('<%= row.phone %>')">WhatsApp</a>
+	<a class="dropdown-item" href="#!" onclick="CallLog_show('<%= row.id %>')">Call</a>
+	<a class="dropdown-item" href="#!" onclick="smsLog('<%= row.id %>')">SMS </a>
+	<a class="dropdown-item" href="#!"  onclick="emailLog('<%= row.id %>')">email </a>
+	<a class="dropdown-item" href="#!"  onclick="all_calllog('<%= row.id %>')">All Details </a>
+	</div>
+	</p>
+			
+	</div>
+	</td>
+</tr>                                                        </tr>
+															  
+    <% }); %>
+    <% } else { %>
+	<tr>
+    <td colspan="2">No data found</td>
+	</tr>
+   <% } %>
+   </table>
+</body>
+</html>
