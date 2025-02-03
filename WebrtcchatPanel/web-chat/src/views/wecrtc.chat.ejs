@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Chat Demo</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="/css/style.css"> -->
+    <style>
+        /* Chat Message Styles */
+      /* General message styling */
+        .sent-message {
+            text-align: right;
+            margin: 10px 0;
+        }
+
+        .received-message {
+            text-align: left;
+            margin: 10px 0;
+        }
+        .sent-message .message-box {
+            border-radius: 20px 20px 0px 20px;
+            border: #aea9a9 solid 1px;
+        }
+        .received-message .message-box {
+            border-radius: 20px 20px 20px 0px;
+            border: #aea9a9 solid 1px;
+        }
+        .message-box {
+           
+            padding: 8px 12px;
+            max-width: 60%;
+            word-wrap: break-word; /* Break words to prevent overflow */
+            overflow-wrap: anywhere; /* Ensure long strings are wrapped */
+            display: inline-block;
+            position: relative;
+            
+        }
+        .message-box small{ font-size: 11px;;}
+        
+
+        /* Sent message specific styling */
+        .sent-message .message-box {
+            background-color: #dcf8c6;
+            color: #000;
+        }
+
+        /* Received message specific styling */
+        .received-message .message-box {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #ccc;
+        }
+
+        /* Chat box scrollbar styling */
+        #chat-box {
+            height: 100vh; /* Full viewport height */
+            overflow-y: auto;
+            background-color: #dcdcdc; /* Match the body background */
+            padding: 10px;
+        }
+
+        /* Active state for buttons or elements */
+        
+
+        /* Sticky send box */
+        #send-box {
+            position: sticky;
+            bottom: 0;
+            /*border-top: 1px solid #ddd;*/
+            padding: 1rem;
+            background-color: #f8f9fa; /* Light background */
+            border: #ccc solid 1px;
+            border-top: none !important;
+        }
+
+        /* Message list container */
+        #message-list {
+            overflow-y: auto;
+            max-height: calc(100vh - 130px); /* Adjust based on the height of send-box */
+            padding: 10px;
+        }
+
+        /* Empty message styling */
+        #empty-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* Sidebar styling */
+        .bg-purple-400 {
+            background-color: #3f4d67; /* Custom purple shade */
+        }
+
+        .bg-purple-300 {
+            background-color: #f8f9fa; /* Lighter purple shade */
+        }
+
+        .list-group-item {
+            background-color: transparent !important; /* Transparent background */
+            color: #281e1e;/* Optional: set text color */
+            border-bottom: #ccc solid 1px !important;
+        }
+        .list-group-item.active,.list-group-item:hover {
+            color: #000 !important;
+            background-color: rgb(237, 227, 227) !important;
+        }
+        .list-group-item+.list-group-item.active {
+            margin-top:0px !important;
+        border-top-width: 0px !important;
+        }
+        /* Custom scrollbar for contact list */
+        #contacts-list{ padding: 10px; !important;}
+        #contacts-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #contacts-list::-webkit-scrollbar-thumb {
+            background-color: #6c757d; /* Matches the sidebar theme */
+            border-radius: 4px;
+        }
+
+        #contacts-list::-webkit-scrollbar-thumb:hover {
+            background-color: #495057;
+        }
+        @media (max-width: 600px) {
+            .message-box {
+                max-width: 90%; /* Adjust width for smaller screens */
+                font-size: 14px; /* Slightly smaller font for readability */
+            }
+
+            #chat-box {
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid " >
+        <div class="row" >
+            <!-- Contacts Sidebar -->
+            <div class="col-lg-4 col-md-4 col-sm-4 bg-purple-300 d-flex flex-column p-0">
+                <div class="bg-purple-400 text-white py-3 px-4 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Contacts</h5>
+                    <div>
+                        <!-- Optional Buttons for Switching Views -->
+                        <!-- <button id="btn-groups" class="btn btn-light btn-sm me-2" onclick="showGroups()">Groups</button>
+                        <button id="btn-onetoone" class="btn btn-light btn-sm" onclick="showOneToOne()">One-to-One</button> -->
+                    </div>
+                </div>
+                <ul id="contacts-list" class="list-group list-group-flush overflow-auto" style="max-height: calc(100vh - 56px);">
+                    <!-- Contacts will be dynamically populated here -->
+                </ul>
+            </div>
+    
+            <!-- Chat Window -->
+            <div class="col-lg-8 col-md-8 col-sm-8 d-flex flex-column p-0 vh-100">
+                <div class="bg-purple-400 text-white py-3 px-4 d-flex align-items-center">
+                    <h5 id="chat-name" class="mb-0">Select a contact</h5>
+                </div>
+                <div id="chat-box" class="flex-grow-1 overflow-auto p-3 d-flex flex-column" style="background: #efe7dd url(../bg.jpg) repeat; z-index: 0; position: relative; border: #ccc solid 1px; padding: 15px;">
+                    <p class="text-center text-muted">Please select a contact to start chatting.</p>
+                </div>
+                <div id="send-box" class="fixed-bottom  border-top p-3">
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.3/socket.io.min.js"></script>
+
+    <script>
+        const user = <%- JSON.stringify(userData || {}) %>;
+        const user_id= user.id
+        const ContectUserList = <%- JSON.stringify(ContectUserList || []) %>;
+        const GroupList = <%- JSON.stringify(GroupList || []) %>;
+        const campaignData=<%- JSON.stringify(campaignData || {}) %>;
+        const campaignId=campaignData.id
+        console.log("campaignData:", campaignData);
+        console.log("ContectUserList:", ContectUserList);
+        console.log("GroupList:", GroupList);
+        console.log("userData:", <%- JSON.stringify(userData || {}) %>);
+
+        let isFetching = false; // Flag to prevent duplicate fetches
+
+        function populateContacts(data, type) {
+            const contactsList = document.getElementById('contacts-list');
+            contactsList.innerHTML = ''; // Clear current list
+
+            if (data.length === 0) {
+                contactsList.innerHTML = `<p class="text-center text-muted mt-3">No ${type === 'group' ? 'groups' : 'contacts'} found.</p>`;
+                return;
+            }
+
+            data.forEach(contact => {
+                console.log("this is contact",contact);
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item d-flex align-items-center';
+                const dynamicId = `${contact.id}-${contact.name}` // Example: Use a timestamp for a unique ID
+                listItem.id = dynamicId;
+                const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}` || '#000000';
+                const firstLetter = contact.name && contact.name.trim() ? contact.name[0].toUpperCase() : '?';
+                listItem.innerHTML = `
+                <div class="rounded-circle text-center fs-2 me-3" style="width: 50px;cursor: pointer; height: 50px; background :${randomColor}" aria-label="User avatar"> ${firstLetter}</div>
+                <div class="flex-grow-1">
+                        <p class="mb-0 fw-bold d-flex" style="cursor: pointer;">
+                            ${type === 'group' ? contact.groupName : ucfirst(contact.name) || contact.mobile}   
+                            <span class="rounded-circle ms-3 bg-success me-3" style="margin-top: 7px;width: 10px;height: 10px;background: #2ecc27 !important;color:#fff;"></span>
+                        </p>
+                        <small class="text-muted">
+                            ${type === 'group' ? 'Group chat' : 'Click to chat'}
+                        </small>
+                    </div>
+                    ${contact.unSeenMsg > 0 
+                                    ? `<div class="d-flex align-items-center justify-content-center rounded-circle unSeenMsg"   id="msg-${contact.id}" 
+                                            style="width: 25px; height: 25px;background: #2ecc27 !important; color:#fff;">
+                                            ${contact.unSeenMsg}
+                                    </div>` 
+                                    : ''}
+                    </div>
+            </div>
+                `;
+                listItem.onclick = () => loadChat(type === 'group' ? contact.groupId : contact.id, type === 'group' ? contact.groupName : contact.name || contact.mobile, type);
+                contactsList.appendChild(listItem);
+                
+            });
+        }
+
+        function showGroups() {
+            populateContacts(GroupList, 'group');
+        }
+
+        function showOneToOne() {
+            populateContacts(ContectUserList, 'one-to-one');
+        }
+
+        function loadChat(receiverId, receiverName, type) {
+            const chatName = document.getElementById('chat-name');
+            chatName.innerHTML = ucfirst(receiverName);
+            chatName.dataset.receiverId = receiverId;
+            const activeElements = document.getElementsByClassName('active');
+                Array.from(activeElements).forEach(element => {
+                    element.classList.remove('active');
+                });
+            document.getElementById(`${receiverId}-${receiverName}`).classList.add('active');
+            const element = document.getElementById(`msg-${receiverId}`);
+                if (element) {
+                    console.log('Hiding element:', element);
+                    element.style.display = 'none';
+                    element.style.setProperty('display', 'none', 'important');
+                    element.style.visibility = 'hidden'; 
+                } else {
+                    console.warn(`Element with ID msg-${receiverId} does not exist.`);
+                }
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = "<p class='text-center text-muted'>Loading messages...</p>";
+            // document.getElementById(`${receiverId}`).id=`${receiverId} active`
+            const sendBox = document.getElementById('send-box');
+            sendBox.innerHTML = `<form id="message-form" class="d-flex" onsubmit="sendMessage(event, '${type}')">
+                            <input id="message-input" type="text" class="form-control me-2" placeholder="Type a message..." autocomplete="off" required>
+                            <input id="campaignId" type="hidden" value="<%= campaignData.id %>" >
+                            <input id="campaignName" type="hidden" value="<%=campaignData.name%>" >
+                            <button type="submit" class="btn btn-success">Send</button>
+                        </form>`;
+
+            const pageSize = 12;
+            let currentPage = 1;
+            let totalMessages = 0;
+
+            chatBox.innerHTML =`<p class='text-center text-muted'>Old Chat</p> <input id="message-senderId" type="hidden" value=${receiverId} >`
+            fetchMessages(receiverId, campaignId,type,currentPage, pageSize, false);
+            chatBox.onscroll = () => {
+                console.log(chatBox.scrollTop <= 10 , !isFetching , totalMessages , currentPage * pageSize);
+                if (chatBox.scrollTop <= 10 && !isFetching && totalMessages > currentPage * pageSize) {
+                    isFetching = true;
+                    currentPage++;
+                    fetchMessages(receiverId, campaignId,type, currentPage, pageSize, true);
+                }
+            };
+
+            function fetchMessages(receiverId, campaignId,type, page, pageSize, prepend) {
+                console.log("campaign id",campaignId);
+                socket.emit('loadChatHistory', { receiverId, campaignId ,page, pageSize, type }, (acknowledgment) => {
+                    const chatBox = document.getElementById('chat-box');
+                    
+                    // Remove the "Loading messages..." message once data is fetched
+                    // chatBox.innerHTML = ''; 
+
+                    if (acknowledgment.statusCode === 200) {
+                        const data = acknowledgment.data;
+                        console.log("data= "+data);
+                        console.log("data1= "+JSON.stringify(data));
+                        totalMessages = data.totalMessages;
+                        displayMessages(data.messages, prepend);
+                    } else {
+                        console.error('Error:', acknowledgment.error);
+                    }
+                    isFetching = false;
+                });
+            }
+
+        }
+        function ucfirst(str) {
+            if (!str) return str; // Check if the string is empty or undefined
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function displayMessages(messages, prepend = false) {
+            const chatBox = document.getElementById('chat-box');
+            const fragment = document.createDocumentFragment(); // Corrected method name
+
+            messages.forEach(message => {
+                const messageElement = document.createElement('div');
+                console.log("msg", message.senderId, user_id);
+                messageElement.classList.add(message.senderId == user_id ? 'sent-message' : 'received-message');
+                let showdatetime=datetime(message.timestamp);
+                messageElement.innerHTML = ` <div class="message-box">${message.msgText} <br/><small>${showdatetime}</small></div>`;
+                fragment.appendChild(messageElement);
+            });
+
+            if (prepend) {
+                chatBox.insertBefore(fragment, chatBox.firstChild);
+            } else {
+                chatBox.appendChild(fragment);
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        function datetime(timestamp)
+        {
+
+            const date = new Date(timestamp);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+            const year = date.getFullYear();
+            let hours = date.getHours();
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12; // Convert to 12-hour format
+            const formattedDateTime = `${day}-${month}-${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+            console.log(formattedDateTime);
+            return formattedDateTime;
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // const socket = io('/', { path: '/v1/chat/socket.io' });
+            showOneToOne();
+        });
+      
+    </script>
+    <script>
+        // Inject token passed from the backend (EJS rendering)
+        const token = "<%= token %>"; // Token from the server
+        // Declare socket globally
+        let socket;
+    
+        // Initialize socket on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Socket.IO connection
+            socket = io('/', {
+                path: '/v1/chat/socket.io', // Ensure this matches the server-side path
+                query: { token } // Pass the token as a query parameter
+            });
+    
+            // Socket connection listeners
+            socket.on('connect', () => {
+                console.log('Connected to the server');
+                userConnected();
+            });
+    
+            socket.on('disconnect', () => {
+                console.log('Disconnected from the server');
+            });
+    
+            // Listen for the 'receiveMsg' event
+            function decodeHtml(encodedString) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(encodedString, 'text/html');
+                return doc.documentElement.textContent;
+            }
+            socket.on('receiveMsg', (data) => {
+                console.log('Received message:', data);
+                data=data.data
+                let timestamp=Number(data.timestamp);
+                let showdatetime=datetime(timestamp);
+                // Get the chat box element where you display messages
+                const chatBox = document.getElementById('chat-box');
+                const chatBoxSenderId = document.getElementById('message-senderId');
+                let senderId
+                if (chatBoxSenderId) {
+                     senderId = chatBoxSenderId.value || null;
+                } else {
+                    console.warn('Element with ID "message-senderId" not found.');
+                     senderId = null;
+                }
+                data.msgText=decodeHtml(data.msgText)
+                console.log('check msg recived data chatBoxSenderId:',chatBoxSenderId,"  msg send by:",data.senderId);
+                // Dynamically update the chat with the new message
+                if (senderId==data.senderId) {
+                    console.log("hello");
+                    msgReceived(data);
+                    chatBox.innerHTML += `
+                        <div class="received-message">
+                            <div class="message-box" id="messageBox-${data.id}"></div>
+                            <!---<div class="sender-info">Sent by: ${data.senderId} at ${new Date(timestamp).toLocaleString()}</div> --->
+                        </div>
+                    `;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                    // typeMessage(data.msgText);
+                    showTypingEffect(`messageBox-${data.id}`, data.msgText, showdatetime);
+                }else{
+                    sendNotification(data);
+                }
+                
+                // Scroll to the bottom of the chat box
+                chatBox.scrollTop = chatBox.scrollHeight;
+               
+            });
+    
+            socket.on('sendNotification',(data)=>{
+                console.log("listing sendNotification data:",data);
+            })
+            socket.on('newMemberOnline', (data) => {
+            console.log("Listening to newMemberOnline data:", data);
+
+            // Emit fetchOnlineUser event to server
+            socket.emit('fetchOnlineUser', { data, campaignData }, (ack) => {
+                if (ack.statusCode === 200) {
+                    console.log('fetchOnlineUser response', ack.data);
+
+                    // Get the currently active element(s) to reapply later
+                    const activeElements = Array.from(document.getElementsByClassName('active'));
+                    const activeElementIds = activeElements.map(el => el.id); // Assuming elements have unique IDs
+
+                    // Remove 'active' class from all elements
+                    activeElements.forEach((el) => {
+                        el.classList.remove('active');
+                    });
+
+                    // Populate contacts
+                    populateContacts(ack.data, 'one-to-one');
+
+                    // Reapply the 'active' class to the previously active element(s)
+                    activeElementIds.forEach((id) => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.classList.add('active');
+                        } else {
+                            console.warn(`Element with ID "${id}" not found.`);
+                        }
+                    });
+                } else {
+                    console.error("Error in fetchOnlineUser:", ack.error || "Unknown error");
+                }
+            });
+        });
+
+
+            // Show One-to-One Chats by default
+            showOneToOne();
+        });
+        function msgReceived(data){
+            console.log("eter in msgReceived & data is:", data);
+            socket.emit('msgReceived',{data},(ack)=>{
+                if (ack.statusCode===200) {
+                        console.log('msgReceived responce',ack.data);
+                        // populateContacts(ack.data,'one-to-one')
+                    } else {
+                            console.log("Error in msgReceived", ack.error);
+                        }
+            });
+
+        }
+        // if user is connect to socket 
+        function userConnected() {
+            console.log('campaignData coneccting user',campaignData);
+            socket.emit('newUserConnected',{campaignData},(ack)=>{
+                console.log("newUserConnected",ack);
+                    if (ack.statusCode===200) {
+                        console.log('newUserConnected responce',ack.data);
+                        // populateContacts(ack.data,'one-to-one')
+                    } else {
+                            console.log("Error in newUserConnected", ack.error);
+                        }
+                })
+        }
+        // Send a message function (unchanged)
+        function sendMessage(event, type) {
+            event.preventDefault();
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
+            if (message) {
+                const msgText = escapeHtml(message);
+                const receiverId = document.getElementById('chat-name').dataset.receiverId;
+                const receiverName = document.getElementById('chat-name').innerHTML;
+                const campaignId= document.getElementById('campaignId').value;
+                const campaignName= document.getElementById('campaignName').value;
+                const chatBox = document.getElementById('chat-box');
+                const timestamp = Date.now().toString();
+                const localMessageId = generateUUID();
+                let showdatetime=datetime(Date.now());
+        
+                socket.emit('sendMessage', { receiverId, receiverName, campaignId,campaignName,type, msgText, localMessageId, timestamp }, (ack) => {
+                    if (ack.statusCode === 200) {
+                        // let msg=escapeHtml(message)
+                        chatBox.innerHTML += `
+                            <div class="sent-message">
+                                <div class="message-box">${msgText}<br/><small>${showdatetime}</small></div>
+                            </div>
+                        `;
+                        messageInput.value = ''; // Clear the input
+                        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
+                    } else {
+                        console.log("Error in messageSend", ack.error);
+                    }
+                });
+            }
+        }
+
+        // send notification 
+        function sendNotification(msg){
+            console.log('enter in sendNotification ',msg);
+            socket.emit('sendNotification',{msg},(ack)=>{
+                if (ack.statusCode===200) {
+                    console.log('notification responce',ack.data);
+                     // Get the currently active element(s) to reapply later
+                     const activeElements = Array.from(document.getElementsByClassName('active'));
+                    const activeElementIds = activeElements.map(el => el.id); // Assuming elements have unique IDs
+
+                    // Remove 'active' class from all elements
+                    activeElements.forEach((el) => {
+                        el.classList.remove('active');
+                    });
+                    populateContacts(ack.data,'one-to-one');
+                    // Reapply the 'active' class to the previously active element(s)
+                    activeElementIds.forEach((id) => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.classList.add('active');
+                        } else {
+                            console.warn(`Element with ID "${id}" not found.`);
+                        }
+                    });
+                } else {
+                        console.log("Error in messageSend", ack.error);
+                    }
+            })
+        }
+    
+        // Function to generate unique UUID for message
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0,
+                    v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+    </script>
+    <script>
+       function showTypingEffect(elementId, msgText, showdatetime) {
+                let index = 0;
+                const element = document.getElementById(elementId);
+                element.textContent += msgText
+                element.innerHTML += `<br/><small>${showdatetime}</small>`;
+                // function typeCharacter() {
+                //     if (index < msgText.length) {
+                //         element.textContent += msgText.charAt(index);
+                //         index++;
+                //         setTimeout(typeCharacter, speed); // call itself to simulate typing
+                //     }
+                // }
+
+                //typeCharacter();
+                
+            }
+
+            function escapeHtml(unsafe) {
+                    return unsafe
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;");
+                }
+    </script>
+</body>
+</html>
